@@ -32,7 +32,7 @@ con = duckdb.connect()
 
 # Tutti i varchi dal catalogo
 import json
-with open(os.path.join(BASE, "catalog_full.json")) as f:
+with open(os.path.join(BASE, "catalogo", "catalog_full.json")) as f:
     cat = json.load(f)
 
 varchi = [ds for ds in cat["datasets"] if ds["id"].startswith("varco-n-")]

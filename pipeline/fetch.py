@@ -87,7 +87,7 @@ def info(dataset_id):
     print(f"   Export: {src['export_format']}")
     print(f"   Copertura: {cov.get('years','?')} — {cov.get('records','?')} records")
     print(f"   Granularità: {cov.get('granularity','?')}")
-    print(f"   Frequenza: {ds.get('schedule',{}).get('frequency','?')}")
+    print(f"   Frequenza: {config.get('schedule',{}).get('frequency','?')}")
     
     path = data_path(dataset_id, src.get("export_format", "parquet"))
     if os.path.exists(path):

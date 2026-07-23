@@ -2,4 +2,5 @@ _data/
 __pycache__/
 *.pyc
 .venv/
+registry.json
 _local/

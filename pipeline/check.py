@@ -183,12 +183,8 @@ def main():
               f"{registry['summary']['total_size_mb']} MB")
     
     if "--status" in args or "--all" in args or not args:
-        if not os.path.exists(REGISTRY_PATH):
-            # Rigenera se non esiste
-            registry = build_registry()
-        else:
-            with open(REGISTRY_PATH) as f:
-                registry = json.load(f)
+        # --status verifica sempre i parquet reali, mai il registry cached
+        registry = build_registry()
         print_status(registry)
 
 if __name__ == "__main__":

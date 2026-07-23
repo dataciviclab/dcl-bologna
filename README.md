@@ -2,7 +2,7 @@
 
 Primo progetto territoriale del **DataCivicLab**. Analisi dei dati aperti del Comune di Bologna.
 
-> **Stato**: pilota attivo — 5 dataset, 1M records, 3 mapping territoriali.
+> **Stato**: pilota attivo — 4 dataset, 1M records, 2 mapping territoriali.
 
 ## Cosa
 
@@ -19,12 +19,12 @@ Bologna ha uno dei portali open data comunali più maturi d'Italia:
 
 ## Dataset attivi
 
-| Dataset | Records | Periodo | Freq | Mapping |
+| Dataset | Records | Periodo | Freq |
 |---|---|---|---|---|
-| Popolazione per quartiere | 239k | 1986–2024 | annuale | quartiere × zona × età × sesso |
-| Colonnine conta-bici | 516k | 2018–2026 | mensile | 24 postazioni → quartiere |
-| Varco ZTL Ercolani | 254k | 2019–2026 | mensile | → quartiere Santo Stefano |
-| Rifter civici | 77k | — | mensile | base per mapping territoriali |
+| Popolazione per quartiere | 239k | 1986–2024 | annuale |
+| Colonnine conta-bici | 516k | 2018–2026 | mensile |
+| Varco ZTL Ercolani | 254k | 2019–2026 | mensile |
+| Rifter civici (indirizzi + quartiere) | 77k | — | mensile |
 
 ## Come si usa
 
@@ -45,7 +45,7 @@ make check
 
 ## Cosa si può fare con questi dati
 
-- **Bici vs Auto**: confronto su Viale Ercolani (4 bici per ogni auto, 1M passaggi/anno)
+- **Bici vs Auto**: confronto su Viale Ercolani nel 2024: ~2.900 bici e ~720 auto/giorno (dati osservati, varco n.44 vs colonnina Ercolani — vedi `analisi/02_bici_vs_auto.sql`)
 - **Demografia per quartiere**: popolazione 1986–2024, età, sesso, cittadinanza
 - **Mobilità × territorio**: colonnine e varchi ZTL mappati ai quartieri via civici ufficiali
 - **Cross-dominio**: incroci con dati nazionali Lab (ANAC, ISTAT, qualità aria)
@@ -58,7 +58,7 @@ dataset/*.yml  →  pipeline/fetch.py  →  _data/*.parquet  →  DuckDB
 mapping/*.csv  →  join territoriali  ←  analisi SQL
 ```
 
-Repo autonomo, formati compatibili con il Lab. Niente dipendenze esterne — solo Python + DuckDB.
+Repo autonomo, formati compatibili con il Lab. Dipendenze minime: `pip install -r requirements.txt` (duckdb, PyYAML, pandas).
 
 ## Roadmap
 

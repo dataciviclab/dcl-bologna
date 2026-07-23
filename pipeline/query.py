@@ -37,25 +37,24 @@ def main():
         return
     
     # Determina dataset e SQL
-    sql_mode = False
     datasets = []
     sql_parts = []
-    
-    for i, arg in enumerate(args):
-        if arg == "--json":
-            continue
-        if arg == "--csv":
-            continue
+    i = 0
+    while i < len(args):
+        arg = args[i]
         if arg == "--datasets":
-            sql_mode = True
-            continue
-        if not sql_mode:
-            datasets.append(arg)
-        else:
-            sql_parts.append(arg)
+            # --datasets ds1,ds2,ds3
+            i += 1
+            if i < len(args):
+                datasets = args[i].split(",")
+            i += 1
+            # Tutto ciò che resta è SQL
+            sql_parts = args[i:]
+            break
+        i += 1
     
-    if not sql_parts:
-        # Primo argomento è il dataset, il resto è SQL
+    if not datasets:
+        # Modalità standard: primo argomento è il dataset, resto SQL
         datasets = [args[0]]
         sql_parts = args[1:]
     

@@ -11,7 +11,7 @@
 PYTHON = python3
 PIPELINE = pipeline
 
-.PHONY: status registry fetch fetch-all check add
+.PHONY: status registry fetch fetch-all check
 
 # --- Stato ---
 status:
@@ -38,11 +38,6 @@ fetch/%:
 
 # --- Check completo ---
 check: registry status
-
-# --- Nuovo dataset ---
-add/%:
-	@echo "=== Aggiungi dataset: $* ==="
-	@$(PYTHON) $(PIPELINE)/add.py $*
 
 # --- Utility ---
 list:
