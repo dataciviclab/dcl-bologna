@@ -65,20 +65,26 @@ def main():
         print(__doc__)
         return
     
-    # Costruisce la clausola FROM
+    # Costruisce la clausola FROM / CTE
     if len(datasets) == 1:
         path = get_path(datasets[0])
         if not os.path.exists(path):
             print(f"❌ Dataset '{datasets[0]}' non scaricato. Usa pipeline/fetch.py prima.")
             return
-        from_clause = f"read_parquet('{path}')"
+        # Dataset singolo: alias 'data' per compatibilità
+        full_sql = sql.replace("data", f"read_parquet('{path}')", 1) if "data" in sql else sql
     else:
-        from_clause = " JOIN ".join(
-            f"read_parquet('{get_path(d)}') AS d{i}"
+        # Multi-dataset: genera WITH (CTE) con alias d0, d1, ...
+        for i, ds in enumerate(datasets):
+            p = get_path(ds)
+            if not os.path.exists(p):
+                print(f"❌ Dataset '{ds}' non scaricato. Usa pipeline/fetch.py prima.")
+                return
+        cte_defs = ", ".join(
+            f"d{i} AS (SELECT * FROM read_parquet('{get_path(d)}'))"
             for i, d in enumerate(datasets)
         )
-    
-    full_sql = sql.replace("data", from_clause, 1) if "data" in sql else sql
+        full_sql = f"WITH {cte_defs}\n{sql}"
     
     con = duckdb.connect()
     try:

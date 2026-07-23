@@ -40,7 +40,7 @@ schema:
       description: Coordinate geografiche (lon, lat)
 
 coverage:
-  years: "2026 (almeno febbraio–luglio)"
+  years: "2018–2026 (colonnina Ercolani dal 2018, altre dal 2022/2024)"
   territorial: "Bologna — postazioni di rilevamento"
   granularity: "oraria × postazione × direzione"
   records: 516200

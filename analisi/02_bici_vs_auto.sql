@@ -1,10 +1,22 @@
 -- ============================================================
 -- Analisi 02: Bici vs Auto su Viale Ercolani (2024)
 -- Dataset: colonnine-bici, varco-ercolani
--- Nota: richiede make fetch per entrambi i dataset
+-- Nota: richiede make fetch per entrambi i dataset.
+-- Copertura 2024: entrambi i dataset coprono l'intero anno
+-- (colonnina Ercolani: dati continui dal 2018; varco: dal 2019).
 -- ============================================================
 
+-- 0. Verifica copertura: giorni con dati nel 2024
+SELECT 'bici' as dataset, count(DISTINCT data::date) as giorni
+FROM read_parquet('_data/colonnine-bici.parquet')
+WHERE colonnina='Ercolani' AND extract(year FROM data)=2024
+UNION ALL
+SELECT 'auto', count(DISTINCT data::date)
+FROM read_parquet('_data/varco-ercolani.parquet')
+WHERE extract(year FROM data)=2024;
+
 -- 1. Volumi annuali: bici (colonnina Ercolani) vs auto (varco n.44)
+--    Le medie giornaliere sono calcolate su 365 giorni (anno solare).
 SELECT extract(year FROM b.data) as anno,
        sum(b.totale) as bici,
        sum(a.auto_furgoni + a.moto_ciclomotori) as veicoli,

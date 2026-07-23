@@ -20,7 +20,7 @@ Bologna ha uno dei portali open data comunali più maturi d'Italia:
 ## Dataset attivi
 
 | Dataset | Records | Periodo | Freq |
-|---|---|---|---|---|
+|---|---|---|---|
 | Popolazione per quartiere | 239k | 1986–2024 | annuale |
 | Colonnine conta-bici | 516k | 2018–2026 | mensile |
 | Varco ZTL Ercolani | 254k | 2019–2026 | mensile |
