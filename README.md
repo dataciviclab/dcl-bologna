@@ -1,5 +1,7 @@
 # dcl-bologna
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
+
 Primo progetto territoriale del **DataCivicLab**. Analisi dei dati aperti del Comune di Bologna.
 
 > **Stato**: pilota attivo — 4 dataset, 1M records, 2 mapping territoriali.
@@ -73,4 +75,5 @@ Repo autonomo, formati compatibili con il Lab. Dipendenze minime: `pip install -
 
 ## Licenza
 
-Dati: CC BY 4.0 (Comune di Bologna). Codice: stessa licenza del Lab.
+- **Codice**: MIT ([LICENSE](./LICENSE))
+- **Dati**: CC BY 4.0 (Comune di Bologna) — i dati originali restano di proprietà del Comune di Bologna e vengono redistribuiti nei termini della licenza CC BY 4.0 indicata sul portale.
