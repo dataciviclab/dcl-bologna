@@ -1,0 +1,80 @@
+varco,nome,descrizione,direzione,lon,lat,quartiere,zona,via,distanza_m
+varco-n-78,Santo Stefano,via Farini via Santo Stefano,piazza Santo Stefano,11.34885940342026,44.49141491237119,Santo Stefano,Galvani,VIA SANTO STEFANO,9.1
+varco-n-3-marconi-laterale-direzione-sud,Marconi,via Marconi,centro,11.3387051915966,44.4994317794482,Porto - Saragozza,Marconi,VIA GUGLIELMO MARCONI,13.8
+varco-n-31-liberazione-direzione-est,Liberazione,via Liberazione 13,Stalingrado,11.3509478821424,44.5113729162272,Navile,Bolognina,VIA DELLA LIBERAZIONE,12.5
+varco-n-76,Chiudare,via Chiudare angolo viale XII Giugno,via Arienti,11.34643199852396,44.48619687605429,Santo Stefano,Galvani,VIA CHIUDARE,8.5
+varco-n-48-emilia-ponente-direzione-centro,Emilia Ponente,via Emilia Ponente angolo Pertini,centro,11.309609112374874,44.50537926756673,Porto - Saragozza,Saffi,VIA EMILIA PONENTE,19.4
+varco-n-63-marconi-tper-direzione-periferia,Marconi TPER,via Marconi 69,piazza dei Martiri,11.3390926859316,44.5003484119406,Porto - Saragozza,Marconi,VIA GUGLIELMO MARCONI,13.2
+varco-n-44-viale-ercolani-direzione-nord,Ercolani,viale Ercolani 5,porta san Vitale,11.357280808714611,44.49258259293362,Santo Stefano,Irnerio,VIALE GIAMBATTISTA ERCOLANI,31.8
+varco-n-51-capo-di-lucca-direzione-nord,Capo di Lucca,via Capo di Lucca (int. Irnerio),periferia,11.3479039053865,44.5004521012539,Santo Stefano,Irnerio,VIA IRNERIO,12.8
+varco-n-37-piazza-medaglie-doro-direzione-bus,Piazza Medaglie D’0ro,piazza Medaglie D’Oro,bus,11.3436053536378,44.5051698701424,Porto - Saragozza,Marconi,PIAZZA DELLE MEDAGLIE D'ORO,19.8
+varco-n-47-porrettana-direzione-centro,Porrettana,via Porrettana 158,centro,11.3026508761141,44.4912253857563,Porto - Saragozza,Costa Saragozza,VIA PROSPERO FONTANA,25.9
+varco-n-84,Rizzoli TPER,via Rizzoli 5,periferia,11.345284342579493,44.494393823162845,Santo Stefano,Galvani,VIA CALZOLERIE,6.1
+varco-n-86,Calari,via Calari 2,via del Pratello,11.3287562017157,44.4950262219978,Porto - Saragozza,Malpighi,VIA MONALDO CALARI,13.8
+varco-n-40-mazzini-direzione-centro,Mazzini,via Mazzini angolo Albertoni,centro,11.3617719138038,44.4885120592707,Santo Stefano,Murri,VIA GIUSEPPE MAZZINI,8.2
+varco-n-50-capo-di-lucca-direzione-sud-est,Finelli,Via Capo di Lucca angolo Finelli,centro,11.348758807384,44.5019527590664,Santo Stefano,Irnerio,VIA ANGELO FINELLI,7.9
+varco-n-32-zaccherini-alvisi-direzione-sud,Zaccherini Alvisi,via Zaccherini Alvisi 2,Massarenti,11.3606250769163,44.4935121025118,San Donato - San Vitale,S. Vitale,VIA GIOVANNA ZACCHERINI ALVISI,11.6
+varco-n-73-piazza-san-francesco-direzione-ovest,San Francesco,piazza San Francesco angolo Malpighi,piazza San Francesco,11.336582231563659,44.49517499814803,Porto - Saragozza,Malpighi,PIAZZA SAN FRANCESCO,4.0
+varco-n-36-piazza-medaglie-doro-direzione-taxi,Piazza Medaglie D’0ro,piazza Medaglie D’Oro,taxi,11.34367749048,44.5051582799919,Porto - Saragozza,Marconi,PIAZZA DELLE MEDAGLIE D'ORO,14.7
+varco-n-91,Moline/Alessandrini,via delle Moline,via Mentana,11.3464550146188,44.4986407856211,Santo Stefano,Irnerio,VIA DELLE MOLINE,3.7
+varco-n-41-matteotti-direzione-nord,Matteotti,via Matteotti 33,periferia,11.3469270833577,44.5090613146472,Navile,Bolognina,VIA GIACOMO MATTEOTTI,1.7
+varco-n-1-s-isaia-direzione-centro,Sant'Isaia,via Sant’Isaia 108,centro,11.3293380414052,44.4945267978293,Porto - Saragozza,Malpighi,VIA SANT'ISAIA,10.7
+varco-n-83-piazza-galvani-direzione-archiginnasio,Piazza Galvani/corte Galluzzi,piazza Galvani 2/A,Archiginnasio,11.342984018615837,44.491575504579316,Santo Stefano,Galvani,PIAZZA LUIGI GALVANI,13.5
+varco-n-1062-piazza-azzarita-direzione-sud,Azzarita,piazza Azzarita 1/N,Riva di Reno,11.332613164181863,44.49895304652429,Porto - Saragozza,Marconi,PIAZZA MANFREDI AZZARITA,8.0
+varco-n-66-viale-pietramellara-direzione-ovest,Viale Pietramellara,,ovest,11.343304024563993,44.50524960788972,Porto - Saragozza,Marconi,VIALE PIETRO PIETRAMELLARA,33.5
+varco-n-6-santo-stefano-direzione-centro,Santo Stefano,"via Santo Stefano 92/B, angolo via Dante",centro,11.3530934583735,44.4871922615464,Santo Stefano,Galvani,VIA SANTO STEFANO,8.6
+varco-n-8-alessandrini-direzione-sud,Alessandrini,via Alessandrini 4,centro,11.3468118992848,44.4994003529201,Santo Stefano,Irnerio,VIA ANTONIO ALESSANDRINI,15.4
+varco-n-57-san-felice-direzione-periferia,San Felice,via S. Felice 134,periferia,11.327597274272572,44.4992448787626,Porto - Saragozza,Marconi,PIAZZA DI PORTA SAN FELICE,22.0
+varco-n-30-massarenti-direzione-periferia,Massarenti,via Massarenti 3,periferia,11.3580611032751,44.4938238715974,San Donato - San Vitale,S. Vitale,VIA GIUSEPPE MASSARENTI,8.0
+varco-n-45-pta-santo-stefano-direzione-centro,Porta Santo Stefano,Via Santo Stefano 174,centro,11.356026176112671,44.48485426759023,Santo Stefano,Galvani,VIA SANTO STEFANO,13.5
+varco-n-18-ugo-bassi-direzione-centro,Ugo Bassi,via Ugo Bassi 4,centro,11.340479536372973,44.49519564568384,Porto - Saragozza,Malpighi,VIA UGO BASSI,4.2
+varco-n-88,Pietralata,via Pietralata 66,via del Pratello,11.330816102535,44.4944186738515,Porto - Saragozza,Malpighi,VIA PIETRALATA,3.6
+varco-n-89,Paradiso,via Paradiso 1,via del Pratello,11.333533904285826,44.496717057994076,Porto - Saragozza,Malpighi,VIA PARADISO,4.2
+varco-n-93,via del Pratello 1,via del Pratello angolo Malpighi,via del Borghetto,11.3367415378066,44.4956833652033,Porto - Saragozza,Malpighi,PIAZZA MARCELLO MALPIGHI,1.8
+varco-n-46-pta-saragozza-direzione-periferia,Porta Saragozza,piazza di Porta Saragozza,periferia,11.3306869101044,44.4904616173227,Porto - Saragozza,Malpighi,VIA SARAGOZZA,24.3
+varco-n-43-del-lavoro-direzione-nord-ovest,Lavoro,via del Lavoro 25,centro,11.3584644465716,44.506325162645,San Donato - San Vitale,San Donato,VIA DEL LAVORO,8.6
+varco-n-69-righi-direzione-moline,Righi,via Righi 15,Moline,11.3457367965497,44.4987580573636,Santo Stefano,Irnerio,VIA AUGUSTO RIGHI,4.1
+varco-n-82-via-delle-moline-direzione-mentana,Moline,via Moline 2,via Mentana,11.34816909672887,44.49777440089802,Santo Stefano,Irnerio,VIA DELLE MOLINE,4.5
+varco-n-4-marconi-centrale-direzione-sud,Marconi,via Marconi,centro,11.3386361425699,44.4994467820784,Porto - Saragozza,Marconi,VIA GUGLIELMO MARCONI,8.1
+varco-n-1059-san-felice-direzione-centro,San Felice,via S. Felice 134,centro,11.32796688174592,44.49892134376264,Porto - Saragozza,Malpighi,VIA SAN FELICE,5.9
+varco-n-55-lame-direzione-centro,Lame,via Lame 102 angolo via Calori,centro,11.334366116207832,44.50033561827126,Porto - Saragozza,Marconi,VIA DELLE LAME,10.7
+varco-n-42-serlio-direzione-ovest,Serlio,via Serlio 26,Matteotti,11.3522612845382,44.5082529575764,Navile,Bolognina,VIA SEBASTIANO SERLIO,20.0
+varco-n-56-santisaia-direzione-periferia,Isaia,via S. Isaia angolo De Marchi,periferia,11.3341216043484,44.493666817375,Porto - Saragozza,Malpighi,VIA SANT'ISAIA,11.8
+varco-n-58-santo-stefano-direzione-sud-est,Santo Stefano,Via Santo Stefano 36 angolo Posterla,periferia,11.3498619531366,44.4905820311448,Santo Stefano,Galvani,VIA SANTO STEFANO,7.4
+varco-n-79,Santa,via Santa 2,via Santo Stefano,11.349036626023945,44.49237662778491,Santo Stefano,Galvani,VIA GERUSALEMME,2.2
+varco-n-64,Irnerio centro,via Irnerio 18,centro,11.349709678579334,44.49991621147352,Santo Stefano,Irnerio,VIA IRNERIO,10.0
+varco-n-2-s-vitale-direzione-centro,San Vitale,via San Vitale 118,centro,11.3563370368684,44.4940087870229,Santo Stefano,Irnerio,VIA SAN VITALE,3.1
+varco-n-33-creti-direzione-ovest,Creti,via Donato Creti 24,piazza dell’Unità,11.3534148831796,44.5101558828273,Navile,Bolognina,VIA DONATO CRETI,16.5
+varco-n-75-aldrovandi-direzione-via-san-vitale,Aldrovandi (angolo strada Maggiore),Piazza Aldrovandi,via San Vitale,11.35169169996251,44.49286944988509,Santo Stefano,Irnerio,PIAZZA ULISSE ALDROVANDI,12.1
+varco-n-61-degli-angeli-direzione-centro,Angeli,Via degli Angeli angolo viale Gozzadini,centro,11.349032429006076,44.485459295518595,Santo Stefano,Galvani,VIA DEGLI ANGELI,17.4
+varco-n-77,San Domenico,piazza San Domenico,piazza San Domenico,11.343605887294311,44.490051855467186,Santo Stefano,Galvani,PIAZZA SAN DOMENICO,13.5
+varco-n-23-dazeglio-direzione-centro,D’Azeglio,via D’Azeglio 51/D,centro,11.3401850905127,44.4888626117786,Santo Stefano,Galvani,VIA MASSIMO D'AZEGLIO,10.9
+varco-n-39-dei-mille-direzione-est,Mille,via dei Mille 5 angolo Galliera,Indipendenza,11.3435401856337,44.5013930890971,Porto - Saragozza,Marconi,VIA GALLIERA,15.6
+varco-n-13-matteotti-direzione-centro,Matteotti,via Matteotti 26/A,centro,11.3467098833886,44.5090259145512,Navile,Bolognina,VIA DOMENICO ZAMPIERI,10.4
+varco-n-49-piazza-re-enzo-direzione-sud,Re Enzo,piazza Re Enzo angolo Rizzoli,piazza Maggiore,11.343974209640399,44.4945189841979,Santo Stefano,Galvani,VIA FRANCESCO RIZZOLI,4.7
+varco-n-87,San Rocco,via San Rocco 32,via San Felice,11.3297399464167,44.4955326003905,Porto - Saragozza,Malpighi,VIA DEL PRATELLO,5.6
+varco-n-67,Dozza TPER,"via Dozza, sottopasso",centro,11.397775319798704,44.47472617379104,Savena,Mazzini,VIA GAETANO TACCONI,104.1
+varco-n-17-indipendenza-direzione-centro,Indipendenza,via Indipendenza 36,centro,11.343551500702125,44.49849874759284,Porto - Saragozza,Marconi,VIA DELL'INDIPENDENZA,8.1
+varco-n-38-indipendenza-direzione-centro,Indipendenza,Indipendenza/angolo Milazzo,centro,11.344845900688274,44.502839223177354,Porto - Saragozza,Marconi,VIA DELL'INDIPENDENZA,11.0
+varco-n-68-dozza-tper-direzione-periferia,Dozza TPER,"via Dozza, sottopasso",periferia,11.395650059560994,44.47549024577382,Savena,Mazzini,VIA ALBERTO DALLOLIO,26.0
+varco-n-53-mascarella-direzione-sud,Mascarella,Via Mascarella 95,centro,11.352191011447053,44.501685139341035,Santo Stefano,Irnerio,VIA MASCARELLA,3.8
+varco-n-72-coltellini-direzione-via-del-pratello,Coltellini,via Coltellini,via del Pratello,11.334617965403078,44.49568849480001,Porto - Saragozza,Malpighi,VIA DEL PRATELLO,6.6
+varco-n-74-aldrovandi-direzione-strada-maggiore,Aldrovandi (angolo San Vitale),Piazza Aldrovandi,strada Maggiore,11.351821165366404,44.493817492448514,Santo Stefano,Irnerio,PIAZZA ULISSE ALDROVANDI,10.0
+varco-n-29-ferrarese-direzione-centro,Ferrarese,via Ferrarese 112/118,centro,11.35734187841,44.5200479179393,Navile,Bolognina,VIA FERRARESE,60.0
+varco-n-80,Falegnami,via Falegnami angolo via Indipendenza,via Indipendenza,11.342403448558999,44.49906560186413,Porto - Saragozza,Marconi,VIA DE' FALEGNAMI,6.2
+varco-n-54-borgo-di-san-pietro-direzione-nord,Borgo San Pietro,Borgo San Pietro (int. Irnerio),periferia,11.3491705357142,44.5001740961229,Santo Stefano,Irnerio,VIA IRNERIO,5.1
+varco-n-34-mezzofanti-direzione-sud-est,Mezzofanti,via Mezzofanti,periferia,11.3691648931542,44.4819629286754,Santo Stefano,Murri,VIA GIUSEPPE MEZZOFANTI,7.9
+varco-n-1058-calari-direzione-sud,Calari,"Via Calari 17/A, angolo via della Grada",via della Grada,11.327978719831455,44.497496958557655,Porto - Saragozza,Malpighi,VIA MONALDO CALARI,7.7
+varco-n-90,Moline/Mentana,via delle Moline,via Capo di Lucca,11.3476202224129,44.4980239696303,Santo Stefano,Irnerio,VIA DELLE MOLINE,4.3
+varco-n-65,Irnerio periferia,via Irnerio 57,periferia,11.355432369209943,44.49842824078878,Santo Stefano,Irnerio,VIA IRNERIO,11.6
+varco-n-59-saragozza-direzione-centro,Saragozza,Via Saragozza 102 angolo piazza di Porta Saragozza,centro,11.3307783807562,44.4902796107907,Porto - Saragozza,Malpighi,VIA SARAGOZZA,6.0
+varco-n-7-viale-xii-giugno-direzione-centro,XII Giugno,viale XII Giugno 2,centro,11.3444645731019,44.4876236792536,Santo Stefano,Galvani,VIALE DODICI GIUGNO,5.3
+varco-n-52-borgo-di-san-pietro-direzione-sud,Borgo San Pietro,Borgo San Pietro (int. Finelli),centro,11.350151676569592,44.50171793018091,Santo Stefano,Irnerio,VIA ANGELO FINELLI,11.9
+varco-n-81-via-falegnami-direzione-galliera,Falegnami,via Falegnami angolo via Galliera,via Galliera,11.343720436126002,44.49908094595105,Porto - Saragozza,Marconi,VIA DELL'INDIPENDENZA,8.2
+varco-n-60-bocca-di-lupo-direzione-nord,Bocca di Lupo,Via Bocca di Lupo 6,centro,11.33792402172594,44.48882198572512,Porto - Saragozza,Malpighi,VIA BOCCA DI LUPO,11.4
+varco-n-10-san-felice-direzione-centro,San Felice,via San Felice 54,centro,11.3314208898859,44.497729908902,Porto - Saragozza,Marconi,VIA SAN FELICE,10.8
+varco-n-62-viale-filopanti-direzione-nord,Filopanti,viale Filopanti 2,porta San Donato,11.356717547766008,44.497580723605836,San Donato - San Vitale,S. Vitale,VIALE QUIRICO FILOPANTI,16.4
+varco-n-9-riva-reno-direzione-est,Riva di Reno,via Riva di Reno 63,centro,11.337882442670693,44.4988398157953,Porto - Saragozza,Marconi,VIA RIVA DI RENO,5.6
+varco-n-19-rizzoli-direzione-centro,Rizzoli,via Rizzoli 28,centro,11.3453380233103,44.49449382473895,Santo Stefano,Irnerio,VIA FRANCESCO RIZZOLI,6.6
+varco-n-25-farini-direzione-ovest,Farini,via Farini 10,piazza Galvani,11.343606600522852,44.49143659502301,Santo Stefano,Galvani,VIA LUIGI CARLO FARINI,4.4
+varco-n-35-azzo-gardino-direzione-centro,Azzo Gardino,via Azzo Gardino angolo via Menarini,via Riva di Reno,11.334358824374688,44.502022423742844,Porto - Saragozza,Marconi,VIA ALBERTO MENARINI,14.0

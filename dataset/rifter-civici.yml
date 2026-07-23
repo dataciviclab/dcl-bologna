@@ -1,0 +1,26 @@
+# Dataset: Rifter civici — numeri civici con coordinate e quartiere
+# Fonte: OpenData Comune di Bologna — SIT (Sistema Informativo Territoriale)
+# API Opendatasoft v2.1
+# ============================================================
+
+dataset:
+  id: rifter-civici
+  title: "Rifter — numeri civici con coordinate, quartiere, zona"
+  description: >
+    Anagrafe dei numeri civici del Comune di Bologna.
+    Ogni riga è un civico con denominazione via, numero,
+    quartiere, zona, coordinate geografiche e sezioni censuarie.
+
+source:
+  type: opendatasoft
+  base_url: "https://opendata.comune.bologna.it/api/explore/v2.1"
+  dataset_id: "rifter_civici_pt"
+  export_format: parquet
+
+coverage:
+  records: 77593
+  territorial: "Comune di Bologna — tutti i civici"
+  granularity: "singolo civico con coordinate"
+
+schedule:
+  frequency: monthly

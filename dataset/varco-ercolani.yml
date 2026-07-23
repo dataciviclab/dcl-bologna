@@ -1,0 +1,103 @@
+# Dataset: Varco ZTL n.44 — Viale Ercolani direzione nord
+# Fonte: OpenData Comune di Bologna — Settore Mobilità Sostenibile
+# API Opendatasoft v2.1 — export diretto Parquet
+# ============================================================
+
+dataset:
+  id: varco-ercolani
+  title: "Varco ZTL n.44 — Viale Ercolani direzione nord — passaggi veicolari"
+  description: >
+    Rilevazione oraria dei passaggi veicolari al varco ZTL n.44 
+    di Viale Ercolani (direzione nord). Classificazione per tipologia
+    (auto/furgoni, moto, bus/camion) e per lista (bianca regolare,
+    bianca fuori fascia, speciale, nera, irregolare).
+    Geolocalizzato. Dati dal 2019.
+
+source:
+  type: opendatasoft
+  base_url: "https://opendata.comune.bologna.it/api/explore/v2.1"
+  dataset_id: "varco-n-44-viale-ercolani-direzione-nord"
+  export_format: parquet
+
+schema:
+  columns:
+    - name: data
+      type: datetime
+      description: Data e ora rilevazione (oraria)
+    - name: varco
+      type: int
+      description: Numero identificativo varco
+    - name: totale_passaggi
+      type: int
+      description: Totale veicoli
+    - name: non_classificato
+      type: int
+      description: Veicoli non classificati
+    - name: moto_ciclomotori
+      type: int
+      description: Moto e ciclomotori
+    - name: auto_furgoni
+      type: int
+      description: Auto e furgoni
+    - name: bus_camion
+      type: int
+      description: Bus e camion
+    - name: sintatticamente_corretta
+      type: int
+      description: Targhe sintatticamente corrette
+    - name: lista_bianca_fuori_fascia
+      type: int
+      description: Lista bianca fuori fascia oraria
+    - name: lista_bianca_regolare
+      type: int
+      description: Lista bianca regolare (autorizzati)
+    - name: lista_speciale
+      type: int
+      description: Lista speciale
+    - name: lista_nera
+      type: int
+      description: Lista nera (non autorizzati → verbale)
+    - name: transito_generico_irregolare
+      type: int
+      description: Transito generico irregolare
+    - name: segnalazioni
+      type: int
+      description: Segnalazioni
+    - name: nome_varco
+      type: string
+      description: Nome del varco
+    - name: descrizione
+      type: string
+      description: Indirizzo
+    - name: direzione
+      type: string
+      description: Direzione di controllo
+    - name: tipologia_varco
+      type: string
+      description: Tipologia
+    - name: coordinate
+      type: struct
+      description: Coordinate geografiche
+
+coverage:
+  years: "2019–2026"
+  territorial: "Viale Ercolani, Bologna — varco ZTL n.44 direzione nord"
+  granularity: "oraria × tipologia veicolo × lista autorizzazione"
+  records: 254575
+
+schedule:
+  frequency: monthly
+  note: "Aggiornato mensilmente"
+
+cross_bologna:
+  - dataset: colonnine-bici
+    note: "Confronto con colonnina Ercolani (stessa via — bici vs auto)"
+
+usage:
+  example: |
+    -- Auto vs bici: trend annuale
+    SELECT extract(year FROM data) as anno,
+           sum(auto_furgoni) as auto,
+           sum(moto_ciclomotori) as moto
+    FROM data
+    GROUP BY anno ORDER BY anno

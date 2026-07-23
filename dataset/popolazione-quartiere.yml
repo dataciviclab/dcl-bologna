@@ -1,0 +1,79 @@
+# Dataset: Popolazione residente per età, sesso, cittadinanza, quartiere e zona
+# Fonte: OpenData Comune di Bologna — Ufficio Comunale di Statistica
+# API Opendatasoft v2.1 — export diretto Parquet
+# ============================================================
+
+dataset:
+  id: popolazione-quartiere
+  title: "Popolazione residente per età, sesso, cittadinanza, quartiere e zona"
+  description: >
+    Serie storica dal 1986 della popolazione residente a Bologna,
+    disaggregata per singolo anno di età, sesso, cittadinanza (italiana/straniera),
+    quartiere e zona. Fonte: Ufficio Comunale di Statistica.
+
+source:
+  type: opendatasoft
+  base_url: "https://opendata.comune.bologna.it/api/explore/v2.1"
+  dataset_id: "annuale_popolazione_residente_eta_quart_zonadal1986"
+  export_format: parquet          # export diretto Parquet (già verificato)
+  # In alternativa CSV:
+  # export_format: csv
+  # csv_delim: ";"
+
+schema:
+  columns:
+    - name: anno
+      type: int
+      description: Anno di riferimento (1986–2024)
+    - name: cittadinanza
+      type: string
+      description: Italiana / Straniera
+    - name: eta_singolo
+      type: int
+      description: Età per singolo anno (0–112)
+    - name: eta_grandi
+      type: string
+      description: Grandi classi (00-14, 15-29, 30-44, 45-64, 65-79, 80 e oltre)
+    - name: eta_quinquennali
+      type: string
+      description: Classi quinquennali
+    - name: quartiere
+      type: string
+      description: Quartiere (6 quartieri + Senza fissa dimora)
+    - name: zona
+      type: string
+      description: Zona statistica (19 zone)
+    - name: centro_storico_zone_periferiche
+      type: string
+      description: Centro Storico / Zone periferiche
+    - name: sesso
+      type: string
+      description: Maschi / Femmine
+    - name: residenti
+      type: int
+      description: Numero residenti
+
+coverage:
+  years: "1986–2024"
+  territorial: "Comune di Bologna — 6 quartieri, 19 zone"
+  granularity: "quartiere × zona × età × sesso × cittadinanza"
+  records: 239075
+
+schedule:
+  frequency: annual
+  note: "Aggiornato ogni anno dall'Ufficio Statistica a dicembre (dato al 31/12)"
+
+usage:
+  example: |
+    -- Popolazione totale per quartiere nell'ultimo anno
+    SELECT quartiere, sum(residenti) as popolazione
+    FROM data
+    WHERE anno = (SELECT max(anno) FROM data)
+    GROUP BY quartiere
+    ORDER BY popolazione DESC
+
+cross_lab:
+  - dataset: istat_popolazione          # confronto con dati ISTAT
+    key: anno × territorio
+  - dataset: mur_istat_scuole           # popolazione scolastica per territorio
+    key: territorio
