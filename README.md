@@ -22,7 +22,7 @@ Bologna ha uno dei portali open data comunali più maturi d'Italia:
 ## Dataset attivi
 
 | Dataset | Records | Periodo | Freq |
-|---|---|---|---|---|
+|---|---|---|---|
 | **Varchi ZTL** (80 accessi) | **18.6M** | 2019–2026 | mensile |
 | Centraline qualità aria | 44k | 2026 | **daily** |
 | Popolazione per quartiere | 239k | 1986–2024 | annuale |
