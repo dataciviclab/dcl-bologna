@@ -4,6 +4,8 @@
 
 Primo progetto territoriale del **DataCivicLab**. Analisi dei dati aperti del Comune di Bologna.
 
+[💬 Discussions](https://github.com/dataciviclab/dcl-bologna/discussions) — segnala dataset, proponi analisi, chiedi come contribuire.
+
 > **Stato**: pilota attivo — 6 dataset, 19M records, 3 mapping territoriali.
 
 ## Cosa
