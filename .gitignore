@@ -2,6 +2,7 @@ _data/
 __pycache__/
 *.pyc
 .venv/
+.tmp/
 registry.json
 _local/
 .tmp/
