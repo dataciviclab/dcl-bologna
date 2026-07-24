@@ -4,3 +4,4 @@ __pycache__/
 .venv/
 registry.json
 _local/
+.tmp/

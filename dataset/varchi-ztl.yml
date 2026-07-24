@@ -1,0 +1,69 @@
+# Dataset: Varchi ZTL — famiglia completa (80 varchi)
+# Fonte: OpenData Comune di Bologna — Settore Mobilità
+# API Opendatasoft v2.1 — export diretto Parquet
+# Nota: usa glob pattern in lettura, non merge fisico
+# ============================================================
+
+dataset:
+  id: varchi-ztl
+  title: "Varchi ZTL — passaggi veicolari (80 accessi)"
+  description: >
+    Rilevazioni orarie dei passaggi veicolari da tutti i 80 varchi ZTL
+    di Bologna. Ogni varco registra: totale passaggi, auto/furgoni,
+    moto/ciclomotori, bus/camion, classificazione per lista (bianca,
+    nera, speciale). Geolocalizzati.
+
+source:
+  type: opendatasoft
+  base_url: "https://opendata.comune.bologna.it/api/explore/v2.1"
+  dataset_id: famiglia varchi (80 dataset varco-n-*)
+  export_format: parquet
+
+data:
+  # Unico parquet mergiato da 80 varchi
+  parquet: "_data/varchi-ztl.parquet"
+
+schema:
+  columns:
+    - name: data
+      type: datetime
+      description: Data e ora rilevazione
+    - name: varco
+      type: int
+      description: Numero identificativo varco
+    - name: totale_passaggi
+      type: int
+      description: Totale veicoli
+    - name: auto_furgoni
+      type: int
+      description: Auto e furgoni
+    - name: moto_ciclomotori
+      type: int
+      description: Moto e ciclomotori
+    - name: bus_camion
+      type: int
+      description: Bus e camion
+    - name: nome_varco
+      type: string
+      description: Nome del varco
+    - name: coordinate
+      type: struct
+      description: Coordinate geografiche
+
+coverage:
+  years: "2019–2026"
+  territorial: "Bologna — 80 accessi ZTL"
+  granularity: "oraria × varco × tipologia veicolo"
+  records: 21000000 # 80 varchi × ~260k records/anno × anni
+
+schedule:
+  frequency: monthly
+
+usage:
+  example: |
+    -- Traffico totale per varco (2024)
+    SELECT nome_varco, sum(auto_furgoni) as auto
+    FROM read_parquet('_data/varchi-ztl-all.parquet')
+    WHERE extract(year FROM data) = 2024
+    GROUP BY nome_varco
+    ORDER BY auto DESC

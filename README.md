@@ -4,7 +4,7 @@
 
 Primo progetto territoriale del **DataCivicLab**. Analisi dei dati aperti del Comune di Bologna.
 
-> **Stato**: pilota attivo — 4 dataset, 1M records, 2 mapping territoriali.
+> **Stato**: pilota attivo — 6 dataset, 19M records, 3 mapping territoriali.
 
 ## Cosa
 
@@ -22,7 +22,9 @@ Bologna ha uno dei portali open data comunali più maturi d'Italia:
 ## Dataset attivi
 
 | Dataset | Records | Periodo | Freq |
-|---|---|---|---|
+|---|---|---|---|---|
+| **Varchi ZTL** (80 accessi) | **18.6M** | 2019–2026 | mensile |
+| Centraline qualità aria | 44k | 2026 | **daily** |
 | Popolazione per quartiere | 239k | 1986–2024 | annuale |
 | Colonnine conta-bici | 516k | 2018–2026 | mensile |
 | Varco ZTL Ercolani | 254k | 2019–2026 | mensile |
@@ -67,9 +69,9 @@ Repo autonomo, formati compatibili con il Lab. Dipendenze minime: `pip install -
 - [x] Scoring 20/80 del catalogo (702 dataset)
 - [x] Popolazione per quartiere (serie 1986–2024)
 - [x] Colonnine bici + mapping ai quartieri
-- [x] Varchi ZTL + mapping ai quartieri
+- [x] Varchi ZTL (80 accessi mergiati) + mapping ai quartieri
 - [x] Pipeline fetch + validazione + registry
-- [ ] Qualità aria (incrocio traffico/inquinamento)
+- [x] Qualità aria (NO2, PM10) + incrocio traffico/inquinamento
 - [ ] Demografia completa (emigrati, famiglie, convivenze)
 - [ ] Dashboard quartieri
 
