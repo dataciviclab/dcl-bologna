@@ -1,0 +1,46 @@
+# Dataset: Centraline qualità aria — dati orari
+# Fonte: OpenData Comune di Bologna — Settore Ambiente e Verde
+# API Opendatasoft v2.1
+# ============================================================
+
+dataset:
+  id: centraline-aria
+  title: "Qualità dell'aria — rilevazioni orarie da centraline fisse"
+  description: >
+    Rilevazioni orarie della qualità dell'aria dalle centraline
+    fisse di Bologna. Due stazioni: Giardini Margherita e Porta San Felice.
+    Agenti: NO, NO2, NOX, O3, PM10, PM2.5.
+    Aggiornamento giornaliero.
+
+source:
+  type: opendatasoft
+  base_url: "https://opendata.comune.bologna.it/api/explore/v2.1"
+  dataset_id: "centraline-qualita-aria"
+  export_format: parquet
+
+schema:
+  columns:
+    - name: id
+      type: string
+      description: ID record
+    - name: reftime
+      type: datetime
+      description: Data e ora rilevazione
+    - name: stazione
+      type: string
+      description: Nome stazione (Giardini Margherita / Porta San Felice)
+    - name: value
+      type: double
+      description: Valore misurato (μg/m³ per PM, μg/m³ per NOx, ...)
+    - name: agente_atm
+      type: string
+      description: Agente inquinante (NO, NO2, NOX, O3, PM10, PM2.5)
+
+coverage:
+  years: "2026 (dati recenti, aggiornamento daily)"
+  territorial: "Bologna — 2 stazioni fisse"
+  granularity: "oraria × stazione × agente"
+  records: 43984
+
+schedule:
+  frequency: daily
