@@ -1,0 +1,25 @@
+# Dataset: Precipitazioni a Bologna — rilevazioni giornaliere
+# Fonte: OpenData Comune di Bologna
+# API Opendatasoft v2.1 — export diretto Parquet
+# ============================================================
+
+dataset:
+  id: precipitazioni
+  title: "Precipitazioni a Bologna — rilevazioni giornaliere"
+  description: >
+    Rilevazioni giornaliere delle precipitazioni a Bologna.
+    Fonte: Comune di Bologna.
+
+source:
+  type: opendatasoft
+  base_url: "https://opendata.comune.bologna.it/api/explore/v2.1"
+  dataset_id: "precipitazioni_bologna"
+  export_format: parquet
+
+coverage:
+  records: 9334
+  territorial: "Bologna"
+  granularity: "giornaliera"
+
+schedule:
+  frequency: daily
