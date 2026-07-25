@@ -26,6 +26,7 @@ Bologna ha uno dei portali open data comunali più maturi d'Italia:
 | Dataset | Records | Periodo | Freq |
 |---|---|---|---|
 | **Varchi ZTL** (80 accessi) | **18.6M** | 2019–2026 | mensile |
+| Incarichi collaborazione | 747 | 2012–2026 | **weekly** |
 | Temperature Bologna | 9,3k | 2001–2026 | **daily** |
 | Precipitazioni Bologna | 9,3k | 2001–2026 | **daily** |
 | Centraline qualità aria | 44k | 2026 | **daily** |
