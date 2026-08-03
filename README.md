@@ -1,18 +1,12 @@
-# dcl-bologna
+# dcl-bologna — Bologna in dati
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
+**18,6 milioni di passaggi ai varchi ZTL, popolazione per quartiere dal 1986, qualità dell'aria, bici e mobilità. I dati aperti di Bologna, interrogabili.**
 
-Primo progetto territoriale del **DataCivicLab**. Analisi dei dati aperti del Comune di Bologna.
+Primo progetto territoriale del DataCivicLab. Selezioniamo i migliori dataset
+del portale [OpenData Bologna](https://opendata.comune.bologna.it) (702 dataset)
+e li rendiamo interrogabili in locale via DuckDB.
 
-[💬 Discussions](https://github.com/dataciviclab/dcl-bologna/discussions) — segnala dataset, proponi analisi, chiedi come contribuire.
-
-> **Stato**: pilota attivo — 6 dataset, 19M records, 3 mapping territoriali.
-
-## Cosa
-
-Dati aperti di Bologna scaricati, strutturati e incrociati. Il portale [OpenData Bologna](https://opendata.comune.bologna.it) ha 702 dataset. Qui ne selezioniamo i migliori e li rendiamo interrogabili in locale via DuckDB.
-
-## Perché
+## Perché Bologna
 
 Bologna ha uno dei portali open data comunali più maturi d'Italia:
 - **702 dataset**, licenza CC BY 4.0
@@ -21,43 +15,70 @@ Bologna ha uno dei portali open data comunali più maturi d'Italia:
 - **Geolocalizzati** — coordinate, quartieri, zone
 - **API pulita** con export diretto in Parquet
 
-## Dataset attivi
+## Cosa contiene
 
 | Dataset | Records | Periodo | Freq |
 |---|---|---|---|
-| **Varchi ZTL** (80 accessi) | **18.6M** | 2019–2026 | mensile |
-| Incarichi collaborazione | 747 | 2012–2026 | **weekly** |
-| Temperature Bologna | 9,3k | 2001–2026 | **daily** |
-| Precipitazioni Bologna | 9,3k | 2001–2026 | **daily** |
-| Centraline qualità aria | 44k | 2026 | **daily** |
-| Popolazione per quartiere | 239k | 1986–2024 | annuale |
+| **Varchi ZTL** (80 accessi) | **18,6M** | 2019–2026 | mensile |
 | Colonnine conta-bici | 516k | 2018–2026 | mensile |
 | Varco ZTL Ercolani | 254k | 2019–2026 | mensile |
-| Rifter civici (indirizzi + quartiere) | 77k | — | mensile |
+| Popolazione per quartiere | 239k | 1986–2024 | annuale |
+| Centraline qualità aria | 44k | 2026 | daily |
+| Riferimenti civici | 77k | — | mensile |
+| Temperature / Precipitazioni | 9,3k+9,3k | 2001–2026 | daily |
+| Incarichi collaborazione | 747 | 2012–2026 | weekly |
 
-## Come si usa
+## Esempi di domande
+
+- **Quante auto e quante bici passano per Viale Ercolani?** (~2.900 bici vs ~720 auto/giorno nel 2024)
+- **Come è cambiata la popolazione dei quartieri dal 1986?**
+- **Quali quartieri hanno più passaggi ZTL?**
+- **C'è relazione tra traffico e inquinamento dell'aria?**
+- **Quali zone della città sono più servite da colonnine bici?**
+
+## Tre modi per accedere ai dati
+
+### 1. Via DuckDB (locale)
 
 ```bash
-# Stato
-make status
-
-# Scarica/aggiorna dati
+pip install -r requirements.txt
 make fetch
-make fetch/popolazione-quartiere
-
-# Query SQL
 make q/popolazione-quartiere CMD="SELECT quartiere, sum(residenti) FROM data WHERE anno='2024-01-01' GROUP BY quartiere"
-
-# Check completo
-make check
 ```
 
-## Cosa si può fare con questi dati
+### 2. Via SQL ad hoc
 
-- **Bici vs Auto**: confronto su Viale Ercolani nel 2024: ~2.900 bici e ~720 auto/giorno (dati osservati, varco n.44 vs colonnina Ercolani — vedi `analisi/02_bici_vs_auto.sql`)
-- **Demografia per quartiere**: popolazione 1986–2024, età, sesso, cittadinanza
-- **Mobilità × territorio**: colonnine e varchi ZTL mappati ai quartieri via civici ufficiali
-- **Cross-dominio**: incroci con dati nazionali Lab (ANAC, ISTAT, qualità aria)
+Ogni dataset è interrogabile con DuckDB:
+
+```python
+import duckdb
+duckdb.sql("""
+    SELECT quartiere, SUM(residenti) AS residenti
+    FROM read_parquet('_data/popolazione-quartiere.parquet')
+    WHERE anno = '2024-01-01'
+    GROUP BY quartiere ORDER BY residenti DESC
+""").show()
+```
+
+### 3. Via analisi già pronte
+
+Le analisi SQL pronte sono in `analisi/` (es. `02_bici_vs_auto.sql`).
+
+## Partecipa
+
+- **Hai una domanda su Bologna?** Apri una [Discussion](https://github.com/dataciviclab/dcl-bologna/discussions)
+- **Vuoi proporre un dataset?** Segnalalo nelle discussioni
+- **Vuoi contribuire?** Vedi [come contribuire al Lab](https://github.com/dataciviclab/dataciviclab/blob/main/docs/come-contribuire.md)
+
+## Roadmap
+
+- [x] Scoring 20/80 del catalogo (702 dataset)
+- [x] Popolazione per quartiere (1986–2024)
+- [x] Colonnine bici + mapping quartieri
+- [x] Varchi ZTL + mapping quartieri
+- [x] Qualità aria + incrocio traffico/inquinamento
+- [ ] Demografia completa (emigrati, famiglie, convivenze)
+- [ ] Dashboard quartieri
 
 ## Architettura
 
@@ -67,20 +88,9 @@ dataset/*.yml  →  pipeline/fetch.py  →  _data/*.parquet  →  DuckDB
 mapping/*.csv  →  join territoriali  ←  analisi SQL
 ```
 
-Repo autonomo, formati compatibili con il Lab. Dipendenze minime: `pip install -r requirements.txt` (duckdb, PyYAML, pandas).
-
-## Roadmap
-
-- [x] Scoring 20/80 del catalogo (702 dataset)
-- [x] Popolazione per quartiere (serie 1986–2024)
-- [x] Colonnine bici + mapping ai quartieri
-- [x] Varchi ZTL (80 accessi mergiati) + mapping ai quartieri
-- [x] Pipeline fetch + validazione + registry
-- [x] Qualità aria (NO2, PM10) + incrocio traffico/inquinamento
-- [ ] Demografia completa (emigrati, famiglie, convivenze)
-- [ ] Dashboard quartieri
+Repo autonomo, formati compatibili con il Lab. Dipendenze minime: duckdb, PyYAML, pandas.
 
 ## Licenza
 
-- **Codice**: MIT ([LICENSE](./LICENSE))
-- **Dati**: CC BY 4.0 (Comune di Bologna) — i dati originali restano di proprietà del Comune di Bologna e vengono redistribuiti nei termini della licenza CC BY 4.0 indicata sul portale.
+- **Codice**: MIT
+- **Dati**: CC BY 4.0 (Comune di Bologna)
