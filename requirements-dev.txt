@@ -1,0 +1,2 @@
+# Dipendenze di sviluppo (test)
+pytest>=7
