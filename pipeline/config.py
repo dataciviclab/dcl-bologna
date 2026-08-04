@@ -16,11 +16,16 @@ def load_config(dataset_id):
         return yaml.safe_load(f)
 
 def export_url(config):
-    """Costruisce URL di export Parquet per un dataset config."""
+    """Costruisce URL di export Parquet per un dataset config.
+
+    Il dataset_id può contenere spazi e caratteri speciali (es. i dataset
+    famiglia Opendatasoft): va URL-encoded, altrimenti urllib rifiuta la
+    request (InvalidURL su spazi non encodati).
+    """
     ds = config["source"]
     ds_id = ds["dataset_id"]
     fmt = ds.get("export_format", "parquet")
-    return f"{API_BASE}/catalog/datasets/{ds_id}/exports/{fmt}"
+    return f"{API_BASE}/catalog/datasets/{urllib.parse.quote(ds_id)}/exports/{fmt}"
 
 def data_path(dataset_id, fmt="parquet"):
     """Path locale dove salvare il parquet scaricato."""

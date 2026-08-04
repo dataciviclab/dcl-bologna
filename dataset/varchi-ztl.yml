@@ -18,6 +18,10 @@ source:
   base_url: "https://opendata.comune.bologna.it/api/explore/v2.1"
   dataset_id: famiglia varchi (80 dataset varco-n-*)
   export_format: parquet
+  # Dataset famiglia Opendatasoft: non esportabile come singolo parquet.
+  # Fetch dedicato (scarica gli 80 varco-n-* dal catalogo e li unisce):
+  fetch: dedicated
+  fetch_script: pipeline/fetch_varchi.py
 
 data:
   # Unico parquet mergiato da 80 varchi
@@ -63,7 +67,7 @@ usage:
   example: |
     -- Traffico totale per varco (2024)
     SELECT nome_varco, sum(auto_furgoni) as auto
-    FROM read_parquet('_data/varchi-ztl-all.parquet')
+    FROM read_parquet('_data/varchi-ztl.parquet')
     WHERE extract(year FROM data) = 2024
     GROUP BY nome_varco
     ORDER BY auto DESC

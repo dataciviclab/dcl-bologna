@@ -18,6 +18,15 @@ from pipeline.config import load_config, export_url, data_path, list_datasets
 def fetch(dataset_id, force=False):
     """Scarica un dataset in Parquet."""
     config = load_config(dataset_id)
+
+    # Dataset con fetch dedicato (es. varchi-ztl → fetch_varchi.py):
+    # il fetch generico non può scaricarli, li skippa con istruzione chiara.
+    src = config["source"]
+    if src.get("fetch") == "dedicated":
+        script = src.get("fetch_script", "?")
+        print(f"⏭️  {dataset_id}: fetch dedicato ({script}) — usa quello, non il generico")
+        return None
+
     url = export_url(config)
     dest = data_path(dataset_id, config["source"].get("export_format", "parquet"))
     
@@ -122,13 +131,19 @@ def main():
         datasets = list_datasets()
         print(f"🎯 Fetch Bologna — {len(datasets)} dataset configurati")
         for ds_id in datasets:
-            fetch(ds_id)
+            try:
+                fetch(ds_id)
+            except Exception as e:
+                print(f"   ❌ {ds_id}: {e}")
         return
     
     for ds_id in args:
         if ds_id.startswith("--"):
             continue
-        fetch(ds_id, force="--force" in args)
+        try:
+            fetch(ds_id, force="--force" in args)
+        except Exception as e:
+            print(f"   ❌ {ds_id}: {e}")
 
 
 if __name__ == "__main__":
