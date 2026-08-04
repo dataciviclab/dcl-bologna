@@ -62,7 +62,7 @@ def main():
         # Aggiungi colonna varco_id per identificare la provenienza
         # DuckDB supporta read_parquet con lista di file
         files_list = "[" + ", ".join(f"'{p}'" for p in parquet_files) + "]"
-        dest = os.path.join(DATA_DIR, "varchi-ztl-all.parquet")
+        dest = os.path.join(DATA_DIR, "varchi-ztl.parquet")
         con.execute(f"CREATE TABLE merged AS SELECT * FROM read_parquet({files_list})")
         con.execute(f"COPY merged TO '{dest}' (FORMAT PARQUET)")
         records = con.execute(f"SELECT count(*) FROM merged").fetchone()[0]

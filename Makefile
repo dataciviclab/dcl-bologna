@@ -5,6 +5,7 @@
 # make fetch      → scarica tutti i dataset non presenti
 # make fetch-all  → riscarica tutto (--force)
 # make fetch/<id> → scarica un dataset specifico
+# make varchi     → fetch dedicato: 80 varchi ZTL + merge in un parquet
 # make check      → validazione + registry + status
 # make add/<id>   → configura un nuovo dataset dal catalogo
 
@@ -34,6 +35,19 @@ fetch-all:
 fetch/%:
 	@echo "=== Fetch: $* ==="
 	@$(PYTHON) $(PIPELINE)/fetch.py $* $(if $(filter --force,$(ARGS)),--force)
+	@$(MAKE) registry
+
+# --- Varchi ZTL: fetch dedicato (80 varco-n-* dal catalogo + merge) ---
+varchi:
+	@echo "=== Varchi ZTL: fetch 80 varchi + merge ==="
+	@$(PYTHON) $(PIPELINE)/fetch_varchi.py
+	@$(PYTHON) $(PIPELINE)/fetch_varchi.py --merge
+	@$(MAKE) registry
+
+varchi-quick:
+	@echo "=== Varchi ZTL: quick (5 varchi di test) ==="
+	@$(PYTHON) $(PIPELINE)/fetch_varchi.py --quick
+	@$(PYTHON) $(PIPELINE)/fetch_varchi.py --merge
 	@$(MAKE) registry
 
 # --- Check completo ---
@@ -68,6 +82,7 @@ help:
 	@echo "make fetch            Scarica dataset mancanti"
 	@echo "make fetch-all        Riscarica tutto"
 	@echo "make fetch/popolazione-quartiere  Scarica specifico"
+	@echo "make varchi           Fetch dedicato: 80 varchi ZTL + merge"
 	@echo "make check            Validazione completa"
 	@echo "make list             Elenca dataset configurati"
 	@echo "make info/popolazione-quartiere   Info su dataset"
