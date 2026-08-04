@@ -1,0 +1,69 @@
+# Dataset: Famiglie residenti per tipologia — serie storica
+# Fonte: OpenData Comune di Bologna — Ufficio Comunale di Statistica
+# API Opendatasoft v2.1 — export diretto Parquet
+# ============================================================
+
+dataset:
+  id: famiglie-tipologia
+  title: "Famiglie residenti per tipologia della famiglia, dimensione familiare, numero componenti, quartiere e zona"
+  description: >
+    Serie storica delle famiglie residenti a Bologna per tipologia
+    (es. unipersonali, coppie, monogenitoriali), dimensione familiare,
+    numero di componenti, quartiere e zona. Descrive la struttura
+    familiare dei quartieri.
+
+source:
+  type: opendatasoft
+  base_url: "https://opendata.comune.bologna.it/api/explore/v2.1"
+  dataset_id: famiglie-residenti-per-eta-tipologia-e-cittadinanza-del-capofamiglia-per-quartie
+  export_format: parquet
+
+schema:
+  columns:
+    - name: anno
+      type: date
+      description: Anno di riferimento (1986–2024)
+    - name: cittadinanza_del_capofamiglia
+      type: string
+      description: Cittadinanza del capofamiglia
+    - name: eta
+      type: string
+      description: Classe d'età del capofamiglia
+    - name: numero_famiglie
+      type: int
+      description: Numero famiglie
+    - name: quartiere
+      type: string
+      description: Quartiere
+    - name: sesso
+      type: string
+      description: Sesso del capofamiglia
+    - name: tipo_capofamiglia
+      type: string
+      description: Tipologia famiglia / capofamiglia
+    - name: zona
+      type: string
+      description: Zona statistica
+
+coverage:
+  years: "1986–2024"
+  territorial: "Comune di Bologna — quartieri e zone"
+  granularity: "tipologia capofamiglia × età × cittadinanza × quartiere × zona"
+  records: 78270
+
+schedule:
+  frequency: annual
+  note: "Aggiornato ogni anno dall'Ufficio Statistica (dato al 31/12)"
+
+usage:
+  example: |
+    -- Famiglie per tipologia e quartiere (ultimo anno)
+    SELECT quartiere, tipologia, sum(famiglie) as famiglie
+    FROM data
+    WHERE anno = (SELECT max(anno) FROM data)
+    GROUP BY quartiere, tipologia
+    ORDER BY famiglie DESC
+
+cross_lab:
+  - dataset: popolazione-quartiere
+    key: anno × quartiere × zona

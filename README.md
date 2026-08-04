@@ -27,6 +27,9 @@ Bologna ha uno dei portali open data comunali più maturi d'Italia:
 | Riferimenti civici | 77k | — | mensile |
 | Temperature / Precipitazioni | 9,3k+9,3k | 2001–2026 | daily |
 | Incarichi collaborazione | 747 | 2012–2026 | weekly |
+| Emigrati per destinazione | 82k | 1986–2024 | annuale |
+| Famiglie per tipologia | 78k | 1986–2024 | annuale |
+| Popolazione in convivenza | 93k | 1986–2024 | annuale |
 
 ## Esempi di domande
 
@@ -77,7 +80,7 @@ Le analisi SQL pronte sono in `analisi/` (es. `02_bici_vs_auto.sql`).
 - [x] Colonnine bici + mapping quartieri
 - [x] Varchi ZTL + mapping quartieri
 - [x] Qualità aria + incrocio traffico/inquinamento
-- [ ] Demografia completa (emigrati, famiglie, convivenze)
+- [x] Demografia completa (emigrati, famiglie, convivenze)
 - [ ] Dashboard quartieri
 
 ## Architettura

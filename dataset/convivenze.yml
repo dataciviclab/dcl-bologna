@@ -1,0 +1,78 @@
+# Dataset: Popolazione in istituti di convivenza — serie storica
+# Fonte: OpenData Comune di Bologna — Ufficio Comunale di Statistica
+# API Opendatasoft v2.1 — export diretto Parquet
+# ============================================================
+
+dataset:
+  id: convivenze
+  title: "Popolazione residente in istituti di convivenza per cittadinanza, età, dimensione della struttura, quartiere e zona"
+  description: >
+    Serie storica della popolazione residente in istituti di convivenza
+    (case di riposo, convitti, istituti di cura, ecc.) a Bologna, per
+    cittadinanza, età, dimensione della struttura, quartiere e zona.
+    Indicatore di fragilità sociale dei quartieri.
+
+source:
+  type: opendatasoft
+  base_url: "https://opendata.comune.bologna.it/api/explore/v2.1"
+  dataset_id: popolazione-residente-in-istituti-di-convivenza-per-cittadinanza-eta-dimensione-
+  export_format: parquet
+
+schema:
+  columns:
+    - name: anno
+      type: date
+      description: Anno di riferimento (1986–2024)
+    - name: centro_storico_zone_periferiche
+      type: string
+      description: Centro Storico / Zone periferiche
+    - name: cittadinanza
+      type: string
+      description: Italiana / Straniera
+    - name: dimensione
+      type: string
+      description: Dimensione della struttura di convivenza
+    - name: eta_grandi
+      type: string
+      description: Grandi classi (00-14, 15-29, 30-44, 45-64, 65-79, 80 e oltre)
+    - name: eta_quinquennali
+      type: string
+      description: Classi quinquennali
+    - name: eta_singolo
+      type: int
+      description: Età per singolo anno (0–112)
+    - name: quartiere
+      type: string
+      description: Quartiere
+    - name: residenti
+      type: int
+      description: Numero residenti in convivenza
+    - name: sesso
+      type: string
+      description: Maschi / Femmine
+    - name: zona
+      type: string
+      description: Zona statistica
+
+coverage:
+  years: "1986–2024"
+  territorial: "Comune di Bologna — quartieri e zone"
+  granularity: "cittadinanza × età × dimensione struttura × quartiere × zona"
+  records: 92633
+
+schedule:
+  frequency: annual
+  note: "Aggiornato ogni anno dall'Ufficio Statistica (dato al 31/12)"
+
+usage:
+  example: |
+    -- Popolazione in convivenza per quartiere (ultimo anno)
+    SELECT quartiere, sum(residenti) as residenti_convivenza
+    FROM data
+    WHERE anno = (SELECT max(anno) FROM data)
+    GROUP BY quartiere
+    ORDER BY residenti_convivenza DESC
+
+cross_lab:
+  - dataset: popolazione-quartiere
+    key: anno × quartiere × zona
