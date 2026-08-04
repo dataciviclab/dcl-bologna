@@ -55,17 +55,15 @@ def fetch(dataset_id, force=False):
     else:
         print(f"   ⚠️ Magic number: {content[:4]} (non PAR1 — forse non è Parquet)")
     
-    # Mostra info schema
+    # Mostra info schema (contratto condiviso: pipeline/parquet.py)
     try:
-        import duckdb
-        con = duckdb.connect()
-        schema = con.execute(f"DESCRIBE read_parquet('{dest}')").fetchall()
-        records = con.execute(f"SELECT count(*) FROM read_parquet('{dest}')").fetchone()[0]
-        print(f"   📊 {records:,} records × {len(schema)} colonne")
-        for row in schema[:5]:
-            print(f"      {row[0]:30s} {row[1]}")
-        if len(schema) > 5:
-            print(f"      ... e altre {len(schema)-5} colonne")
+        from pipeline.parquet import inspect_parquet
+        columns, records = inspect_parquet(dest)
+        print(f"   📊 {records:,} records × {len(columns)} colonne")
+        for name, typ in columns[:5]:
+            print(f"      {name:30s} {typ}")
+        if len(columns) > 5:
+            print(f"      ... e altre {len(columns)-5} colonne")
     except Exception as e:
         print(f"   ⚠️ Errore validazione DuckDB: {e}")
     

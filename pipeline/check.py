@@ -24,10 +24,9 @@ FREQ_DAYS = {
 def schema_hash(path):
     """Hash veloce dello schema (nomi colonne ordinati)."""
     try:
-        import duckdb
-        con = duckdb.connect()
-        cols = con.execute(f"SELECT column_name FROM (DESCRIBE SELECT * FROM read_parquet('{path}')) ORDER BY column_name").fetchall()
-        names = [c[0] for c in cols]
+        from pipeline.parquet import inspect_parquet
+        columns, _ = inspect_parquet(path)
+        names = [c[0] for c in columns]
         return hashlib.md5("|".join(names).encode()).hexdigest()[:12]
     except Exception:
         return None
@@ -48,11 +47,9 @@ def validate_parquet(path):
         return {"valid": False, "error": f"bad_magic:{magic.hex()}"}
     
     try:
-        import duckdb
-        con = duckdb.connect()
-        records = con.execute(f"SELECT count(*) FROM read_parquet('{path}')").fetchone()[0]
-        cols_count = len(con.execute(f"SELECT column_name FROM (DESCRIBE SELECT * FROM read_parquet('{path}'))").fetchall())
-        return {"valid": True, "records": records, "cols": cols_count, "size_bytes": size}
+        from pipeline.parquet import inspect_parquet
+        columns, records = inspect_parquet(path)
+        return {"valid": True, "records": records, "cols": len(columns), "size_bytes": size}
     except Exception as e:
         return {"valid": False, "error": f"duckdb:{str(e)[:100]}"}
 
