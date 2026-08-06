@@ -39,14 +39,13 @@ varchi = [ds for ds in cat["datasets"] if ds["id"].startswith("varco-n-")]
 print(f"Varchi ZTL trovati: {len(varchi)}")
 
 # Per ogni varco, prendi nome e coordinate via API (solo prime righe)
-# Usiamo i dati dal dataset varco-ercolani come template
-# Invece di scaricare tutti i varchi, prendiamo le info dal catalogo
+# I nomi dei varchi vengono dal catalogo (catalog_full.json).
+# Il match spaziale con i civici è il meccanismo di mapping.
 
 # Scarichiamo un dataset unico con tutti i varchi? No, sono separati.
 # Usiamo il nome del varco per fare mapping manuale + coordinate
 
-# Per ora, mappiamo i varchi di cui abbiamo il parquet (varco-ercolani)
-# e per gli altri usiamo le coordinate dalla descrizione nel catalogo
+# Mappiamo tutti i varchi del catalogo via coordinate (match con i civici)
 
 # Carica civici
 civici = con.execute(f"""

@@ -1,0 +1,77 @@
+root: "../../out"
+schema_version: 1
+
+dataset:
+  name: "colonnine_bici"
+  source_id: "comune_bologna_opendata"
+  tags: [trasporti, mobilita, bici, bologna]
+  category: trasporti
+  years: [2026]
+  time_coverage:
+    start_year: 2018
+    end_year: 2026
+
+raw:
+  output_policy: overwrite
+  sources:
+    - name: "ods_colonnine_conta_bici"
+      type: "http_file"
+      args:
+        url: "https://opendata.comune.bologna.it/api/explore/v2.1/catalog/datasets/colonnine-conta-bici/exports/parquet"
+        filename: "colonnine_conta_bici.parquet"
+      primary: true
+
+clean:
+  sql: "sql/clean.sql"
+  read:
+    source: auto
+    mode: latest
+  required_columns:
+    - anno
+    - data
+    - colonnina
+    - direzione_centro
+    - direzione_periferia
+    - totale
+    - quartiere
+    - zona
+    - via
+  validate:
+    min_rows: 100000
+    not_null:
+      - data
+      - colonnina
+      - totale
+    primary_key:
+      - data
+      - colonnina
+
+mart:
+  tables:
+    - name: "mart_colonnine_anno"
+      sql: "sql/mart_colonnine_anno.sql"
+    - name: "mart_colonnine_quartiere"
+      sql: "sql/mart_colonnine_quartiere.sql"
+    - name: "mart_colonnine_ora"
+      sql: "sql/mart_colonnine_ora.sql"
+  required_tables:
+    - "mart_colonnine_anno"
+    - "mart_colonnine_quartiere"
+    - "mart_colonnine_ora"
+  validate:
+    table_rules:
+      mart_colonnine_anno:
+        required_columns: [anno, colonnina, quartiere, giorni_rilevati, totale_passaggi]
+        primary_key: [anno, colonnina]
+        min_rows: 10
+      mart_colonnine_quartiere:
+        required_columns: [anno, quartiere, totale_passaggi, bici_giorno_medi]
+        primary_key: [anno, quartiere]
+        min_rows: 5
+      mart_colonnine_ora:
+        required_columns: [ora_inizio, quartiere, bici_medie]
+        primary_key: [ora_inizio, quartiere]
+        min_rows: 10
+
+validation:
+  fail_on_error: true

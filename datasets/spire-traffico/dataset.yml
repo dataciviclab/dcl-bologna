@@ -1,0 +1,79 @@
+root: "../../out"
+schema_version: 1
+
+dataset:
+  name: "spire_traffico"
+  source_id: "comune_bologna_opendata"
+  tags: [trasporti, mobilita, traffico, spire, bologna]
+  category: trasporti
+  years: [2022, 2023, 2024, 2025]
+  time_coverage:
+    start_year: 2022
+    end_year: 2025
+
+raw:
+  output_policy: overwrite
+  sources:
+    - name: "ods_spire_flusso_veicoli"
+      type: "http_file"
+      args:
+        url: "https://opendata.comune.bologna.it/api/explore/v2.1/catalog/datasets/rilevazione-flusso-veicoli-tramite-spire-anno-{year}/exports/parquet"
+        filename: "rilevazione_flusso_spire_{year}.parquet"
+      primary: true
+
+clean:
+  sql: "sql/clean.sql"
+  read:
+    source: auto
+    mode: latest
+  required_columns:
+    - anno
+    - data
+    - id_uni
+    - nome_via
+    - livello
+    - fascia_oraria
+    - ora_inizio
+    - passaggi
+  validate:
+    min_rows: 10000
+    not_null:
+      - data
+      - id_uni
+      - passaggi
+    primary_key:
+      - data
+      - id_uni
+      - livello
+      - fascia_oraria
+
+mart:
+  tables:
+    - name: "mart_spire_sintesi"
+      sql: "sql/mart_spire_sintesi.sql"
+    - name: "mart_spire_ora"
+      sql: "sql/mart_spire_ora.sql"
+    - name: "mart_spire_trend"
+      sql: "sql/mart_spire_trend.sql"
+      years: [2022, 2023, 2024, 2025]
+  required_tables:
+    - "mart_spire_sintesi"
+    - "mart_spire_ora"
+    - "mart_spire_trend"
+  validate:
+    table_rules:
+      mart_spire_sintesi:
+        required_columns: [anno, nome_via, giorni_rilevati, totale_passaggi]
+        primary_key: [anno, nome_via]
+        min_rows: 300
+      mart_spire_ora:
+        required_columns: [anno, nome_via, ora_inizio, passaggi_medi]
+        primary_key: [anno, nome_via, ora_inizio]
+        min_rows: 3000
+      mart_spire_trend:
+        required_columns: [nome_via, first_year, last_year, cagr_pct]
+        primary_key: [nome_via]
+        min_rows: 300
+
+validation:
+  fail_on_error: true

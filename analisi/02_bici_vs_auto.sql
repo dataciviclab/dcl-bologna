@@ -1,6 +1,6 @@
 -- ============================================================
 -- Analisi 02: Bici vs Auto su Viale Ercolani (2024)
--- Dataset: colonnine-bici, varco-ercolani
+-- Dataset: colonnine-bici, varchi-ztl (varco n.44 Ercolani)
 -- Nota: richiede make fetch per entrambi i dataset.
 -- Copertura 2024: entrambi i dataset coprono l'intero anno
 -- (colonnina Ercolani: dati continui dal 2018; varco: dal 2019).
@@ -12,8 +12,8 @@ FROM read_parquet('_data/colonnine-bici.parquet')
 WHERE colonnina='Ercolani' AND extract(year FROM data)=2024
 UNION ALL
 SELECT 'auto', count(DISTINCT data::date)
-FROM read_parquet('_data/varco-ercolani.parquet')
-WHERE extract(year FROM data)=2024;
+FROM read_parquet('_data/varchi-ztl.parquet')
+WHERE varco=44 AND extract(year FROM data)=2024;
 
 -- 1. Volumi annuali: bici (colonnina Ercolani) vs auto (varco n.44)
 --    Le medie giornaliere sono calcolate su 365 giorni (anno solare).
@@ -24,7 +24,7 @@ SELECT extract(year FROM b.data) as anno,
        round(sum(b.totale) / 365.0, 0) as bici_giorno,
        round(sum(a.auto_furgoni + a.moto_ciclomotori) / 365.0, 0) as veicoli_giorno
 FROM read_parquet('_data/colonnine-bici.parquet') b
-JOIN read_parquet('_data/varco-ercolani.parquet') a ON b.data = a.data
+JOIN read_parquet('_data/varchi-ztl.parquet') a ON b.data = a.data AND a.varco = 44
 WHERE b.colonnina='Ercolani'
   AND extract(year FROM b.data) = 2024
 GROUP BY anno;
@@ -35,7 +35,7 @@ SELECT extract(hour FROM b.data) as ora,
        round(avg(a.auto_furgoni + a.moto_ciclomotori), 0) as media_veicoli,
        round(avg(b.totale) * 1.0 / nullif(avg(a.auto_furgoni + a.moto_ciclomotori), 0), 1) as rapporto
 FROM read_parquet('_data/colonnine-bici.parquet') b
-JOIN read_parquet('_data/varco-ercolani.parquet') a ON b.data = a.data
+JOIN read_parquet('_data/varchi-ztl.parquet') a ON b.data = a.data AND a.varco = 44
 WHERE b.colonnina='Ercolani'
   AND extract(year FROM b.data) = 2024
 GROUP BY ora ORDER BY ora;
