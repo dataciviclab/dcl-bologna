@@ -1,0 +1,68 @@
+root: "../../out"
+schema_version: 1
+
+dataset:
+  name: "centraline_aria"
+  source_id: "comune_bologna_opendata"
+  tags: [ambiente, aria, inquinamento, bologna]
+  category: ambiente
+  years: [2026]
+  time_coverage:
+    start_year: 2025
+    end_year: 2026
+
+raw:
+  output_policy: overwrite
+  sources:
+    - name: "ods_centraline_aria"
+      type: "http_file"
+      args:
+        url: "https://opendata.comune.bologna.it/api/explore/v2.1/catalog/datasets/centraline-qualita-aria/exports/parquet"
+        filename: "centraline_aria.parquet"
+      primary: true
+
+clean:
+  sql: "sql/clean.sql"
+  read:
+    source: auto
+    mode: latest
+  required_columns:
+    - anno
+    - reftime
+    - stazione
+    - agente_atm
+    - value
+  validate:
+    min_rows: 10000
+    not_null:
+      - reftime
+      - stazione
+      - agente_atm
+      - value
+    primary_key:
+      - reftime
+      - stazione
+      - agente_atm
+
+mart:
+  tables:
+    - name: "mart_aria_stazione"
+      sql: "sql/mart_aria_stazione.sql"
+    - name: "mart_aria_ora"
+      sql: "sql/mart_aria_ora.sql"
+  required_tables:
+    - "mart_aria_stazione"
+    - "mart_aria_ora"
+  validate:
+    table_rules:
+      mart_aria_stazione:
+        required_columns: [anno, stazione, agente_atm, media_valore, max_valore, giorni_rilevati]
+        primary_key: [anno, stazione, agente_atm]
+        min_rows: 10
+      mart_aria_ora:
+        required_columns: [ora_inizio, stazione, agente_atm, media_valore]
+        primary_key: [ora_inizio, stazione, agente_atm]
+        min_rows: 10
+
+validation:
+  fail_on_error: true

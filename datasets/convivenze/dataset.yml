@@ -1,0 +1,70 @@
+root: "../../out"
+schema_version: 1
+
+dataset:
+  name: "convivenze"
+  source_id: "comune_bologna_opendata"
+  tags: [demografia, convivenze, bologna]
+  category: welfare-lavoro
+  years: [2024]
+  time_coverage:
+    start_year: 1986
+    end_year: 2024
+
+raw:
+  output_policy: overwrite
+  sources:
+    - name: "ods_convivenze"
+      type: "http_file"
+      args:
+        url: "https://opendata.comune.bologna.it/api/explore/v2.1/catalog/datasets/popolazione-residente-in-istituti-di-convivenza-per-cittadinanza-eta-dimensione-/exports/parquet"
+        filename: "convivenze.parquet"
+      primary: true
+
+clean:
+  sql: "sql/clean.sql"
+  read:
+    source: auto
+    mode: latest
+  required_columns:
+    - anno
+    - quartiere
+    - zona
+    - centro_storico_zone_periferiche
+    - cittadinanza
+    - dimensione
+    - eta_quinquennali
+    - eta_grandi
+    - eta_singolo
+    - sesso
+    - residenti
+  validate:
+    min_rows: 10000
+    not_null:
+      - anno
+      - quartiere
+      - residenti
+    primary_key:
+      - anno
+      - quartiere
+      - zona
+      - cittadinanza
+      - dimensione
+      - eta_singolo
+      - sesso
+
+mart:
+  tables:
+    - name: "mart_convivenze_tipo"
+      sql: "sql/mart_convivenze_tipo.sql"
+  required_tables:
+    - "mart_convivenze_tipo"
+  validate:
+    table_rules:
+      mart_convivenze_tipo:
+        required_columns: [anno, dimensione, residenti, quota_pct]
+        primary_key: [anno, dimensione]
+        min_rows: 20
+
+validation:
+  fail_on_error: true

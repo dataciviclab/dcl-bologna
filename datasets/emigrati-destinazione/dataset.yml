@@ -1,0 +1,63 @@
+root: "../../out"
+schema_version: 1
+
+dataset:
+  name: "emigrati_destinazione"
+  source_id: "comune_bologna_opendata"
+  tags: [demografia, emigrazione, bologna]
+  category: welfare-lavoro
+  years: [2024]
+  time_coverage:
+    start_year: 1986
+    end_year: 2024
+
+raw:
+  output_policy: overwrite
+  sources:
+    - name: "ods_emigrati_destinazione"
+      type: "http_file"
+      args:
+        url: "https://opendata.comune.bologna.it/api/explore/v2.1/catalog/datasets/emigrati-secondo-la-destinazione-per-sesso-quartiere-e-zona-di-provenienza-serie/exports/parquet"
+        filename: "emigrati.parquet"
+      primary: true
+
+clean:
+  sql: "sql/clean.sql"
+  read:
+    source: auto
+    mode: latest
+  required_columns:
+    - anno
+    - destinazione_comuni_regioni
+    - quartiere
+    - zona
+    - sesso
+    - numero_emigrati
+  validate:
+    min_rows: 10000
+    not_null:
+      - anno
+      - quartiere
+      - numero_emigrati
+    primary_key:
+      - anno
+      - destinazione_comuni_regioni
+      - quartiere
+      - zona
+      - sesso
+
+mart:
+  tables:
+    - name: "mart_emigrati_quartiere"
+      sql: "sql/mart_emigrati_quartiere.sql"
+  required_tables:
+    - "mart_emigrati_quartiere"
+  validate:
+    table_rules:
+      mart_emigrati_quartiere:
+        required_columns: [anno, quartiere, totale_emigrati, quota_pct]
+        primary_key: [anno, quartiere]
+        min_rows: 100
+
+validation:
+  fail_on_error: true
