@@ -25,7 +25,7 @@ Quirk della fonte, rischi noti, decisioni metodologiche.
 
 ## Rischi noti
 
-- **Cache dei 80 varchi**: lo script usa `_data/varco-n-*.parquet` come cache di default (già presenti). In CI serve popolare la cache o eseguire lo script come step dedicato.
+- **Cache dei 80 varchi**: lo script usa `datasets/varchi-ztl/cache/` come cache di default (`DEFAULT_CACHE = BASE / "cache"`). In CI serve popolare la cache o eseguire lo script come step dedicato.
 - **Path assoluto in dataset.yml**: `local_file` usa un path assoluto alla candidate root (convenzione locale POC). In produzione da rendere relativo o configurabile.
 - **Famiglia incompleta**: 2019-2026 è la serie attuale; verificare che il catalogo non abbia aggiunto varchi dopo `catalog_full.json`.
 

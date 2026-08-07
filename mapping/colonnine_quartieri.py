@@ -60,8 +60,9 @@ def main():
     
     # Se non esiste, avvisa
     if not os.path.exists(CIVICI_PATH):
-        print("⚠️  Dataset civici non trovato. Scaricalo con:")
-        print("   toolkit run --config datasets/rifter-civici/dataset.yml")
+        print("⚠️  Dataset civici (rifter) non trovato.")
+        print("   I mapping già generati sono committati in mapping/*.csv e usati dai candidate.")
+        print("   Per rigenerarli serve il dataset civici, non migrato nel toolkit.")
         return
     
     civici = con.execute(f"""

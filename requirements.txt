@@ -1,1 +1,4 @@
 duckdb>=1.0
+# lab-connectors: richiesto da datasets/varchi-ztl/fetch_varchi_toolkit.py
+# (safe_connect impone memory_limit=2GB — necessario per il merge dei 80 varchi)
+lab-connectors>=0.15

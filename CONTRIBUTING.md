@@ -59,12 +59,12 @@ git commit -m "tipo: messaggio"
 
 Prima di pushare:
 - `make status/<slug>` — readiness del dataset
-- Controlla che `out/` e `_data/` non siano in git (`git status`)
+- Controlla che `out/`, `datasets/*/cache/` e i parquet candidate non siano in git (`git status`)
 - Il commit deve essere stabile: chi clona deve poter fare `toolkit run` e vedere tutto funzionare
 
 ## Principi
 
-- **I dati in `out/` e `_data/` non vanno in git.** Sono rigenerabili con il toolkit. Il repo contiene solo codice e configurazioni.
+- **I dati in `out/` e nelle cache (`datasets/*/cache/`) non vanno in git.** Sono rigenerabili con il toolkit. Il repo contiene solo codice e configurazioni.
 - **Un dataset = una cartella `datasets/<slug>/`.** Config + SQL di pulizia + mart. Niente pipeline custom.
 - **Le analisi in SQL**, non in Python. Python solo per orchestrazione (script di bootstrap, es. varchi) e visualizzazione. L'analisi deve essere riproducibile.
 - **Se un dato non è verificabile, non esiste.** Ogni numero nel README deve avere una query alle spalle.
