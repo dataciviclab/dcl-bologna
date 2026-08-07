@@ -46,6 +46,12 @@ clean:
       - data
       - colonnina
 
+support:
+  - name: colonnina_quartieri
+    type: file
+    # path relativo al candidate root (datasets/colonnine-bici/), normalizzato dal parser
+    path: "../../mapping/colonnine-quartieri.csv"
+
 mart:
   tables:
     - name: "mart_colonnine_anno"
