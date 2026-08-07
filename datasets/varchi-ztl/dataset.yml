@@ -1,0 +1,81 @@
+root: "../../out"
+schema_version: 1
+
+dataset:
+  name: "varchi_ztl"
+  source_id: "comune_bologna_opendata"
+  tags: [trasporti, mobilita, traffico, ztl, bologna]
+  category: trasporti
+  years: [2026]
+  time_coverage:
+    start_year: 2019
+    end_year: 2026
+
+raw:
+  output_policy: overwrite
+  sources:
+    - name: "varchi_ztl_merged"
+      type: "local_file"
+      args:
+        path: "/home/gabry/dev/dataciviclab-workspace/dcl-bologna/datasets/varchi-ztl/varchi_ztl.parquet"
+        filename: "varchi_ztl.parquet"
+      primary: true
+
+clean:
+  sql: "sql/clean.sql"
+  read:
+    source: auto
+    mode: latest
+  required_columns:
+    - anno
+    - data
+    - varco
+    - nome_varco
+    - direzione
+    - tipologia_varco
+    - totale_passaggi
+    - auto_furgoni
+    - moto_ciclomotori
+    - bus_camion
+    - non_classificato
+    - sintatticamente_corretta
+    - lista_bianca_regolare
+    - lista_bianca_fuori_fascia
+    - lista_speciale
+    - lista_nera
+    - transito_generico_irregolare
+    - segnalazioni
+    - longitudine
+    - latitudine
+  validate:
+    min_rows: 1000000
+    not_null:
+      - data
+      - varco
+      - totale_passaggi
+    primary_key:
+      - data
+      - varco
+
+mart:
+  tables:
+    - name: "mart_varchi_ora"
+      sql: "sql/mart_varchi_ora.sql"
+    - name: "mart_varchi_varco"
+      sql: "sql/mart_varchi_varco.sql"
+  required_tables:
+    - "mart_varchi_ora"
+    - "mart_varchi_varco"
+  validate:
+    table_rules:
+      mart_varchi_ora:
+        required_columns: [anno, ora_inizio, totale_passaggi, auto_furgoni, moto_ciclomotori]
+        primary_key: [anno, ora_inizio]
+        min_rows: 20
+      mart_varchi_varco:
+        required_columns: [anno, varco, nome_varco, giorni_rilevati, totale_passaggi]
+        primary_key: [anno, varco]
+        min_rows: 100
+
+validation:
+  fail_on_error: true
