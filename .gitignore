@@ -6,3 +6,6 @@ __pycache__/
 registry.json
 _local/
 out/
+# Candidate toolkit: artefatti runtime non committabili
+datasets/*/*.parquet
+datasets/*/cache/
