@@ -4,8 +4,8 @@
 --   1. anno derivato dalla data (il dato è multi-anno, {year} è solo il run year)
 --   2. dedup su (data, colonnina): esistono letture ridondanti (~60 coppie,
 --      valori diversi es. totale 0 vs 51) → tengo la lettura col totale maggiore
---   3. join con mapping quartieri (mapping/colonnine-quartieri.csv) per
---      arricchire colonnina → quartiere/zona/via
+--   3. join con mapping quartieri (support type file, ADR-005) per
+--      arricchire colonnina → quartiere/zona/via — {support.colonnina_quartieri.path}
 --   4. typing con le macro standard
 --
 -- Chiave: (data, colonnina) unica dopo dedup. primary_key del clean.
@@ -27,7 +27,7 @@ SELECT
     cast_double(m.lat) AS latitudine
 
 FROM raw_input r
-LEFT JOIN read_csv('mapping/colonnine-quartieri.csv',
+LEFT JOIN read_csv('{support.colonnina_quartieri.path}',
                    auto_detect=true, delim=',', header=true) m
     ON r.colonnina = m.colonnina
 
