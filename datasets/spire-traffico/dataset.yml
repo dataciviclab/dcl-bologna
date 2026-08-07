@@ -71,7 +71,7 @@ mart:
         primary_key: [anno, nome_via, ora_inizio]
         min_rows: 3000
       mart_spire_trend:
-        required_columns: [nome_via, first_year, last_year, cagr_pct]
+        required_columns: [nome_via, first_year, last_year, passaggi_giorno_primo_anno, passaggi_giorno_ultimo_anno, giorni_rilevati_primo_anno, giorni_rilevati_ultimo_anno, cagr_pct]
         primary_key: [nome_via]
         min_rows: 300
 
