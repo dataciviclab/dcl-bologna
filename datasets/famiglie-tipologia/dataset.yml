@@ -1,0 +1,74 @@
+root: "../../out"
+schema_version: 1
+
+dataset:
+  name: "famiglie_tipologia"
+  source_id: "comune_bologna_opendata"
+  tags: [demografia, famiglie, bologna]
+  category: welfare-lavoro
+  years: [2024]
+  time_coverage:
+    start_year: 1986
+    end_year: 2024
+
+raw:
+  output_policy: overwrite
+  sources:
+    - name: "ods_famiglie_tipologia"
+      type: "http_file"
+      args:
+        url: "https://opendata.comune.bologna.it/api/explore/v2.1/catalog/datasets/famiglie-residenti-per-eta-tipologia-e-cittadinanza-del-capofamiglia-per-quartie/exports/parquet"
+        filename: "famiglie.parquet"
+      primary: true
+
+clean:
+  sql: "sql/clean.sql"
+  read:
+    source: auto
+    mode: latest
+  required_columns:
+    - anno
+    - quartiere
+    - zona
+    - eta
+    - tipo_capofamiglia
+    - sesso
+    - cittadinanza_del_capofamiglia
+    - numero_famiglie
+  validate:
+    min_rows: 10000
+    not_null:
+      - anno
+      - quartiere
+      - numero_famiglie
+    primary_key:
+      - anno
+      - quartiere
+      - zona
+      - eta
+      - tipo_capofamiglia
+      - sesso
+      - cittadinanza_del_capofamiglia
+
+mart:
+  tables:
+    - name: "mart_famiglie_tipo"
+      sql: "sql/mart_famiglie_tipo.sql"
+    - name: "mart_famiglie_quartiere"
+      sql: "sql/mart_famiglie_quartiere.sql"
+  required_tables:
+    - "mart_famiglie_tipo"
+    - "mart_famiglie_quartiere"
+  validate:
+    table_rules:
+      mart_famiglie_tipo:
+        required_columns: [anno, tipo_capofamiglia, totale_famiglie, quota_pct]
+        primary_key: [anno, tipo_capofamiglia]
+        min_rows: 20
+      mart_famiglie_quartiere:
+        required_columns: [anno, quartiere, totale_famiglie, quota_pct]
+        primary_key: [anno, quartiere]
+        min_rows: 100
+
+validation:
+  fail_on_error: true

@@ -1,0 +1,57 @@
+root: "../../out"
+schema_version: 1
+
+dataset:
+  name: "temperature_bologna"
+  source_id: "comune_bologna_opendata"
+  tags: [ambiente, meteo, temperatura, bologna]
+  category: ambiente
+  years: [2026]
+  time_coverage:
+    start_year: 2001
+    end_year: 2026
+
+raw:
+  output_policy: overwrite
+  sources:
+    - name: "ods_temperature"
+      type: "http_file"
+      args:
+        url: "https://opendata.comune.bologna.it/api/explore/v2.1/catalog/datasets/temperature_bologna/exports/parquet"
+        filename: "temperature.parquet"
+      primary: true
+
+clean:
+  sql: "sql/clean.sql"
+  read:
+    source: auto
+    mode: latest
+  required_columns:
+    - date
+    - avg
+    - max
+    - min
+    - stagione
+  validate:
+    min_rows: 5000
+    not_null:
+      - date
+      - avg
+    primary_key:
+      - date
+
+mart:
+  tables:
+    - name: "mart_temperatura_anno"
+      sql: "sql/mart_temperatura_anno.sql"
+  required_tables:
+    - "mart_temperatura_anno"
+  validate:
+    table_rules:
+      mart_temperatura_anno:
+        required_columns: [anno, avg_media, max_max, min_min, giorni_oltre_35]
+        primary_key: [anno]
+        min_rows: 20
+
+validation:
+  fail_on_error: true

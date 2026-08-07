@@ -1,0 +1,54 @@
+root: "../../out"
+schema_version: 1
+
+dataset:
+  name: "precipitazioni_bologna"
+  source_id: "comune_bologna_opendata"
+  tags: [ambiente, meteo, precipitazioni, bologna]
+  category: ambiente
+  years: [2026]
+  time_coverage:
+    start_year: 2001
+    end_year: 2026
+
+raw:
+  output_policy: overwrite
+  sources:
+    - name: "ods_precipitazioni"
+      type: "http_file"
+      args:
+        url: "https://opendata.comune.bologna.it/api/explore/v2.1/catalog/datasets/precipitazioni_bologna/exports/parquet"
+        filename: "precipitazioni.parquet"
+      primary: true
+
+clean:
+  sql: "sql/clean.sql"
+  read:
+    source: auto
+    mode: latest
+  required_columns:
+    - date
+    - pioggia_mm
+    - stagione
+  validate:
+    min_rows: 5000
+    not_null:
+      - date
+    primary_key:
+      - date
+
+mart:
+  tables:
+    - name: "mart_precipitazioni_anno"
+      sql: "sql/mart_precipitazioni_anno.sql"
+  required_tables:
+    - "mart_precipitazioni_anno"
+  validate:
+    table_rules:
+      mart_precipitazioni_anno:
+        required_columns: [anno, pioggia_totale_mm, giorni_pioggia, max_giornaliero_mm]
+        primary_key: [anno]
+        min_rows: 20
+
+validation:
+  fail_on_error: true

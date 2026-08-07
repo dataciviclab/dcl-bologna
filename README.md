@@ -20,8 +20,7 @@ Bologna ha uno dei portali open data comunali più maturi d'Italia:
 | Dataset | Records | Periodo | Freq |
 |---|---|---|---|
 | **Varchi ZTL** (80 accessi) | **18,6M** | 2019–2026 | mensile |
-| Colonnine conta-bici | 516k | 2018–2026 | mensile |
-| Varco ZTL Ercolani | 254k | 2019–2026 | mensile |
+| Colonnine conta-bici | 525k | 2018–2026 | mensile |
 | Popolazione per quartiere | 239k | 1986–2024 | annuale |
 | Centraline qualità aria | 44k | 2026 | daily |
 | Riferimenti civici | 77k | — | mensile |

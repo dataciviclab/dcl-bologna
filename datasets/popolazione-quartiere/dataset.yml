@@ -1,0 +1,75 @@
+root: "../../out"
+schema_version: 1
+
+dataset:
+  name: "popolazione_quartiere"
+  source_id: "comune_bologna_opendata"
+  tags: [demografia, popolazione, bologna]
+  category: welfare-lavoro
+  years: [2024]
+  time_coverage:
+    start_year: 1986
+    end_year: 2024
+
+raw:
+  output_policy: overwrite
+  sources:
+    - name: "ods_popolazione_residente"
+      type: "http_file"
+      args:
+        url: "https://opendata.comune.bologna.it/api/explore/v2.1/catalog/datasets/annuale_popolazione_residente_eta_quart_zonadal1986/exports/parquet"
+        filename: "popolazione_residente.parquet"
+      primary: true
+
+clean:
+  sql: "sql/clean.sql"
+  read:
+    source: auto
+    mode: latest
+  required_columns:
+    - anno
+    - cittadinanza
+    - eta_singolo
+    - eta_grandi
+    - eta_quinquennali
+    - quartiere
+    - zona
+    - centro_storico_zone_periferiche
+    - sesso
+    - residenti
+  validate:
+    min_rows: 100000
+    not_null:
+      - anno
+      - quartiere
+      - residenti
+    primary_key:
+      - anno
+      - quartiere
+      - zona
+      - eta_singolo
+      - sesso
+      - cittadinanza
+
+mart:
+  tables:
+    - name: "mart_pop_quartiere"
+      sql: "sql/mart_pop_quartiere.sql"
+    - name: "mart_pop_trend"
+      sql: "sql/mart_pop_trend.sql"
+  required_tables:
+    - "mart_pop_quartiere"
+    - "mart_pop_trend"
+  validate:
+    table_rules:
+      mart_pop_quartiere:
+        required_columns: [anno, quartiere, residenti, quota_pct, indice_vecchiaia]
+        primary_key: [anno, quartiere]
+        min_rows: 100
+      mart_pop_trend:
+        required_columns: [quartiere, first_year, last_year, residenti_primo, residenti_ultimo, cagr_pct]
+        primary_key: [quartiere]
+        min_rows: 5
+
+validation:
+  fail_on_error: true
