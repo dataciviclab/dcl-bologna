@@ -2,24 +2,29 @@
 
 ## Aggiungere un nuovo dataset
 
+I dataset vivono in `datasets/<slug>/` con lo **standard candidate del Lab**
+(raw → clean → mart via [toolkit](https://github.com/dataciviclab/toolkit)). Riferimento:
+[docs/candidate-standard.md](https://github.com/dataciviclab/dataset-incubator/blob/main/docs/candidate-standard.md).
+
 ```bash
-# 1. Crea dataset/nome.yml (copia da uno esistente, modifica)
-#    source.dataset_id = nome API del dataset su opendata.comune.bologna.it
-#    source.export_format = parquet (sempre — è il formato nativo)
+# 1. Crea datasets/<slug>/ con:
+#    - dataset.yml      → nome, years, source_id, tags, category, raw/clean/mart
+#    - sql/clean.sql    → SELECT ... FROM raw_input (typing, {year}, macro standard)
+#    - sql/mart_*.sql   → aggregazioni (SELECT ... FROM clean_input)
+#    - README.md + notes.md
 
-# 2. Scarica
-make fetch/nome-dataset
+# 2. Esegui la pipeline
+toolkit run --config datasets/<slug>/dataset.yml
+#    target: status: passed, readiness: ready (8/8)
 
-# 3. Verifica
-make status                  # deve comparire come pronto
-python3 pipeline/query.py nome-dataset "SELECT count(*) FROM data"
+# 3. Verifica schema e dati
+toolkit inspect config --config datasets/<slug>/dataset.yml
 
-# 4. Esplora schema e prime righe
-python3 pipeline/query.py nome-dataset "DESCRIBE SELECT * FROM data"
-python3 pipeline/query.py nome-dataset "SELECT * FROM data LIMIT 5"
-
-# 5. Aggiorna README (tabella dataset attivi + stato)
+# 4. Aggiorna README.md (tabella dataset)
 ```
+
+Per le convenzioni del toolkit (source types, macro, placeholder `{year}`, mart multi-anno):
+`toolkit contract --layer all` prima di scrivere.
 
 ## Fare un'analisi
 
@@ -30,15 +35,12 @@ python3 pipeline/query.py nome-dataset "SELECT * FROM data LIMIT 5"
 #    - query 1..N: analisi
 #    - ogni query deve funzionare in DuckDB direttamente
 
-# 2. Esegui l'analisi
-python3 pipeline/query.py dataset1 "SELECT * FROM data LIMIT 10"
-
-# Per analisi multi-dataset:
+# 2. Esegui l'analisi sui parquet clean (out/data/clean/<slug>/<anno>/)
 python3 -c "
 import duckdb
 con = duckdb.connect()
-con.execute('SELECT * FROM read_parquet(\"_data/ds1.parquet\") a
-             JOIN read_parquet(\"_data/ds2.parquet\") b ON a.data = b.data
+con.execute('SELECT * FROM read_parquet(\"out/data/clean/ds/2026/ds_2026_clean.parquet\") a
+             JOIN read_parquet(\"out/data/clean/ds2/2026/ds2_2026_clean.parquet\") b ON a.data = b.data
              LIMIT 10').fetchdf()
 "
 
@@ -51,19 +53,19 @@ con.execute('SELECT * FROM read_parquet(\"_data/ds1.parquet\") a
 git add -A
 git commit -m "tipo: messaggio"
 
-# tipi: feat (nuovo dataset/analisi), fix (correzione), 
+# tipi: feat (nuovo dataset/analisi), fix (correzione),
 #       docs (README, discussioni), chore (manutenzione)
 ```
 
 Prima di pushare:
-- `make status` — verifica che i dataset pronti siano quelli giusti
-- Controlla che `_data/` e `.tmp/` non siano in git (`git status`)
-- Il commit deve essere stabile: chi clona deve poter fare `make fetch && make status` e vedere tutto funzionare
+- `make status/<slug>` — readiness del dataset
+- Controlla che `out/` e `_data/` non siano in git (`git status`)
+- Il commit deve essere stabile: chi clona deve poter fare `toolkit run` e vedere tutto funzionare
 
 ## Principi
 
-- **I dati in _data/ non vanno in git.** Sono rigenerabili con `make fetch`. Il repo contiene solo codice e configurazioni.
-- **Un dataset = un file YAML.** Niente di più. Lo YAML dice dove sta il dato, come si chiama, che colonne ha.
-- **Le analisi in SQL**, non in Python. Python solo per orchestrazione (fetch) e visualizzazione. L'analisi deve essere riproducibile.
+- **I dati in `out/` e `_data/` non vanno in git.** Sono rigenerabili con il toolkit. Il repo contiene solo codice e configurazioni.
+- **Un dataset = una cartella `datasets/<slug>/`.** Config + SQL di pulizia + mart. Niente pipeline custom.
+- **Le analisi in SQL**, non in Python. Python solo per orchestrazione (script di bootstrap, es. varchi) e visualizzazione. L'analisi deve essere riproducibile.
 - **Se un dato non è verificabile, non esiste.** Ogni numero nel README deve avere una query alle spalle.
 - **Prima di aggiungere un dataset, controlla se si incrocia con uno già presente.** Se no, probabilmente non serve.

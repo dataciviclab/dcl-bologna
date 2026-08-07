@@ -4,28 +4,32 @@
 
 Primo progetto territoriale del DataCivicLab. Selezioniamo i migliori dataset
 del portale [OpenData Bologna](https://opendata.comune.bologna.it) (702 dataset)
-e li rendiamo interrogabili in locale via DuckDB.
+e li rendiamo interrogabili in locale via DuckDB, con la pipeline standard del Lab
+([toolkit](https://github.com/dataciviclab/toolkit)).
 
 ## Perché Bologna
 
 Bologna ha uno dei portali open data comunali più maturi d'Italia:
 - **702 dataset**, licenza CC BY 4.0
 - **Serie storiche** demografiche dal 1986
-- **Dati di mobilità** (ZTL, bici, parcheggi) con granularità oraria
+- **Dati di mobilità** (ZTL, bici, spire, parcheggi) con granularità oraria
 - **Geolocalizzati** — coordinate, quartieri, zone
 - **API pulita** con export diretto in Parquet
 
 ## Cosa contiene
 
+Tutti i dataset sono configurati in `datasets/<slug>/` con lo standard candidate del Lab
+(`dataset.yml` + `sql/clean.sql` + `sql/mart_*.sql`).
+
 | Dataset | Records | Periodo | Freq |
 |---|---|---|---|
 | **Varchi ZTL** (80 accessi) | **18,6M** | 2019–2026 | mensile |
+| Spire traffico (fuori ZTL) | 18,6M | 2022–2025 | mensile |
 | Colonnine conta-bici | 525k | 2018–2026 | mensile |
 | Popolazione per quartiere | 239k | 1986–2024 | annuale |
-| Centraline qualità aria | 44k | 2026 | daily |
-| Riferimenti civici | 77k | — | mensile |
+| Centraline qualità aria | 46k | 2026 | daily |
 | Temperature / Precipitazioni | 9,3k+9,3k | 2001–2026 | daily |
-| Incarichi collaborazione | 747 | 2012–2026 | weekly |
+| Incarichi collaborazione | 750 | 2012–2026 | weekly |
 | Emigrati per destinazione | 82k | 1986–2024 | annuale |
 | Famiglie per tipologia | 78k | 1986–2024 | annuale |
 | Popolazione in convivenza | 93k | 1986–2024 | annuale |
@@ -34,43 +38,47 @@ Bologna ha uno dei portali open data comunali più maturi d'Italia:
 
 - **Quante auto e quante bici passano per Viale Ercolani?** (~2.900 bici vs ~720 auto/giorno nel 2024)
 - **Come è cambiata la popolazione dei quartieri dal 1986?**
-- **Quali quartieri hanno più passaggi ZTL?**
+- **Quali varchi e quali vie hanno più traffico, e a che ora?**
 - **C'è relazione tra traffico e inquinamento dell'aria?**
 - **Quali zone della città sono più servite da colonnine bici?**
 
-## Tre modi per accedere ai dati
+## Come accedere ai dati
 
-### 1. Via DuckDB (locale)
+### 1. Esegui la pipeline (toolkit)
 
 ```bash
-pip install -r requirements.txt
-make fetch
-make q/popolazione-quartiere CMD="SELECT quartiere, sum(residenti) FROM data WHERE anno='2024-01-01' GROUP BY quartiere"
+# esegue raw → clean → mart per un dataset
+toolkit run --config datasets/popolazione-quartiere/dataset.yml
+
+# oppure via Makefile
+make run/popolazione-quartiere
 ```
 
-### 2. Via SQL ad hoc
+L'output è in `out/data/clean/<slug>/<anno>/` (parquet puliti) e
+`out/data/mart/<slug>/` (aggregazioni pronte).
 
-Ogni dataset è interrogabile con DuckDB:
+### 2. Interroga i parquet con DuckDB
 
 ```python
 import duckdb
 duckdb.sql("""
     SELECT quartiere, SUM(residenti) AS residenti
-    FROM read_parquet('_data/popolazione-quartiere.parquet')
-    WHERE anno = '2024-01-01'
+    FROM read_parquet('out/data/clean/popolazione_quartiere/2024/popolazione_quartiere_2024_clean.parquet')
+    WHERE anno = 2024
     GROUP BY quartiere ORDER BY residenti DESC
 """).show()
 ```
 
 ### 3. Via analisi già pronte
 
-Le analisi SQL pronte sono in `analisi/` (es. `02_bici_vs_auto.sql`).
+Le analisi SQL pronte sono in `analisi/` (es. `02_bici_vs_auto.sql`) e leggono dai
+parquet clean in `out/data/clean/`.
 
 ## Partecipa
 
 - **Hai una domanda su Bologna?** Apri una [Discussion](https://github.com/dataciviclab/dcl-bologna/discussions)
 - **Vuoi proporre un dataset?** Segnalalo nelle discussioni
-- **Vuoi contribuire?** Vedi [come contribuire al Lab](https://github.com/dataciviclab/dataciviclab/blob/main/docs/come-contribuire.md)
+- **Vuoi contribuire?** Vedi [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## Roadmap
 
@@ -78,19 +86,24 @@ Le analisi SQL pronte sono in `analisi/` (es. `02_bici_vs_auto.sql`).
 - [x] Popolazione per quartiere (1986–2024)
 - [x] Colonnine bici + mapping quartieri
 - [x] Varchi ZTL + mapping quartieri
+- [x] Spire traffico (complemento ZTL)
 - [x] Qualità aria + incrocio traffico/inquinamento
 - [x] Demografia completa (emigrati, famiglie, convivenze)
+- [x] Migrazione completa alla pipeline toolkit (Fase 5)
 - [ ] Dashboard quartieri
 
 ## Architettura
 
 ```
-dataset/*.yml  →  pipeline/fetch.py  →  _data/*.parquet  →  DuckDB
-                                                              ↓
-mapping/*.csv  →  join territoriali  ←  analisi SQL
+datasets/<slug>/dataset.yml  →  toolkit run  →  out/data/{raw,clean,mart}/<slug>/
+        │                                        │
+        │  sql/clean.sql + mart_*.sql            ↓
+        └────────────────────────────→  DuckDB / analisi SQL
+mapping/*.csv  →  join territoriali (support file ADR-005)
 ```
 
-Repo autonomo, formati compatibili con il Lab. Dipendenze minime: duckdb, PyYAML, pandas.
+Stack: [toolkit](https://github.com/dataciviclab/toolkit) (raw → clean → mart) + DuckDB.
+Dipendenze: vedi `requirements.txt` (per il toolkit: workspace venv del Lab).
 
 ## Licenza
 

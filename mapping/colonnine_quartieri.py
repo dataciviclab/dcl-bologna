@@ -61,7 +61,7 @@ def main():
     # Se non esiste, avvisa
     if not os.path.exists(CIVICI_PATH):
         print("⚠️  Dataset civici non trovato. Scaricalo con:")
-        print(f"   make fetch/rifter-civici")
+        print("   toolkit run --config datasets/rifter-civici/dataset.yml")
         return
     
     civici = con.execute(f"""

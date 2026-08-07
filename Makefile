@@ -1,90 +1,44 @@
-# Bologna Pilota — Makefile
+# dcl-bologna — Makefile
 # ==========================
-# make status     → mostra stato di tutti i dataset
-# make registry   → rigenera registry.json
-# make fetch      → scarica tutti i dataset non presenti
-# make fetch-all  → riscarica tutto (--force)
-# make fetch/<id> → scarica un dataset specifico
-# make varchi     → fetch dedicato: 80 varchi ZTL + merge in un parquet
-# make check      → validazione + registry + status
-# make add/<id>   → configura un nuovo dataset dal catalogo
+# Tutti i dataset vivono in datasets/<slug>/ e sono gestiti dal toolkit.
+# https://github.com/dataciviclab/toolkit
+#
+# make run/<slug>            → esegue la pipeline completa (raw→clean→mart)
+# make status/<slug>         → stato + readiness di un dataset
+# make fetch/<slug>          → scarica/aggiorna i dati raw
+# make clean/<slug>          → pulisce l'output di un dataset
+# make varchi-bootstrap      → bootstrap varchi-ztl (merge 80 dataset, ~2 min)
+# make help                  → questo aiuto
 
-PYTHON = python3
-PIPELINE = pipeline
+TOOLKIT = toolkit
+CONFIG = datasets
 
-.PHONY: status registry fetch fetch-all check
+.PHONY: help
 
-# --- Stato ---
-status:
-	@$(PYTHON) $(PIPELINE)/check.py --status
+# --- Pipeline toolkit ---
+run/%:
+	@$(TOOLKIT) run --config $(CONFIG)/$*/dataset.yml
 
-registry:
-	@$(PYTHON) $(PIPELINE)/check.py --registry
-
-# --- Fetch ---
-fetch:
-	@echo "=== Fetch: scarica dataset mancanti ==="
-	@$(PYTHON) $(PIPELINE)/fetch.py
-	@$(MAKE) registry
-
-fetch-all:
-	@echo "=== Fetch: riscarica tutto ==="
-	@$(PYTHON) $(PIPELINE)/fetch.py --force
-	@$(MAKE) registry
+status/%:
+	@$(TOOLKIT) inspect config --config $(CONFIG)/$*/dataset.yml
 
 fetch/%:
-	@echo "=== Fetch: $* ==="
-	@$(PYTHON) $(PIPELINE)/fetch.py $* $(if $(filter --force,$(ARGS)),--force)
-	@$(MAKE) registry
+	@$(TOOLKIT) run raw --config $(CONFIG)/$*/dataset.yml
 
-# --- Varchi ZTL: fetch dedicato (80 varco-n-* dal catalogo + merge) ---
-varchi:
-	@echo "=== Varchi ZTL: fetch 80 varchi + merge ==="
-	@$(PYTHON) $(PIPELINE)/fetch_varchi.py
-	@$(PYTHON) $(PIPELINE)/fetch_varchi.py --merge
-	@$(MAKE) registry
+clean/%:
+	@rm -rf out/data/raw/$* out/data/clean/$* out/data/mart/$*
 
-varchi-quick:
-	@echo "=== Varchi ZTL: quick (5 varchi di test) ==="
-	@$(PYTHON) $(PIPELINE)/fetch_varchi.py --quick
-	@$(PYTHON) $(PIPELINE)/fetch_varchi.py --merge
-	@$(MAKE) registry
-
-# --- Check completo ---
-check: registry status
-
-# --- Utility ---
-list:
-	@$(PYTHON) $(PIPELINE)/fetch.py --list
-
-info/%:
-	@$(PYTHON) $(PIPELINE)/fetch.py --info $*
-
-# --- Query ---
-query:
-	@echo "Uso: make q/<dataset> CMD='SELECT ... FROM data'"
-	@echo "Oppure: python3 pipeline/query.py <dataset> '<sql>'"
-
-q/%:
-	@$(PYTHON) $(PIPELINE)/query.py $* "$(CMD)"
-
-# --- Clean ---
-clean:
-	@echo "Rimuovi _data/*.parquet?"
-	@rm -i _data/*.parquet
+# --- Varchi ZTL: bootstrap (merge 80 dataset, una tantum) ---
+varchi-bootstrap:
+	@echo "=== Varchi ZTL: merge 80 varchi (bootstrap) ==="
+	@cd datasets/varchi-ztl && python3 fetch_varchi_toolkit.py --fetch
 
 # --- Help ---
 help:
-	@echo "Bologna Pilota — Makefile"
+	@echo "dcl-bologna — Makefile (toolkit)"
 	@echo ""
-	@echo "make status           Stato dei dataset"
-	@echo "make registry         Rigenera registry.json"
-	@echo "make fetch            Scarica dataset mancanti"
-	@echo "make fetch-all        Riscarica tutto"
-	@echo "make fetch/popolazione-quartiere  Scarica specifico"
-	@echo "make varchi           Fetch dedicato: 80 varchi ZTL + merge"
-	@echo "make check            Validazione completa"
-	@echo "make list             Elenca dataset configurati"
-	@echo "make info/popolazione-quartiere   Info su dataset"
-	@echo "make q/popolazione-quartiere CMD='SELECT ...'  Query SQL"
-	@echo "make clean            Rimuovi dati scaricati"
+	@echo "make run/popolazione-quartiere    Esegue la pipeline completa"
+	@echo "make status/popolazione-quartiere Stato + readiness"
+	@echo "make fetch/popolazione-quartiere  Aggiorna i dati raw"
+	@echo "make clean/popolazione-quartiere  Rimuove l'output del dataset"
+	@echo "make varchi-bootstrap             Merge 80 varchi (una tantum)"

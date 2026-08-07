@@ -5,7 +5,7 @@
 
 -- 1. Partite IVA negli incarichi Bologna (top 20 per importo)
 SELECT partita_iva, ragione_sociale, round(sum(importo_euro), 0) as totale_incarichi
-FROM read_parquet('_data/incarichi.parquet')
+FROM read_parquet('out/data/clean/incarichi/2026/incarichi_2026_clean.parquet')
 WHERE partita_iva IS NOT NULL AND partita_iva != '' AND importo_euro > 0
 GROUP BY partita_iva, ragione_sociale
 ORDER BY totale_incarichi DESC

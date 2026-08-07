@@ -1,11 +1,11 @@
-_data/
 __pycache__/
 *.pyc
 .venv/
 .tmp/
-registry.json
 _local/
 out/
+_data/
+registry.json
 # Candidate toolkit: artefatti runtime non committabili
 datasets/*/*.parquet
 datasets/*/cache/
