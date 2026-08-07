@@ -4,12 +4,14 @@
 -- 2019-2026 in un unico file, 1 riga = 1 varco × 1 ora). Trasformazioni:
 --   1. anno derivato da data (dato multi-anno, {year} è solo il run year)
 --   2. typing con le macro standard
---   3. dedup per chiave (data, varco) con GROUP BY + max(): il merge produce
---      ~3817 doppioni (0.02%). NON usare ROW_NUMBER() OVER — su 18,6M righe
---      il window esplode la RAM (OOM anche con memory_limit 2GB). GROUP BY: 0.7s.
+--   3. dedup per chiave (data, varco) con GROUP BY + max() come GUARDIA:
+--      lo script di bootstrap deduplica già il raw (~3817 doppioni, 0.02%);
+--      il GROUP BY qui lo difende in modo riproducibile. NON usare
+--      ROW_NUMBER() OVER — su 18,6M righe il window esplode la RAM
+--      (OOM anche con memory_limit 2GB). GROUP BY: 0.7s.
 --   (lon/lat già decodificate dal WKB nello script di merge)
 --
--- Chiave: (data, varco) unica dopo dedup. primary_key del clean.
+-- Chiave: (data, varco) unica. primary_key del clean.
 
 SELECT
     CAST(EXTRACT(YEAR FROM data) AS INTEGER) AS anno,

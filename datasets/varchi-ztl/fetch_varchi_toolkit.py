@@ -1,18 +1,16 @@
 #!/usr/bin/env python3
 """
-Fetch + merge dei 80 varchi ZTL per la pipeline toolkit.
+Fetch + merge dei 80 varchi ZTL per la pipeline toolkit (bootstrap).
 
-Adattamento di pipeline/fetch_varchi.py al source type `script` del toolkit:
-- lo script gira nella candidate root (datasets/varchi-ztl/)
-- scarica i 80 dataset `varco-n-*` da OpenData Bologna in una CACHE locale
-- li unisce in un unico parquet `varchi_ztl.parquet` (output per il raw layer)
+Questo script è il BOOTSTRAP del candidate `varchi-ztl`: scarica i 80 dataset
+`varco-n-*` da OpenData Bologna in una CACHE locale, li unisce in un unico
+parquet e produce `varchi_ztl.parquet` (nella candidate root), che il
+`dataset.yml` legge via `raw.type: local_file`.
 
-Cache: i singoli varchi vengono salvati in un dir cache (default: sotto la
-candidate root, es. `cache/`), così i run successivi riusano i file già
-scaricati. Per un fetch da zero servono ~80 download (lato server ODS, lento
-~50s per i dataset grandi) — il primo run può superare il timeout di 600s del
-toolkit: in quel caso pre-eseguire questo script a mano (bootstrap cache) e poi
-rilanciare `toolkit run raw`.
+Perché bootstrap e non source `script`:
+- il toolkit riesegue lo `script` a ogni run (output_policy overwrite/versioned,
+  niente skip) → su 18,6M righe il raw supera il timeout di 600s del toolkit;
+- `local_file` legge il mergiato già pronto, senza re-eseguire il merge.
 
 Uso (dalla candidate root):
   python fetch_varchi_toolkit.py                 # merge da cache
@@ -20,7 +18,7 @@ Uso (dalla candidate root):
   python fetch_varchi_toolkit.py --cache <dir>   # cache alternativa
   python fetch_varchi_toolkit.py --out <file>    # output alternativo
 """
-import os, sys, json, time, urllib.request, concurrent.futures, struct
+import os, sys, json, urllib.request, concurrent.futures, struct
 from pathlib import Path
 from lab_connectors.duckdb import safe_connect
 

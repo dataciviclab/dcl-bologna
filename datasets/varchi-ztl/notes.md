@@ -32,6 +32,7 @@ Quirk della fonte, rischi noti, decisioni metodologiche.
 ## Decisioni metodologiche
 
 - **`primary_key` clean**: `(data, varco)` — unica dopo dedup per chiave.
-- **Dedup nel clean**, non nello script: il mergiato resta "raw" fedele e il dedup è riproducibile nel layer clean.
+- **Dedup nello script di bootstrap** (`GROUP BY data, varco` nel merge): il raw prodotto è già dedup. Il `clean.sql` mantiene lo stesso GROUP BY come **guardia** riproducibile (costo 0.7s su 18,6M righe, nessun window → nessun OOM) — se il raw cambia, il clean garantisce comunque la chiave. Il "possessore" del dedup è lo script; il clean lo difende.
 - **Benchmark nel mart**: `quota_pct` + `rank_varco` (PERCENT_RANK) seguono il pattern comuni/sintesi.
 - **`source_id`**: `comune_bologna_opendata` placeholder — da registrare in SO (stessa nota degli altri candidate).
+- **Portabilità**: il `dataset.yml` usa un path assoluto per il `local_file` (convenzione POC locale). Non riproducibile su altre macchine/CI senza prima generare il mergiato e aggiornare il path — da risolvere in Fase 5 (job CI dedicato + path relativo/configurabile).
