@@ -30,4 +30,4 @@ toolkit run --years 2024 --config datasets/famiglie-tipologia/dataset.yml
 
 ## Stato / prossimo passo
 
-Fase 2 del piano di migrazione dcl-bologna → toolkit. Branch `poc/tokkit-spire`.
+Fase 2 del piano di migrazione dcl-bologna → toolkit. Branch `poc/toolkit-spire`.

@@ -33,4 +33,4 @@ toolkit run --years 2026 --config datasets/temperatura/dataset.yml
 
 ## Stato / prossimo passo
 
-Fase 2 del piano di migrazione dcl-bologna → toolkit. Branch `poc/tokkit-spire`.
+Fase 2 del piano di migrazione dcl-bologna → toolkit. Branch `poc/toolkit-spire`.

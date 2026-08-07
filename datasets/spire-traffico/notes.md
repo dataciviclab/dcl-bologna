@@ -19,7 +19,7 @@ Quirk della fonte, rischi noti, decisioni metodologiche.
 ## Decisioni metodologiche
 
 - **CAGR normalizzato su passaggi/giorno** (non sui totali annuali): il totale annuo distorce la copertura parziale del primo/ultimo anno (es. VIA VITTORIO BIGARI attivata a luglio 2022 → 181/365 giorni → totale tagliato → CAGR gonfiato a +538%). Con la media/giorno scende a +405% e la copertura (181 vs 365 giorni) è esposta nel mart per il consumer. Vie con `giorni_rilevati_primo_anno` bassi vanno interpretate con cautela.
-- **UNPIVOT → `needs-review (7/8)`**: la transizione raw→clean mostra `-2300%` righe (304k wide → 7,3M long) e la readiness scende a `needs-review` perché la coverage della transizione supera la soglia. È il comportamento atteso dell'UNPIVOT (24× righe), non un errore — il `status` resta `passed`.
+- **UNPIVOT → transizione `-2300%` righe**: la transizione raw→clean mostra `-2300%` (304k wide → 7,3M long, 24×) e il validatore la segnala (`qs=95`) ma `status` resta `passed`. È il comportamento atteso dell'UNPIVOT, non un errore. Readiness: `ready (8/8)` dopo `required_columns` completo (15/15) per la check `validation_rules_coverage`.
 - **`source_id`**: `comune_bologna_opendata` non è ancora in source-observatory. Da aprire un intake issue / source-check per la tracciabilità (campo obbligatorio a standard).
 - **`primary_key` clean**: `(data, id_uni, livello, fascia_oraria)` — unico verificato empiricamente sul parquet 2025.
 - **Benchmark nel mart**: `rank_passaggi_anno` in `mart_spire_sintesi` (PERCENT_RANK) segue il pattern comuni/sintesi/trend del candidate-standard.
