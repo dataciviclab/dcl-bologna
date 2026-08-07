@@ -1,0 +1,88 @@
+root: "../../out"
+schema_version: 1
+
+dataset:
+  name: "incarichi"
+  source_id: "comune_bologna_opendata"
+  tags: [pa, incarichi, trasparenza, bologna]
+  category: pa
+  years: [2026]
+  time_coverage:
+    start_year: 2012
+    end_year: 2026
+
+raw:
+  output_policy: overwrite
+  sources:
+    - name: "ods_incarichi_collaborazione"
+      type: "http_file"
+      args:
+        url: "https://opendata.comune.bologna.it/api/explore/v2.1/catalog/datasets/incarichi-di-collaborazione/exports/parquet"
+        filename: "incarichi.parquet"
+      primary: true
+
+clean:
+  sql: "sql/clean.sql"
+  read:
+    source: auto
+    mode: latest
+  required_columns:
+    - id
+    - anno
+    - anno_pg_atto
+    - durata_dal
+    - durata_al
+    - oggetto
+    - classificazione_incarichi
+    - descrizione_classificazione_incarichi
+    - norma_o_titolo_a_base_dell_attribuzione
+    - importo_euro
+    - n_pg_atto
+    - settore_dipartimento_area
+    - servizio
+    - uo
+    - dirigente
+    - responsabile
+    - ragione_sociale
+    - partita_iva
+    - codice_fiscale
+    - curriculum_link
+  validate:
+    min_rows: 500
+    not_null:
+      - id
+      - anno
+      - importo_euro
+      - ragione_sociale
+    primary_key:
+      - id
+
+mart:
+  tables:
+    - name: "mart_incarichi_anno"
+      sql: "sql/mart_incarichi_anno.sql"
+    - name: "mart_incarichi_tipo"
+      sql: "sql/mart_incarichi_tipo.sql"
+    - name: "mart_incarichi_soggetti"
+      sql: "sql/mart_incarichi_soggetti.sql"
+  required_tables:
+    - "mart_incarichi_anno"
+    - "mart_incarichi_tipo"
+    - "mart_incarichi_soggetti"
+  validate:
+    table_rules:
+      mart_incarichi_anno:
+        required_columns: [anno, numero_incarichi, importo_totale, importo_medio]
+        primary_key: [anno]
+        min_rows: 10
+      mart_incarichi_tipo:
+        required_columns: [classificazione_incarichi, numero_incarichi, importo_totale, quota_incarichi_pct, quota_importo_pct]
+        primary_key: [classificazione_incarichi]
+        min_rows: 5
+      mart_incarichi_soggetti:
+        required_columns: [ragione_sociale, numero_incarichi, importo_totale, partita_iva]
+        primary_key: [ragione_sociale]
+        min_rows: 5
+
+validation:
+  fail_on_error: true
