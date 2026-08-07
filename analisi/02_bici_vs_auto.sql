@@ -27,7 +27,7 @@ FROM read_parquet('out/data/clean/colonnine_bici/2026/colonnine_bici_2026_clean.
 JOIN read_parquet('out/data/clean/varchi_ztl/2026/varchi_ztl_2026_clean.parquet') a ON b.data = a.data AND a.varco = 44
 WHERE b.colonnina='Ercolani'
   AND extract(year FROM b.data) = 2024
-GROUP BY anno;
+GROUP BY extract(year FROM b.data);
 
 -- 2. Profilo orario (media bici e auto per ora, 2024)
 SELECT extract(hour FROM b.data) as ora,

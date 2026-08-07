@@ -24,7 +24,7 @@ Tutti i dataset sono configurati in `datasets/<slug>/` con lo standard candidate
 | Dataset | Records | Periodo | Freq |
 |---|---|---|---|
 | **Varchi ZTL** (80 accessi) | **18,6M** | 2019–2026 | mensile |
-| Spire traffico (fuori ZTL) | 18,6M | 2022–2025 | mensile |
+| Spire traffico (fuori ZTL) | 7,3M/anno | 2022–2025 | mensile |
 | Colonnine conta-bici | 525k | 2018–2026 | mensile |
 | Popolazione per quartiere | 239k | 1986–2024 | annuale |
 | Centraline qualità aria | 46k | 2026 | daily |

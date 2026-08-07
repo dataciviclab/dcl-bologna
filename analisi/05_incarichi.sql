@@ -18,7 +18,8 @@ GROUP BY classificazione_incarichi, descrizione_classificazione_incarichi
 ORDER BY totale DESC;
 
 -- 2. Incarichi per anno
-SELECT extract(year FROM anno_pg_atto) as anno,
+-- Nota: usa la colonna `anno` del clean (derivata da anno_pg_atto nel clean.sql)
+SELECT anno,
        count(*) as n,
        round(sum(importo_euro), 0) as totale
 FROM read_parquet('out/data/clean/incarichi/2026/incarichi_2026_clean.parquet')
