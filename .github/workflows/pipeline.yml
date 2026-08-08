@@ -136,26 +136,49 @@ jobs:
           echo "GCS sync da implementare quando pubblicazione attiva"
 
       # ── Registry + PR draft (pattern eurostat/DI) ─────────────────────
+      # Escluso in smoke: il builder vedrebbe parquet sample (1000 righe)
+      # e produrrebbe un catalogo basato su dati parziali.
       - name: Build registry
-        run: |
-          python scripts/build_registry.py --write 2>/dev/null || echo "⚠️ build_registry non ancora presente"
+        if: ${{ !inputs.smoke && steps.detect.outputs.dirs != '' }}
+        run: python scripts/build_registry.py --write
 
-      - name: Open PR draft if registry changed
-        if: github.event_name != 'pull_request'
+      - name: Check registry diff
+        if: ${{ !inputs.smoke }}
+        id: diff
+        run: |
+          # registry/ è untracked su main (generato da build_registry) —
+          # git diff ignora gli untracked, quindi usiamo git status.
+          if git status --porcelain -- registry/ | grep -q .; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create draft registry PR
+        if: ${{ !inputs.smoke && steps.diff.outputs.changed == 'true' }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number || 'schedule' }}
         run: |
-          if git diff --quiet registry/; then
-            echo "registry invariato — nessuna PR"
+          BRANCH="post-merge-registry/${PR_NUMBER}-registry"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -B "$BRANCH"
+          git add registry/
+          git commit -m "chore(post-merge): aggiorna registry ($PR_NUMBER)" || exit 0
+          git push --force-with-lease -u origin "$BRANCH"
+          EXISTING_PR=$(gh pr list --head "$BRANCH" --json number --jq '.[0].number // empty')
+          if [ -n "$EXISTING_PR" ]; then
+            gh pr edit "$EXISTING_PR" \
+              --title "chore(post-merge): aggiorna registry ($PR_NUMBER)" \
+              --body "Registry artifacts updated after pipeline run." \
+              --add-label post-merge
           else
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            BRANCH="chore/registry-$(date +%Y%m%d-%H%M%S)"
-            git checkout -b "$BRANCH"
-            git add registry/
-            git commit -m "chore: aggiorna registry (post-merge)" || true
-            git push origin "$BRANCH"
-            gh pr create --base main --head "$BRANCH" --title "chore: aggiorna registry" \
-              --body "Aggiornamento automatico del registry dopo il run della pipeline." \
-              --draft || true
+            gh pr create \
+              --base main \
+              --head "$BRANCH" \
+              --title "chore(post-merge): aggiorna registry ($PR_NUMBER)" \
+              --body "Registry artifacts updated after pipeline run." \
+              --label post-merge \
+              --draft
           fi
