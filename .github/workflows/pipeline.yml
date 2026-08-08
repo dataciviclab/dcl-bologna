@@ -135,20 +135,27 @@ jobs:
           }
           echo "GCS sync da implementare quando pubblicazione attiva"
 
-      # ── Registry + PR draft ─────────────────────────────────────────
+      # ── Registry + PR draft (pattern eurostat/DI) ─────────────────────
       - name: Build registry
         run: |
           python scripts/build_registry.py --write 2>/dev/null || echo "⚠️ build_registry non ancora presente"
 
-      - name: Open PR if registry changed
+      - name: Open PR draft if registry changed
         if: github.event_name != 'pull_request'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           if git diff --quiet registry/; then
-            echo "registry invariato"
+            echo "registry invariato — nessuna PR"
           else
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            BRANCH="chore/registry-$(date +%Y%m%d-%H%M%S)"
+            git checkout -b "$BRANCH"
             git add registry/
-            git commit -m "chore(post-merge): aggiorna registry" || true
-            git push origin HEAD:main || true
+            git commit -m "chore: aggiorna registry (post-merge)" || true
+            git push origin "$BRANCH"
+            gh pr create --base main --head "$BRANCH" --title "chore: aggiorna registry" \
+              --body "Aggiornamento automatico del registry dopo il run della pipeline." \
+              --draft || true
           fi
