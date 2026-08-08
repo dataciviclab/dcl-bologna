@@ -63,26 +63,6 @@ jobs:
           pip install git+https://github.com/dataciviclab/toolkit.git
           pip install git+https://github.com/dataciviclab/lab-connectors.git
 
-      # ── Bootstrap varchi-ztl (una tantum per run) ──────────────────
-      # I 80 varchi raw stanno in una cache persistente (actions/cache):
-      # al primo run si scaricano (~20-25 min), ai successivi solo il merge.
-      # La key è basata sullo script di fetch (non su file di catalogo,
-      # eliminati in #19): lo script --fetch è incrementale, quindi i nuovi
-      # varchi dall'API live vengono comunque scaricati al run successivo.
-      - name: Cache varchi raw
-        uses: actions/cache@v4
-        with:
-          path: datasets/varchi-ztl/cache/
-          key: varchi-cache-${{ hashFiles('datasets/varchi-ztl/fetch_varchi_toolkit.py') }}
-          restore-keys: |
-            varchi-cache-
-
-      - name: Bootstrap varchi-ztl
-        run: |
-          # Fallisce se il mergiato non viene prodotto (es. API ODS down):
-          # meglio un errore chiaro che un run con dati stale.
-          python datasets/varchi-ztl/fetch_varchi_toolkit.py --fetch
-
       # ── Determinare i dataset da processare ─────────────────────────
       - name: Detect datasets to run
         id: detect
@@ -111,6 +91,27 @@ jobs:
           else
             echo "dirs=" >> "$GITHUB_OUTPUT"
           fi
+
+      # ── Bootstrap varchi-ztl (SOLO se varchi è tra i dataset processati) ──
+      # I 80 varchi raw stanno in una cache persistente (actions/cache):
+      # al primo run si scaricano (~20-25 min), ai successivi solo il merge.
+      # La key è basata sullo script di fetch: lo script --fetch è
+      # incrementale, quindi i nuovi varchi dall'API vengono scaricati comunque.
+      - name: Cache varchi raw
+        if: contains(steps.detect.outputs.dirs, 'varchi-ztl')
+        uses: actions/cache@v4
+        with:
+          path: datasets/varchi-ztl/cache/
+          key: varchi-cache-${{ hashFiles('datasets/varchi-ztl/fetch_varchi_toolkit.py') }}
+          restore-keys: |
+            varchi-cache-
+
+      - name: Bootstrap varchi-ztl
+        if: contains(steps.detect.outputs.dirs, 'varchi-ztl')
+        run: |
+          # Fallisce se il mergiato non viene prodotto (es. API ODS down):
+          # meglio un errore chiaro che un run con dati stale.
+          python datasets/varchi-ztl/fetch_varchi_toolkit.py --fetch
 
       # ── Run pipeline ─────────────────────────────────────────────────
       - name: Run datasets
@@ -142,8 +143,10 @@ jobs:
       # ── Registry + PR draft (pattern eurostat/DI) ─────────────────────
       # Escluso in smoke: il builder vedrebbe parquet sample (1000 righe)
       # e produrrebbe un catalogo basato su dati parziali.
+      # Gira anche quando cambia solo scripts/** (es. build_registry.py):
+      # il registry si rigenera sui dati già runnati, senza rifare i dataset.
       - name: Build registry
-        if: ${{ !inputs.smoke && steps.detect.outputs.dirs != '' }}
+        if: ${{ !inputs.smoke }}
         run: python scripts/build_registry.py --write
 
       - name: Check registry diff
