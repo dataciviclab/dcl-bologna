@@ -1,12 +1,17 @@
 #!/usr/bin/env python3
 """
-Mapping varchi ZTL → quartieri di Bologna.
-Usa il dataset civici (rifter_civici_pt) per match spaziale.
+Mapping varchi ZTL → quartieri di Bologna (rigenerazione MANUALE).
+
+Il CSV risultante (mapping/varchi-quartieri.csv) è già committato nel repo
+e usato dai candidate. Questo script serve solo a rigenerarlo: richiede il
+dataset civici (rifter), NON migrato nel toolkit — per cui legge da un file
+locale _data/ non versionato. Se manca, i mapping committati restano validi.
 """
 import os, sys, struct, csv, math
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, BASE)
 
+# File locale non versionato (dataset civici, non migrato) — solo per rigenerare i mapping
 DATA_DIR = os.path.join(BASE, "_data")
 MAPPING_DIR = os.path.join(BASE, "mapping")
 CIVICI_PATH = os.path.join(DATA_DIR, "rifter-civici.parquet")

@@ -82,7 +82,7 @@ parquet clean in `out/data/clean/`.
 
 ## Roadmap
 
-- [x] Scoring 20/80 del catalogo (702 dataset)
+- [x] Scoring pilota 20/80 del portale (702 dataset) — catalogo statico ritirato, consultazione via API live
 - [x] Popolazione per quartiere (1986–2024)
 - [x] Colonnine bici + mapping quartieri
 - [x] Varchi ZTL + mapping quartieri
