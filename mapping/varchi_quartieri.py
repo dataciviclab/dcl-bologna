@@ -30,16 +30,19 @@ def haversine(lon1, lat1, lon2, lat2):
 import duckdb
 con = duckdb.connect()
 
-# Tutti i varchi dal catalogo
-import json
-with open(os.path.join(BASE, "catalogo", "catalog_full.json")) as f:
-    cat = json.load(f)
+# Tutti i varchi dal catalogo ODS live (API del portale, non file statico)
+import json, urllib.request, urllib.parse
+API = "https://opendata.comune.bologna.it/api/explore/v2.1/catalog/datasets"
+url = f"{API}?where=" + urllib.parse.quote('search("varco")') + "&limit=100&select=dataset_id"
+req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+with urllib.request.urlopen(req, timeout=30) as resp:
+    data = json.loads(resp.read())
 
-varchi = [ds for ds in cat["datasets"] if ds["id"].startswith("varco-n-")]
+varchi = [x["dataset_id"] for x in data["results"] if x["dataset_id"].startswith("varco-n-")]
 print(f"Varchi ZTL trovati: {len(varchi)}")
 
 # Per ogni varco, prendi nome e coordinate via API (solo prime righe)
-# I nomi dei varchi vengono dal catalogo (catalog_full.json).
+# I nomi dei varchi vengono dal catalogo ODS live (API del portale).
 # Il match spaziale con i civici è il meccanismo di mapping.
 
 # Scarichiamo un dataset unico con tutti i varchi? No, sono separati.

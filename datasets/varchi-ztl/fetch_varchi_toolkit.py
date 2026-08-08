@@ -18,7 +18,7 @@ Uso (dalla candidate root):
   python fetch_varchi_toolkit.py --cache <dir>   # cache alternativa
   python fetch_varchi_toolkit.py --out <file>    # output alternativo
 """
-import os, sys, json, urllib.request, concurrent.futures, struct
+import os, sys, json, urllib.request, urllib.parse, concurrent.futures, struct
 from pathlib import Path
 from lab_connectors.duckdb import safe_connect
 
@@ -27,17 +27,22 @@ BASE = Path(__file__).resolve().parent
 DEFAULT_CACHE = BASE / "cache"
 DEFAULT_OUT = BASE / "varchi_ztl.parquet"
 
-# Lista varchi dal catalogo del repo (fonti di verità dei dataset_id)
-CATALOG = BASE.parent.parent / "catalogo" / "catalog_full.json"
-
+# Lista varchi dal catalogo ODS live (API del portale, non file statico locale)
 API = "https://opendata.comune.bologna.it/api/explore/v2.1/catalog/datasets"
 
 
 def list_varchi():
-    """Ritorna gli id dei dataset varco-n-* dal catalogo del repo."""
-    with open(CATALOG) as f:
-        cat = json.load(f)
-    return [ds["id"] for ds in cat["datasets"] if ds["id"].startswith("varco-n-")]
+    """Ritorna gli id dei dataset varco-n-* dal catalogo ODS live.
+
+    Interroga l'API del portale (search("varco")) e filtra i dataset
+    `varco-n-*`. Il catalogo statico locale è stato eliminato: l'API è
+    sempre fresca (metadati ODS aggiornati dal Comune).
+    """
+    url = f"{API}?where=" + urllib.parse.quote('search("varco")') + "&limit=100&select=dataset_id"
+    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+    with urllib.request.urlopen(req, timeout=30) as resp:
+        data = json.loads(resp.read())
+    return [x["dataset_id"] for x in data["results"] if x["dataset_id"].startswith("varco-n-")]
 
 
 def fetch_one(varco_id, cache):
