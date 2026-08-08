@@ -1,5 +1,7 @@
 # dcl-bologna — Bologna in dati
 
+[![CI](https://github.com/dataciviclab/dcl-bologna/actions/workflows/ci.yml/badge.svg)](https://github.com/dataciviclab/dcl-bologna/actions/workflows/ci.yml)
+
 **18,6 milioni di passaggi ai varchi ZTL, popolazione per quartiere dal 1986, qualità dell'aria, bici e mobilità. I dati aperti di Bologna, interrogabili.**
 
 Primo progetto territoriale del DataCivicLab. Selezioniamo i migliori dataset
@@ -77,8 +79,10 @@ parquet clean in `out/data/clean/`.
 ## Partecipa
 
 - **Hai una domanda su Bologna?** Apri una [Discussion](https://github.com/dataciviclab/dcl-bologna/discussions)
-- **Vuoi proporre un dataset?** Segnalalo nelle discussioni
-- **Vuoi contribuire?** Vedi [CONTRIBUTING.md](CONTRIBUTING.md)
+- **Vuoi proporre un dataset?** Apri un'issue col template [📥 Dataset](https://github.com/dataciviclab/dcl-bologna/issues/new/choose)
+- **Vuoi proporre un'analisi?** Apri un'issue col template [📄 Analisi](https://github.com/dataciviclab/dcl-bologna/issues/new/choose)
+- **Hai trovato un bug?** Apri un'issue col template [🐛 Bug](https://github.com/dataciviclab/dcl-bologna/issues/new/choose)
+- **Vuoi contribuire?** Vedi [CONTRIBUTING.md](CONTRIBUTING.md) — se inizi, cerca le issue con label `good first issue`
 
 ## Roadmap
 

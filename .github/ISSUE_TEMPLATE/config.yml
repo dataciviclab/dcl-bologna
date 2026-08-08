@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Discussion
+    url: https://github.com/dataciviclab/dcl-bologna/discussions
+    about: Domande generali su Bologna, dati e analisi — usa le discussioni per dialogare prima di aprire issue.

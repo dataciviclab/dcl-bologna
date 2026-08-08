@@ -1,0 +1,30 @@
+name: "📄 Proposta analisi"
+description: Proponi un'analisi da fare sui dataset di Bologna
+title: "📄 Analisi: [domanda]"
+labels: ["analisi"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Grazie! Descrivi la domanda a cui vuoi rispondere con i dati di Bologna.
+  - type: textarea
+    id: domanda
+    attributes:
+      label: Domanda
+      description: Cosa vuoi capire? Formulata come domanda concreta.
+    validations:
+      required: true
+  - type: textarea
+    id: dataset
+    attributes:
+      label: Dataset coinvolti
+      description: Quali dataset servono? (es. varchi-ztl, colonnine-bici)
+    validations:
+      required: true
+  - type: textarea
+    id: incroci
+    attributes:
+      label: Incroci possibili
+      description: Con quali altri dataset si potrebbe incrociare?
+    validations:
+      required: false

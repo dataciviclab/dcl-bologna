@@ -1,0 +1,26 @@
+name: "🐛 Bug"
+description: Segnala un problema nel repo o nei dati
+title: "🐛 Bug: [descrizione breve]"
+labels: ["bug"]
+body:
+  - type: textarea
+    id: cosa
+    attributes:
+      label: Cosa succede
+      description: Descrivi il problema.
+    validations:
+      required: true
+  - type: textarea
+    id: riproduzione
+    attributes:
+      label: Come riprodurlo
+      description: Comando o query che mostra il problema.
+    validations:
+      required: true
+  - type: input
+    id: atteso
+    attributes:
+      label: Risultato atteso
+      description: Cosa ti aspettavi?
+    validations:
+      required: false

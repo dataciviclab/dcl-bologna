@@ -17,7 +17,9 @@ raw:
     - name: "varchi_ztl_merged"
       type: "local_file"
       args:
-        path: "/home/gabry/dev/dataciviclab-workspace/dcl-bologna/datasets/varchi-ztl/varchi_ztl.parquet"
+        # path relativo alla candidate root — il parser lo normalizza.
+        # Il mergiato è generato da fetch_varchi_toolkit.py (bootstrap).
+        path: "varchi_ztl.parquet"
         filename: "varchi_ztl.parquet"
       primary: true
 
