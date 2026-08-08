@@ -1,12 +1,17 @@
 #!/usr/bin/env python3
 """
-Mapping varchi ZTL → quartieri di Bologna.
-Usa il dataset civici (rifter_civici_pt) per match spaziale.
+Mapping varchi ZTL → quartieri di Bologna (rigenerazione MANUALE).
+
+Il CSV risultante (mapping/varchi-quartieri.csv) è già committato nel repo
+e usato dai candidate. Questo script serve solo a rigenerarlo: richiede il
+dataset civici (rifter), NON migrato nel toolkit — per cui legge da un file
+locale _data/ non versionato. Se manca, i mapping committati restano validi.
 """
 import os, sys, struct, csv, math
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, BASE)
 
+# File locale non versionato (dataset civici, non migrato) — solo per rigenerare i mapping
 DATA_DIR = os.path.join(BASE, "_data")
 MAPPING_DIR = os.path.join(BASE, "mapping")
 CIVICI_PATH = os.path.join(DATA_DIR, "rifter-civici.parquet")
@@ -30,16 +35,19 @@ def haversine(lon1, lat1, lon2, lat2):
 import duckdb
 con = duckdb.connect()
 
-# Tutti i varchi dal catalogo
-import json
-with open(os.path.join(BASE, "catalogo", "catalog_full.json")) as f:
-    cat = json.load(f)
+# Tutti i varchi dal catalogo ODS live (API del portale, non file statico)
+import json, urllib.request, urllib.parse
+API = "https://opendata.comune.bologna.it/api/explore/v2.1/catalog/datasets"
+url = f"{API}?where=" + urllib.parse.quote('search("varco")') + "&limit=100&select=dataset_id"
+req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+with urllib.request.urlopen(req, timeout=30) as resp:
+    data = json.loads(resp.read())
 
-varchi = [ds for ds in cat["datasets"] if ds["id"].startswith("varco-n-")]
+varchi = [x["dataset_id"] for x in data["results"] if x["dataset_id"].startswith("varco-n-")]
 print(f"Varchi ZTL trovati: {len(varchi)}")
 
 # Per ogni varco, prendi nome e coordinate via API (solo prime righe)
-# I nomi dei varchi vengono dal catalogo (catalog_full.json).
+# I nomi dei varchi vengono dal catalogo ODS live (API del portale).
 # Il match spaziale con i civici è il meccanismo di mapping.
 
 # Scarichiamo un dataset unico con tutti i varchi? No, sono separati.
