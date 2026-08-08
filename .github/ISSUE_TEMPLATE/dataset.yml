@@ -1,0 +1,37 @@
+name: "📥 Proposta dataset"
+description: Proponi un nuovo dataset da aggiungere a dcl-bologna
+title: "📥 Dataset: [nome dataset]"
+labels: ["dataset"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Grazie per la proposta! Compila i campi sotto: più info hai, più veloce sarà l'intake.
+  - type: input
+    id: nome
+    attributes:
+      label: Nome del dataset
+      description: Come si chiama sul portale OpenData Bologna?
+    validations:
+      required: true
+  - type: input
+    id: url
+    attributes:
+      label: URL sul portale
+      description: Link al dataset su opendata.comune.bologna.it
+    validations:
+      required: true
+  - type: textarea
+    id: descrizione
+    attributes:
+      label: Cosa contiene
+      description: Che dati, che periodo, che granularità?
+    validations:
+      required: true
+  - type: textarea
+    id: valore
+    attributes:
+      label: Perché è utile
+      description: Quali domande permette di rispondere? Si incrocia con altri dataset?
+    validations:
+      required: false

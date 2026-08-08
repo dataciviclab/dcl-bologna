@@ -1,5 +1,23 @@
 # Come lavorare su dcl-bologna
 
+## La tua prima PR
+
+Benvenuto! Se sei nuovo, il percorso più semplice:
+
+1. **Trova una issue con label `good first issue`** — sono pensate per chi inizia: toccano pochi file e hanno istruzioni nel body.
+2. **Apri una issue o una discussion prima di lavorare** se hai un'idea tua — evitiamo lavoro duplicato.
+3. **Crea un branch** con nome descrittivo: `feat/<cosa>`, `fix/<cosa>`, `docs/<cosa>`, `chore/<cosa>`.
+4. **Fai la modifica**, poi verifica in locale (vedi sotto).
+5. **Apri la PR** — il template guida la descrizione e la checklist. La CI (`.github/workflows/ci.yml`) gira i preflight automaticamente.
+
+Verifica in locale prima della PR:
+
+```bash
+# toolkit dal venv del Lab (o pip install git+https://github.com/dataciviclab/toolkit.git)
+toolkit run preflight --config datasets/<slug>/dataset.yml   # config valido
+toolkit run --config datasets/<slug>/dataset.yml             # status: passed
+```
+
 ## Aggiungere un nuovo dataset
 
 I dataset vivono in `datasets/<slug>/` con lo **standard candidate del Lab**
@@ -58,9 +76,16 @@ git commit -m "tipo: messaggio"
 ```
 
 Prima di pushare:
-- `make status/<slug>` — readiness del dataset
+- `toolkit run preflight --config datasets/<slug>/dataset.yml` passa (la CI lo rifà)
 - Controlla che `out/`, `datasets/*/cache/` e i parquet candidate non siano in git (`git status`)
 - Il commit deve essere stabile: chi clona deve poter fare `toolkit run` e vedere tutto funzionare
+
+## CI
+
+Il repo ha due workflow GitHub Actions:
+
+- **`ci.yml`** (su ogni PR/push): valida i config dataset con `toolkit run preflight`. `varchi-ztl` è escluso dal preflight — usa un mergiato generato dallo script di bootstrap, gestito dal workflow pipeline.
+- **`pipeline.yml`** (post-merge + schedule mensile + manuale): esegue il run dei dataset, il bootstrap di `varchi-ztl` (con cache persistente), e la sync GCS **graceful** (skippata se le chiavi non sono configurate).
 
 ## Principi
 

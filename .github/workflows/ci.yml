@@ -1,0 +1,38 @@
+# CI — dcl-bologna
+# Validazione leggera su PR/push: config dataset validi via toolkit preflight.
+# NOTA: varchi-ztl è escluso dal preflight — usa local_file su un mergiato
+# generato da fetch_varchi_toolkit.py (bootstrap), non disponibile su PR.
+# Il suo run completo avviene nel workflow pipeline.yml (post-merge/schedule).
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate-config:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install toolkit
+        run: pip install git+https://github.com/dataciviclab/toolkit.git
+
+      - name: Validate all dataset configs (preflight)
+        run: |
+          for cfg in $(find datasets -maxdepth 2 -name dataset.yml | sort); do
+            # varchi-ztl: local_file sul mergiato bootstrap — skip nel preflight
+            case "$cfg" in
+              *varchi-ztl*) echo "→ $cfg (skip: bootstrap varchi, gestito in pipeline.yml)"; continue;;
+            esac
+            echo "→ $cfg"
+            toolkit run preflight --config "$cfg" --years 2026 > /dev/null
+          done
+          echo "✅ All configs valid"
