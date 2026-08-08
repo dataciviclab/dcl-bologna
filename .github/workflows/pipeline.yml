@@ -66,17 +66,22 @@ jobs:
       # ── Bootstrap varchi-ztl (una tantum per run) ──────────────────
       # I 80 varchi raw stanno in una cache persistente (actions/cache):
       # al primo run si scaricano (~20-25 min), ai successivi solo il merge.
+      # La key è basata sullo script di fetch (non su file di catalogo,
+      # eliminati in #19): lo script --fetch è incrementale, quindi i nuovi
+      # varchi dall'API live vengono comunque scaricati al run successivo.
       - name: Cache varchi raw
         uses: actions/cache@v4
         with:
           path: datasets/varchi-ztl/cache/
-          key: varchi-cache-${{ hashFiles('catalogo/**') }}
+          key: varchi-cache-${{ hashFiles('datasets/varchi-ztl/fetch_varchi_toolkit.py') }}
           restore-keys: |
             varchi-cache-
 
       - name: Bootstrap varchi-ztl
         run: |
-          python datasets/varchi-ztl/fetch_varchi_toolkit.py --fetch || true
+          # Fallisce se il mergiato non viene prodotto (es. API ODS down):
+          # meglio un errore chiaro che un run con dati stale.
+          python datasets/varchi-ztl/fetch_varchi_toolkit.py --fetch
 
       # ── Determinare i dataset da processare ─────────────────────────
       - name: Detect datasets to run
@@ -119,21 +124,20 @@ jobs:
             toolkit run -c "$dir/dataset.yml" --years $YEAR $SMOKE
           done
 
-      # ── Sync GCS (graceful: skippa se le chiavi non sono configurate) ──
+      # ── Sync GCS (placeholder D3: pubblicazione non ancora attiva) ──
+      # Lo step è strutturato per auth + sync (pattern eurostat), ma la
+      # pubblicazione vera non è decisa (D3). Con o senza chiavi fa solo
+      # echo — da implementare quando si attiva la pubblicazione GCS.
       - name: Sync GCS (clean+mart)
         if: ${{ !inputs.smoke }}
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY_DCL_BOLOGNA }}
         run: |
           if [ -z "$GCP_SA_KEY" ]; then
-            echo "⚠️ GCP_SA_KEY_DCL_BOLOGNA non configurata — skip GCS sync"
-            exit 0
+            echo "⚠️ GCP_SA_KEY_DCL_BOLOGNA non configurata — skip GCS sync (D3)"
+          else
+            echo "✅ GCP auth disponibile — GCS sync da implementare (D3: pubblicazione non attiva)"
           fi
-          echo "$GCP_SA_KEY" | gcloud auth activate-service-account --key-file=- 2>/dev/null || {
-            echo "⚠️ auth GCS fallita (tooling) — skip"
-            exit 0
-          }
-          echo "GCS sync da implementare quando pubblicazione attiva"
 
       # ── Registry + PR draft (pattern eurostat/DI) ─────────────────────
       # Escluso in smoke: il builder vedrebbe parquet sample (1000 righe)
