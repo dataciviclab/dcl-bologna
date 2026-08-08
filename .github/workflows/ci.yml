@@ -33,11 +33,7 @@ jobs:
               *varchi-ztl*) echo "→ $cfg (skip: bootstrap varchi, gestito in pipeline.yml)"; continue;;
             esac
             # anni dichiarati nel dataset.yml (variano: 2024/2026/multi-anno)
-            YEARS=$(python3 -c "
-import yaml
-y=yaml.safe_load(open('$cfg'))['dataset']['years']
-print(','.join(str(x) for x in y))
-")
+            YEARS=$(python3 -c "import yaml,sys; print(','.join(str(x) for x in yaml.safe_load(open('$cfg'))['dataset']['years']))")
             echo "→ $cfg (years: $YEARS)"
             toolkit run preflight --config "$cfg" --years "$YEARS" > /dev/null
           done
