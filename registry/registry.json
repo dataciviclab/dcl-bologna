@@ -193,7 +193,7 @@
         "colonnine_bici__mart_colonnine_ora"
       ],
       "run": {
-        "run_id": "20260807T183625Z_5a719ad0",
+        "run_id": "20260808T145356Z_a46a8147",
         "year": 2026,
         "status": "SUCCESS",
         "quality_score": {
@@ -202,17 +202,17 @@
           "mart": 100
         },
         "output_rows": {
-          "clean": 525896,
+          "clean": 526352,
           "mart": 267
         },
         "output_bytes": {
-          "raw": 2987521,
-          "clean": 4333912,
-          "mart": 8443
+          "raw": 2990508,
+          "clean": 4442514,
+          "mart": 8421
         },
-        "started_at": "2026-08-07T18:36:25.576119+00:00",
-        "finished_at": "2026-08-07T18:37:52.466431+00:00",
-        "duration_seconds": 86.89
+        "started_at": "2026-08-08T14:53:56.337317+00:00",
+        "finished_at": "2026-08-08T14:55:03.364393+00:00",
+        "duration_seconds": 67.027
       }
     },
     {
@@ -1340,28 +1340,6 @@
         "media_valore"
       ],
       "min_rows": 10,
-      "run": {
-        "run_id": "20260808T142946Z_d1879d43",
-        "year": 2026,
-        "status": "SUCCESS",
-        "quality_score": {
-          "raw": 100,
-          "clean": 100,
-          "mart": 100
-        },
-        "output_rows": {
-          "clean": 47269,
-          "mart": 254
-        },
-        "output_bytes": {
-          "raw": 424992,
-          "clean": 164690,
-          "mart": 4941
-        },
-        "started_at": "2026-08-08T14:29:46.828915+00:00",
-        "finished_at": "2026-08-08T14:29:52.241475+00:00",
-        "duration_seconds": 5.413
-      },
       "location": {
         "type": "gcs",
         "path": "gs://dataciviclab-mart/centraline_aria/2026/mart_aria_ora.parquet",
@@ -1387,28 +1365,6 @@
         "giorni_rilevati"
       ],
       "min_rows": 10,
-      "run": {
-        "run_id": "20260808T142946Z_d1879d43",
-        "year": 2026,
-        "status": "SUCCESS",
-        "quality_score": {
-          "raw": 100,
-          "clean": 100,
-          "mart": 100
-        },
-        "output_rows": {
-          "clean": 47269,
-          "mart": 254
-        },
-        "output_bytes": {
-          "raw": 424992,
-          "clean": 164690,
-          "mart": 4941
-        },
-        "started_at": "2026-08-08T14:29:46.828915+00:00",
-        "finished_at": "2026-08-08T14:29:52.241475+00:00",
-        "duration_seconds": 5.413
-      },
       "location": {
         "type": "gcs",
         "path": "gs://dataciviclab-mart/centraline_aria/2026/mart_aria_stazione.parquet",
@@ -1432,6 +1388,28 @@
         "totale_passaggi"
       ],
       "min_rows": 10,
+      "run": {
+        "run_id": "20260808T145356Z_a46a8147",
+        "year": 2026,
+        "status": "SUCCESS",
+        "quality_score": {
+          "raw": 100,
+          "clean": 100,
+          "mart": 100
+        },
+        "output_rows": {
+          "clean": 526352,
+          "mart": 267
+        },
+        "output_bytes": {
+          "raw": 2990508,
+          "clean": 4442514,
+          "mart": 8421
+        },
+        "started_at": "2026-08-08T14:53:56.337317+00:00",
+        "finished_at": "2026-08-08T14:55:03.364393+00:00",
+        "duration_seconds": 67.027
+      },
       "location": {
         "type": "gcs",
         "path": "gs://dataciviclab-mart/colonnine_bici/2026/mart_colonnine_anno.parquet",
@@ -1453,6 +1431,28 @@
         "bici_medie"
       ],
       "min_rows": 10,
+      "run": {
+        "run_id": "20260808T145356Z_a46a8147",
+        "year": 2026,
+        "status": "SUCCESS",
+        "quality_score": {
+          "raw": 100,
+          "clean": 100,
+          "mart": 100
+        },
+        "output_rows": {
+          "clean": 526352,
+          "mart": 267
+        },
+        "output_bytes": {
+          "raw": 2990508,
+          "clean": 4442514,
+          "mart": 8421
+        },
+        "started_at": "2026-08-08T14:53:56.337317+00:00",
+        "finished_at": "2026-08-08T14:55:03.364393+00:00",
+        "duration_seconds": 67.027
+      },
       "location": {
         "type": "gcs",
         "path": "gs://dataciviclab-mart/colonnine_bici/2026/mart_colonnine_ora.parquet",
@@ -1475,6 +1475,28 @@
         "bici_giorno_medi"
       ],
       "min_rows": 5,
+      "run": {
+        "run_id": "20260808T145356Z_a46a8147",
+        "year": 2026,
+        "status": "SUCCESS",
+        "quality_score": {
+          "raw": 100,
+          "clean": 100,
+          "mart": 100
+        },
+        "output_rows": {
+          "clean": 526352,
+          "mart": 267
+        },
+        "output_bytes": {
+          "raw": 2990508,
+          "clean": 4442514,
+          "mart": 8421
+        },
+        "started_at": "2026-08-08T14:53:56.337317+00:00",
+        "finished_at": "2026-08-08T14:55:03.364393+00:00",
+        "duration_seconds": 67.027
+      },
       "location": {
         "type": "gcs",
         "path": "gs://dataciviclab-mart/colonnine_bici/2026/mart_colonnine_quartiere.parquet",
@@ -1884,7 +1906,7 @@
         2026
       ],
       "run": {
-        "run_id": "20260807T183625Z_5a719ad0",
+        "run_id": "20260808T145356Z_a46a8147",
         "year": 2026,
         "status": "SUCCESS",
         "quality_score": {
@@ -1893,17 +1915,17 @@
           "mart": 100
         },
         "output_rows": {
-          "clean": 525896,
+          "clean": 526352,
           "mart": 267
         },
         "output_bytes": {
-          "raw": 2987521,
-          "clean": 4333912,
-          "mart": 8443
+          "raw": 2990508,
+          "clean": 4442514,
+          "mart": 8421
         },
-        "started_at": "2026-08-07T18:36:25.576119+00:00",
-        "finished_at": "2026-08-07T18:37:52.466431+00:00",
-        "duration_seconds": 86.89
+        "started_at": "2026-08-08T14:53:56.337317+00:00",
+        "finished_at": "2026-08-08T14:55:03.364393+00:00",
+        "duration_seconds": 67.027
       }
     },
     {
