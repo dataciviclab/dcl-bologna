@@ -2,40 +2,60 @@
 -- Analisi 02: Bici vs Auto su Viale Ercolani (2024)
 -- Dataset: colonnine-bici, varchi-ztl (varco n.44 Ercolani)
 -- Nota: richiede toolkit run per colonnine-bici e varchi-ztl.
--- Copertura 2024: entrambi i dataset coprono l'intero anno
--- (colonnina Ercolani: dati continui dal 2018; varco: dal 2019).
+--
+-- METODO (fix 2026-08-09): i due dataset hanno coperture diverse
+-- nel 2024 (bici: 366 giorni, auto: 308 giorni). Un JOIN su data
+-- butterebbe via i giorni in cui rileva solo uno dei due → le
+-- medie/giorno sono calcolate SEPARATAMENTE per dataset, con
+-- denominatore = giorni rilevati propri. Il rapporto bici/auto
+-- si calcola sulle medie/giorno, non sui totali annuali.
 -- ============================================================
 
--- 0. Verifica copertura: giorni con dati nel 2024
-SELECT 'bici' as dataset, count(DISTINCT data::date) as giorni
+-- 0. Verifica copertura: giorni con dati nel 2024 (per dataset)
+SELECT 'bici' as dataset, count(DISTINCT data::date) as giorni,
+       sum(totale) as totale_anno
 FROM read_parquet('out/data/clean/colonnine_bici/2026/colonnine_bici_2026_clean.parquet')
 WHERE colonnina='Ercolani' AND extract(year FROM data)=2024
 UNION ALL
-SELECT 'auto', count(DISTINCT data::date)
+SELECT 'auto', count(DISTINCT data::date),
+       sum(auto_furgoni + moto_ciclomotori)
 FROM read_parquet('out/data/clean/varchi_ztl/2026/varchi_ztl_2026_clean.parquet')
 WHERE varco=44 AND extract(year FROM data)=2024;
 
 -- 1. Volumi annuali: bici (colonnina Ercolani) vs auto (varco n.44)
---    Le medie giornaliere sono calcolate su 365 giorni (anno solare).
-SELECT extract(year FROM b.data) as anno,
-       sum(b.totale) as bici,
-       sum(a.auto_furgoni + a.moto_ciclomotori) as veicoli,
-       round(sum(b.totale) * 1.0 / nullif(sum(a.auto_furgoni + a.moto_ciclomotori), 0), 1) as bici_per_veicolo,
-       round(sum(b.totale) / 365.0, 0) as bici_giorno,
-       round(sum(a.auto_furgoni + a.moto_ciclomotori) / 365.0, 0) as veicoli_giorno
-FROM read_parquet('out/data/clean/colonnine_bici/2026/colonnine_bici_2026_clean.parquet') b
-JOIN read_parquet('out/data/clean/varchi_ztl/2026/varchi_ztl_2026_clean.parquet') a ON b.data = a.data AND a.varco = 44
-WHERE b.colonnina='Ercolani'
-  AND extract(year FROM b.data) = 2024
-GROUP BY extract(year FROM b.data);
+--    Medie/giorno su giorni EFFETTIVI di rilevazione per dataset.
+WITH bici AS (
+    SELECT sum(totale) as tot, count(DISTINCT data::date) as giorni
+    FROM read_parquet('out/data/clean/colonnine_bici/2026/colonnine_bici_2026_clean.parquet')
+    WHERE colonnina='Ercolani' AND extract(year FROM data)=2024
+), auto AS (
+    SELECT sum(auto_furgoni + moto_ciclomotori) as tot, count(DISTINCT data::date) as giorni
+    FROM read_parquet('out/data/clean/varchi_ztl/2026/varchi_ztl_2026_clean.parquet')
+    WHERE varco=44 AND extract(year FROM data)=2024
+)
+SELECT round(b.tot / b.giorni, 0) as bici_giorno,
+       round(a.tot / a.giorni, 0) as auto_giorno,
+       round((b.tot / b.giorni) / nullif(a.tot / a.giorni, 0), 1) as bici_per_auto,
+       b.giorni as giorni_bici, a.giorni as giorni_auto
+FROM bici b, auto a;
 
 -- 2. Profilo orario (media bici e auto per ora, 2024)
-SELECT extract(hour FROM b.data) as ora,
-       round(avg(b.totale), 0) as media_bici,
-       round(avg(a.auto_furgoni + a.moto_ciclomotori), 0) as media_veicoli,
-       round(avg(b.totale) * 1.0 / nullif(avg(a.auto_furgoni + a.moto_ciclomotori), 0), 1) as rapporto
-FROM read_parquet('out/data/clean/colonnine_bici/2026/colonnine_bici_2026_clean.parquet') b
-JOIN read_parquet('out/data/clean/varchi_ztl/2026/varchi_ztl_2026_clean.parquet') a ON b.data = a.data AND a.varco = 44
-WHERE b.colonnina='Ercolani'
-  AND extract(year FROM b.data) = 2024
-GROUP BY ora ORDER BY ora;
+--    Medie calcolate separatamente per dataset: ogni media/ora è
+--    su tutti i giorni in cui QUEL dataset rileva (niente JOIN che
+--    taglia la copertura). La colonna giorni dice il denominatore.
+SELECT extract(hour FROM data) as ora,
+       round(avg(totale), 0) as media_bici,
+       count(DISTINCT data::date) as giorni_bici
+FROM read_parquet('out/data/clean/colonnine_bici/2026/colonnine_bici_2026_clean.parquet')
+WHERE colonnina='Ercolani' AND extract(year FROM data)=2024
+GROUP BY ora
+ORDER BY ora;
+-- (la media auto/ora è nella query 2b, qui sotto, per leggibilità)
+-- 2b. Profilo orario auto (varco 44, 2024)
+SELECT extract(hour FROM data) as ora,
+       round(avg(auto_furgoni + moto_ciclomotori), 0) as media_auto,
+       count(DISTINCT data::date) as giorni_auto
+FROM read_parquet('out/data/clean/varchi_ztl/2026/varchi_ztl_2026_clean.parquet')
+WHERE varco=44 AND extract(year FROM data)=2024
+GROUP BY ora
+ORDER BY ora;

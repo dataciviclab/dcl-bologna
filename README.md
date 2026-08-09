@@ -38,7 +38,7 @@ Tutti i dataset sono configurati in `datasets/<slug>/` con lo standard candidate
 
 ## Esempi di domande
 
-- **Quante auto e quante bici passano per Viale Ercolani?** (~2.900 bici vs ~720 auto/giorno nel 2024)
+- **Quante auto e quante bici passano per Viale Ercolani?** (~2.900 bici vs ~930 auto/giorno nei giorni rilevati 2024 — rapporto 3:1)
 - **Come è cambiata la popolazione dei quartieri dal 1986?**
 - **Quali varchi e quali vie hanno più traffico, e a che ora?**
 - **C'è relazione tra traffico e inquinamento dell'aria?**
