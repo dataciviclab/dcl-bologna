@@ -4,7 +4,7 @@
 #   1. bootstrap varchi-ztl (fetch 80 varchi + merge) con cache persistente
 #   2. run dei dataset (cambiati se PR merged, TUTTI se schedule/manuale)
 #   3. sync GCS (clean + mart) — GRACEFUL: skippata se le chiavi non ci sono
-#   4. build_registry --write → PR draft se diff (pattern eurostat/DI)
+#   4. `toolkit registry build --write` → PR draft se diff (pattern eurostat/DI)
 #
 # Triggers:
 #   - pull_request closed (merged) su datasets/** → run dei dataset cambiati
@@ -18,7 +18,6 @@ on:
     types: [closed]
     paths:
       - "datasets/**"
-      - "scripts/**"
   schedule:
     - cron: '0 6 1 * *'
   workflow_dispatch:
@@ -143,17 +142,15 @@ jobs:
       # ── Registry + PR draft (pattern eurostat/DI) ─────────────────────
       # Escluso in smoke: il builder vedrebbe parquet sample (1000 righe)
       # e produrrebbe un catalogo basato su dati parziali.
-      # Gira anche quando cambia solo scripts/** (es. build_registry.py):
-      # il registry si rigenera sui dati già runnati, senza rifare i dataset.
       - name: Build registry
         if: ${{ !inputs.smoke }}
-        run: python scripts/build_registry.py --write
+        run: toolkit registry build --write
 
       - name: Check registry diff
         if: ${{ !inputs.smoke }}
         id: diff
         run: |
-          # registry/ è untracked su main (generato da build_registry) —
+          # registry/ è untracked su main (generato dal builder) —
           # git diff ignora gli untracked, quindi usiamo git status.
           if git status --porcelain -- registry/ | grep -q .; then
             echo "changed=true" >> "$GITHUB_OUTPUT"
