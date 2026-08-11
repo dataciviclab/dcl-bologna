@@ -1,0 +1,82 @@
+root: "../../out"
+schema_version: 1
+
+dataset:
+  name: "bolognawifi_matrice"
+  source_id: "comune_bologna_opendata"
+  tags: [mobilita, pedoni, wifi, spostamenti, bologna]
+  category: trasporti
+  years: [2025]
+  time_coverage:
+    start_year: 2021
+    end_year: 2025
+
+raw:
+  output_policy: overwrite
+  sources:
+    - name: "ods_wifi_matrice"
+      type: "http_file"
+      args:
+        url: "https://opendata.comune.bologna.it/api/explore/v2.1/catalog/datasets/bolognawifi-matrice-spostamenti-storico/exports/parquet"
+        filename: "bolognawifi_matrice.parquet"
+      primary: true
+
+clean:
+  sql: "sql/clean.sql"
+  read:
+    source: auto
+    mode: latest
+  required_columns:
+    - anno
+    - data
+    - ora
+    - giorno_num
+    - giorno_label
+    - id_origine
+    - label_origine
+    - id_destinazione
+    - label_destinazione
+    - totale
+    - percentile_50
+  validate:
+    min_rows: 1000000
+    not_null:
+      - data
+      - ora
+      - id_origine
+      - id_destinazione
+      - totale
+    primary_key:
+      - data
+      - ora
+      - id_origine
+      - id_destinazione
+
+mart:
+  tables:
+    - name: "mart_wifi_anno"
+      sql: "sql/mart_wifi_anno.sql"
+    - name: "mart_wifi_ora"
+      sql: "sql/mart_wifi_ora.sql"
+    - name: "mart_wifi_od"
+      sql: "sql/mart_wifi_od.sql"
+  required_tables:
+    - "mart_wifi_anno"
+    - "mart_wifi_ora"
+    - "mart_wifi_od"
+  validate:
+    table_rules:
+      mart_wifi_anno:
+        required_columns: [anno, giorni_coperti, flussi_totali, flussi_giorno]
+        primary_key: [anno]
+        min_rows: 3
+      mart_wifi_ora:
+        required_columns: [ora, media_flussi, flussi_totali]
+        primary_key: [ora]
+        min_rows: 20
+      mart_wifi_od:
+        required_columns: [label_origine, label_destinazione, flussi_totali]
+        min_rows: 10
+
+validation:
+  fail_on_error: true
