@@ -6,7 +6,7 @@ dataset:
   source_id: "comune_bologna_opendata"
   tags: [mobilita, pedoni, wifi, spostamenti, bologna]
   category: trasporti
-  years: [2025]
+  years: [2026]
   time_coverage:
     start_year: 2021
     end_year: 2025

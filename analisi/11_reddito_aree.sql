@@ -1,7 +1,7 @@
 -- ============================================================
 -- Analisi 11: Il reddito a Bologna per area — 2016-2024
 -- Dataset: reddito-mediano (817 righe, 91 aree, serie 2016-2024)
--- Path: out/data/clean/reddito_mediano/2024/reddito_mediano_2024_clean.parquet
+-- Path: out/data/clean/reddito_mediano/2026/reddito_mediano_2026_clean.parquet
 --
 -- Domanda: dove si concentra il reddito a Bologna e come è cambiato?
 --
@@ -16,25 +16,25 @@
 
 -- 0. Verifica copertura: anni, aree, contribuenti
 SELECT anno, count(*) as aree, sum(numero_contribuenti) as contribuenti
-FROM read_parquet('out/data/clean/reddito_mediano/2024/reddito_mediano_2024_clean.parquet')
+FROM read_parquet('out/data/clean/reddito_mediano/2026/reddito_mediano_2026_clean.parquet')
 GROUP BY anno ORDER BY anno;
 
 -- 1. Trend comunale: reddito mediano medio e contribuenti (2016-2024)
 SELECT anno,
        round(avg(reddito_imponibile_mediano), 0) as reddito_medio,
        sum(numero_contribuenti) as contribuenti
-FROM read_parquet('out/data/clean/reddito_mediano/2024/reddito_mediano_2024_clean.parquet')
+FROM read_parquet('out/data/clean/reddito_mediano/2026/reddito_mediano_2026_clean.parquet')
 GROUP BY anno ORDER BY anno;
 
 -- 2. TOP aree 2024 (>= 1000 contribuenti) — dove sta il reddito
 SELECT area_statistica, reddito_imponibile_mediano, numero_contribuenti
-FROM read_parquet('out/data/clean/reddito_mediano/2024/reddito_mediano_2024_clean.parquet')
+FROM read_parquet('out/data/clean/reddito_mediano/2026/reddito_mediano_2026_clean.parquet')
 WHERE anno = 2024 AND numero_contribuenti >= 1000
 ORDER BY reddito_imponibile_mediano DESC LIMIT 6;
 
 -- 3. BOTTOM aree 2024 (>= 1000 contribuenti)
 SELECT area_statistica, reddito_imponibile_mediano, numero_contribuenti
-FROM read_parquet('out/data/clean/reddito_mediano/2024/reddito_mediano_2024_clean.parquet')
+FROM read_parquet('out/data/clean/reddito_mediano/2026/reddito_mediano_2026_clean.parquet')
 WHERE anno = 2024 AND numero_contribuenti >= 1000
 ORDER BY reddito_imponibile_mediano LIMIT 6;
 
@@ -45,7 +45,7 @@ WITH per_area AS (
            max(reddito_imponibile_mediano) FILTER (WHERE anno=2024) as r2024,
            max(numero_contribuenti) FILTER (WHERE anno=2016) as c16,
            max(numero_contribuenti) FILTER (WHERE anno=2024) as c24
-    FROM read_parquet('out/data/clean/reddito_mediano/2024/reddito_mediano_2024_clean.parquet')
+    FROM read_parquet('out/data/clean/reddito_mediano/2026/reddito_mediano_2026_clean.parquet')
     GROUP BY area_statistica
 )
 SELECT round(max(r2024) * 1.0 / min(r2024), 1) as rapporto_2024
@@ -57,7 +57,7 @@ WITH per_area AS (
            max(reddito_imponibile_mediano) FILTER (WHERE anno=2016) as r2016,
            max(reddito_imponibile_mediano) FILTER (WHERE anno=2024) as r2024,
            max(numero_contribuenti) FILTER (WHERE anno=2024) as c2024
-    FROM read_parquet('out/data/clean/reddito_mediano/2024/reddito_mediano_2024_clean.parquet')
+    FROM read_parquet('out/data/clean/reddito_mediano/2026/reddito_mediano_2026_clean.parquet')
     GROUP BY area_statistica
 )
 SELECT area_statistica, r2016, r2024,
@@ -73,7 +73,7 @@ WITH per_area AS (
            max(reddito_imponibile_mediano) FILTER (WHERE anno=2016) as r2016,
            max(reddito_imponibile_mediano) FILTER (WHERE anno=2024) as r2024,
            max(numero_contribuenti) FILTER (WHERE anno=2024) as c2024
-    FROM read_parquet('out/data/clean/reddito_mediano/2024/reddito_mediano_2024_clean.parquet')
+    FROM read_parquet('out/data/clean/reddito_mediano/2026/reddito_mediano_2026_clean.parquet')
     GROUP BY area_statistica
 )
 SELECT area_statistica, r2016, r2024,

@@ -6,7 +6,7 @@ dataset:
   source_id: "comune_bologna_opendata"
   tags: [economia, reddito, aree, bologna]
   category: finanza-pubblica
-  years: [2024]
+  years: [2026]
   time_coverage:
     start_year: 2016
     end_year: 2024
