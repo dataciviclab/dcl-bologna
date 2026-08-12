@@ -2,7 +2,7 @@
   "schema_version": 1,
   "repo": "dcl-bologna",
   "source_repo": "dataciviclab/dcl-bologna",
-  "updated_at": "2026-08-08",
+  "updated_at": "2026-08-12",
   "datasets": [
     {
       "slug": "centraline_aria",
@@ -718,6 +718,237 @@
       }
     },
     {
+      "slug": "indici_fragilita",
+      "name": "Indici Fragilita",
+      "description": "",
+      "source": "",
+      "source_id": "comune_bologna_opendata",
+      "period": {
+        "start": 2021,
+        "end": 2023
+      },
+      "years": [
+        2026
+      ],
+      "tags": [
+        "demografia",
+        "welfare",
+        "fragilita",
+        "bologna"
+      ],
+      "category": "welfare-lavoro",
+      "columns": [
+        {
+          "name": "anno",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": "",
+          "semantic_type": "year"
+        },
+        {
+          "name": "area_statistica",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "quartiere",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "zona_pross",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "aree_escl",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "pop_res",
+          "type": "BIGINT",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "var_5y_pop",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "saldonat",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "ultra80",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "soli_65",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "imem_italia",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "imem_stra",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "stra_0_19",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "minori1gen",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "perc_laur",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "perfragsan",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "peraffit",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "rmpe_fam",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "perfam_r60",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "integrazione",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "spazinsuff",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "bil",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "bqe",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "frag_demo",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "frag_soc",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "frag_econ",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "frag_compl",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "cluster_an",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "codareast",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        }
+      ],
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-clean/indici_fragilita/2026/indici_fragilita_2026_clean.parquet",
+        "multi_file": false
+      },
+      "stage": "incubating",
+      "registry_source": "derive_auto",
+      "mart_refs": [
+        "indici_fragilita__mart_fragilita_area",
+        "indici_fragilita__mart_fragilita_quartiere"
+      ],
+      "run": {
+        "run_id": "20260812T114653Z_c2643b36",
+        "year": 2026,
+        "status": "SUCCESS",
+        "quality_score": {
+          "raw": 100,
+          "clean": 95,
+          "mart": 100
+        },
+        "output_rows": {
+          "clean": 270,
+          "mart": 256
+        },
+        "output_bytes": {
+          "raw": 29010,
+          "clean": 20213,
+          "mart": 11962
+        },
+        "started_at": "2026-08-12T11:46:53.171858+00:00",
+        "finished_at": "2026-08-12T11:46:54.124568+00:00",
+        "duration_seconds": 0.953
+      }
+    },
+    {
       "slug": "popolazione_quartiere",
       "name": "Popolazione Quartiere",
       "description": "",
@@ -1324,6 +1555,64 @@
   ],
   "marts": [
     {
+      "slug": "bolognawifi_matrice__mart_wifi_anno",
+      "dataset": "bolognawifi_matrice",
+      "table": "mart_wifi_anno",
+      "description": "bolognawifi_matrice — mart mart_wifi_anno",
+      "primary_key": [
+        "anno"
+      ],
+      "required_columns": [
+        "anno",
+        "giorni_coperti",
+        "flussi_totali",
+        "flussi_giorno"
+      ],
+      "min_rows": 3,
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-mart/bolognawifi_matrice/2025/mart_wifi_anno.parquet",
+        "multi_file": false
+      }
+    },
+    {
+      "slug": "bolognawifi_matrice__mart_wifi_od",
+      "dataset": "bolognawifi_matrice",
+      "table": "mart_wifi_od",
+      "description": "bolognawifi_matrice — mart mart_wifi_od",
+      "required_columns": [
+        "label_origine",
+        "label_destinazione",
+        "flussi_totali"
+      ],
+      "min_rows": 10,
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-mart/bolognawifi_matrice/2025/mart_wifi_od.parquet",
+        "multi_file": false
+      }
+    },
+    {
+      "slug": "bolognawifi_matrice__mart_wifi_ora",
+      "dataset": "bolognawifi_matrice",
+      "table": "mart_wifi_ora",
+      "description": "bolognawifi_matrice — mart mart_wifi_ora",
+      "primary_key": [
+        "ora"
+      ],
+      "required_columns": [
+        "ora",
+        "media_flussi",
+        "flussi_totali"
+      ],
+      "min_rows": 20,
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-mart/bolognawifi_matrice/2025/mart_wifi_ora.parquet",
+        "multi_file": false
+      }
+    },
+    {
       "slug": "centraline_aria__mart_aria_ora",
       "dataset": "centraline_aria",
       "table": "mart_aria_ora",
@@ -1656,6 +1945,98 @@
       }
     },
     {
+      "slug": "indici_fragilita__mart_fragilita_area",
+      "dataset": "indici_fragilita",
+      "table": "mart_fragilita_area",
+      "description": "indici_fragilita — mart mart_fragilita_area",
+      "primary_key": [
+        "anno",
+        "area_statistica"
+      ],
+      "required_columns": [
+        "anno",
+        "area_statistica",
+        "quartiere",
+        "frag_demo",
+        "frag_soc",
+        "frag_econ",
+        "frag_compl",
+        "cluster_an"
+      ],
+      "min_rows": 200,
+      "run": {
+        "run_id": "20260812T114653Z_c2643b36",
+        "year": 2026,
+        "status": "SUCCESS",
+        "quality_score": {
+          "raw": 100,
+          "clean": 95,
+          "mart": 100
+        },
+        "output_rows": {
+          "clean": 270,
+          "mart": 256
+        },
+        "output_bytes": {
+          "raw": 29010,
+          "clean": 20213,
+          "mart": 11962
+        },
+        "started_at": "2026-08-12T11:46:53.171858+00:00",
+        "finished_at": "2026-08-12T11:46:54.124568+00:00",
+        "duration_seconds": 0.953
+      },
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-mart/indici_fragilita/2026/mart_fragilita_area.parquet",
+        "multi_file": false
+      }
+    },
+    {
+      "slug": "indici_fragilita__mart_fragilita_quartiere",
+      "dataset": "indici_fragilita",
+      "table": "mart_fragilita_quartiere",
+      "description": "indici_fragilita — mart mart_fragilita_quartiere",
+      "primary_key": [
+        "anno",
+        "quartiere"
+      ],
+      "required_columns": [
+        "anno",
+        "quartiere",
+        "aree",
+        "frag_compl_media"
+      ],
+      "min_rows": 12,
+      "run": {
+        "run_id": "20260812T114653Z_c2643b36",
+        "year": 2026,
+        "status": "SUCCESS",
+        "quality_score": {
+          "raw": 100,
+          "clean": 95,
+          "mart": 100
+        },
+        "output_rows": {
+          "clean": 270,
+          "mart": 256
+        },
+        "output_bytes": {
+          "raw": 29010,
+          "clean": 20213,
+          "mart": 11962
+        },
+        "started_at": "2026-08-12T11:46:53.171858+00:00",
+        "finished_at": "2026-08-12T11:46:54.124568+00:00",
+        "duration_seconds": 0.953
+      },
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-mart/indici_fragilita/2026/mart_fragilita_quartiere.parquet",
+        "multi_file": false
+      }
+    },
+    {
       "slug": "popolazione_quartiere__mart_pop_quartiere",
       "dataset": "popolazione_quartiere",
       "table": "mart_pop_quartiere",
@@ -1788,7 +2169,7 @@
       "min_rows": 300,
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/spire_traffico/2025/mart_spire_trend.parquet",
+        "path": "gs://dataciviclab-mart/spire_traffico/mart_spire_trend.parquet",
         "multi_file": false
       }
     },
@@ -1862,6 +2243,17 @@
     }
   ],
   "signals": [
+    {
+      "id": "bolognawifi_matrice",
+      "source_id": "comune_bologna_opendata",
+      "status": "ok",
+      "label": "bolognawifi_matrice",
+      "detail": "anno 2025 — mart: si",
+      "action": "",
+      "years": [
+        2025
+      ]
+    },
     {
       "id": "centraline_aria",
       "source_id": "comune_bologna_opendata",
@@ -2058,6 +2450,39 @@
         "started_at": "2026-08-07T09:16:31.873957+00:00",
         "finished_at": "2026-08-07T09:16:32.938458+00:00",
         "duration_seconds": 1.065
+      }
+    },
+    {
+      "id": "indici_fragilita",
+      "source_id": "comune_bologna_opendata",
+      "status": "ok",
+      "label": "indici_fragilita",
+      "detail": "anno 2026 — mart: si",
+      "action": "",
+      "years": [
+        2026
+      ],
+      "run": {
+        "run_id": "20260812T114653Z_c2643b36",
+        "year": 2026,
+        "status": "SUCCESS",
+        "quality_score": {
+          "raw": 100,
+          "clean": 95,
+          "mart": 100
+        },
+        "output_rows": {
+          "clean": 270,
+          "mart": 256
+        },
+        "output_bytes": {
+          "raw": 29010,
+          "clean": 20213,
+          "mart": 11962
+        },
+        "started_at": "2026-08-12T11:46:53.171858+00:00",
+        "finished_at": "2026-08-12T11:46:54.124568+00:00",
+        "duration_seconds": 0.953
       }
     },
     {
@@ -2298,6 +2723,12 @@
             "semantic_type": "year"
           },
           {
+            "slug": "indici_fragilita",
+            "name": "Indici Fragilita",
+            "column": "anno",
+            "semantic_type": "year"
+          },
+          {
             "slug": "popolazione_quartiere",
             "name": "Popolazione Quartiere",
             "column": "anno",
@@ -2317,7 +2748,7 @@
           }
         ],
         "types": {
-          "year": 9
+          "year": 10
         }
       }
     },
@@ -2328,8 +2759,8 @@
     }
   },
   "summary": {
-    "datasets": 11,
-    "marts": 21,
-    "signals": 11
+    "datasets": 12,
+    "marts": 26,
+    "signals": 13
   }
 }
