@@ -6,9 +6,9 @@
   "datasets": [
     {
       "slug": "bolognawifi_matrice",
-      "name": "Bolognawifi Matrice",
-      "description": "",
-      "source": "",
+      "name": "Matrice spostamenti pedonali WiFi",
+      "description": "Flussi di spostamento tra zone WiFi pubbliche (2021-2025) — proxy della mobilità pedonale per zona e ora",
+      "source": "OpenData Comune di Bologna — BolognaWiFi",
       "source_id": "comune_bologna_opendata",
       "period": {
         "start": 2021,
@@ -27,68 +27,68 @@
           "name": "anno",
           "type": "INTEGER",
           "role": "dimension",
-          "description": "",
+          "description": "Anno di riferimento",
           "semantic_type": "year"
         },
         {
           "name": "data",
           "type": "DATE",
           "role": "dimension",
-          "description": ""
+          "description": "Data della misurazione"
         },
         {
           "name": "ora",
           "type": "INTEGER",
           "role": "metric",
-          "description": ""
+          "description": "Ora della misurazione"
         },
         {
           "name": "giorno_num",
           "type": "INTEGER",
           "role": "metric",
-          "description": ""
+          "description": "Numero giorno settimana (1=Lunedì)"
         },
         {
           "name": "giorno_label",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Giorno settimana"
         },
         {
           "name": "id_origine",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Zona di origine"
         },
         {
           "name": "label_origine",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Nome zona di origine"
         },
         {
           "name": "id_destinazione",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Zona di destinazione"
         },
         {
           "name": "label_destinazione",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Nome zona di destinazione"
         },
         {
           "name": "totale",
           "type": "BIGINT",
           "role": "metric",
-          "description": ""
+          "description": "Flusso di dispositivi"
         },
         {
           "name": "percentile_50",
           "type": "BIGINT",
           "role": "metric",
-          "description": ""
+          "description": "Percentile 50 della distribuzione"
         }
       ],
       "location": {
@@ -105,9 +105,9 @@
     },
     {
       "slug": "centraline_aria",
-      "name": "Centraline Aria",
-      "description": "",
-      "source": "",
+      "name": "Centraline qualità dell'aria",
+      "description": "Rilevazioni orarie degli inquinanti atmosferici per stazione di monitoraggio",
+      "source": "OpenData Comune di Bologna — Arpae",
       "source_id": "comune_bologna_opendata",
       "period": {
         "start": 2025,
@@ -125,32 +125,32 @@
           "name": "anno",
           "type": "INTEGER",
           "role": "dimension",
-          "description": "",
+          "description": "Anno di riferimento",
           "semantic_type": "year"
         },
         {
           "name": "reftime",
           "type": "TIMESTAMP",
           "role": "metric",
-          "description": ""
+          "description": "Data e ora rilevazione"
         },
         {
           "name": "stazione",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Nome stazione di monitoraggio"
         },
         {
           "name": "agente_atm",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Inquinante misurato"
         },
         {
           "name": "value",
           "type": "DOUBLE",
           "role": "metric",
-          "description": ""
+          "description": "Concentrazione rilevata"
         }
       ],
       "location": {
@@ -166,9 +166,9 @@
     },
     {
       "slug": "colonnine_bici",
-      "name": "Colonnine Bici",
-      "description": "",
-      "source": "",
+      "name": "Conta-bici per colonnina",
+      "description": "Passaggi di biciclette rilevati dalle colonnine conta-bici, per via e direzione",
+      "source": "OpenData Comune di Bologna — Mobilità sostenibile",
       "source_id": "comune_bologna_opendata",
       "period": {
         "start": 2018,
@@ -186,56 +186,56 @@
           "name": "anno",
           "type": "INTEGER",
           "role": "dimension",
-          "description": "",
+          "description": "Anno di riferimento",
           "semantic_type": "year"
         },
         {
           "name": "data",
           "type": "TIMESTAMP",
           "role": "metric",
-          "description": ""
+          "description": "Data e ora rilevazione"
         },
         {
           "name": "colonnina",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Nome colonnina"
         },
         {
           "name": "quartiere",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Quartiere"
         },
         {
           "name": "zona",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Zona"
         },
         {
           "name": "via",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Via della colonnina"
         },
         {
           "name": "direzione_centro",
           "type": "BIGINT",
           "role": "metric",
-          "description": ""
+          "description": "Passaggi verso il centro"
         },
         {
           "name": "direzione_periferia",
           "type": "BIGINT",
           "role": "metric",
-          "description": ""
+          "description": "Passaggi verso la periferia"
         },
         {
           "name": "totale",
           "type": "BIGINT",
           "role": "metric",
-          "description": ""
+          "description": "Totale passaggi"
         },
         {
           "name": "longitudine",
@@ -264,9 +264,9 @@
     },
     {
       "slug": "convivenze",
-      "name": "Convivenze",
-      "description": "",
-      "source": "",
+      "name": "Popolazione in convivenza",
+      "description": "Residenti in convivenza (case di riposo, studentati, istituti) per quartiere e tipologia",
+      "source": "OpenData Comune di Bologna — Ufficio di Statistica",
       "source_id": "comune_bologna_opendata",
       "period": {
         "start": 1986,
@@ -283,20 +283,20 @@
           "name": "anno",
           "type": "INTEGER",
           "role": "dimension",
-          "description": "",
+          "description": "Anno di riferimento",
           "semantic_type": "year"
         },
         {
           "name": "quartiere",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Quartiere"
         },
         {
           "name": "zona",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Zona"
         },
         {
           "name": "centro_storico_zone_periferiche",
@@ -308,13 +308,13 @@
           "name": "cittadinanza",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Cittadinanza"
         },
         {
           "name": "dimensione",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Dimensione della convivenza"
         },
         {
           "name": "eta_quinquennali",
@@ -344,7 +344,7 @@
           "name": "residenti",
           "type": "BIGINT",
           "role": "metric",
-          "description": ""
+          "description": "Residenti in convivenza"
         }
       ],
       "location": {
@@ -359,9 +359,9 @@
     },
     {
       "slug": "emigrati_destinazione",
-      "name": "Emigrati Destinazione",
-      "description": "",
-      "source": "",
+      "name": "Emigrati per destinazione",
+      "description": "Emigrati dal Comune per quartiere e destinazione (comune, regione, estero)",
+      "source": "OpenData Comune di Bologna — Ufficio di Statistica",
       "source_id": "comune_bologna_opendata",
       "period": {
         "start": 1986,
@@ -378,26 +378,26 @@
           "name": "anno",
           "type": "INTEGER",
           "role": "dimension",
-          "description": "",
+          "description": "Anno di riferimento",
           "semantic_type": "year"
         },
         {
           "name": "destinazione_comuni_regioni",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Destinazione (comune o regione)"
         },
         {
           "name": "destinazione_comuni_e_aree_italia",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Destinazione dettagliata"
         },
         {
           "name": "quartiere",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Quartiere di partenza"
         },
         {
           "name": "zona",
@@ -409,13 +409,13 @@
           "name": "sesso",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Sesso"
         },
         {
           "name": "numero_emigrati",
           "type": "BIGINT",
           "role": "metric",
-          "description": ""
+          "description": "Numero di emigrati"
         }
       ],
       "location": {
@@ -430,9 +430,9 @@
     },
     {
       "slug": "famiglie_tipologia",
-      "name": "Famiglie Tipologia",
-      "description": "",
-      "source": "",
+      "name": "Famiglie per tipologia",
+      "description": "Famiglie per tipologia, quartiere e caratteristiche del capofamiglia",
+      "source": "OpenData Comune di Bologna — Ufficio di Statistica",
       "source_id": "comune_bologna_opendata",
       "period": {
         "start": 1986,
@@ -449,50 +449,50 @@
           "name": "anno",
           "type": "INTEGER",
           "role": "dimension",
-          "description": "",
+          "description": "Anno di riferimento",
           "semantic_type": "year"
         },
         {
           "name": "quartiere",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Quartiere"
         },
         {
           "name": "zona",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Zona"
         },
         {
           "name": "eta",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Età capofamiglia"
         },
         {
           "name": "tipo_capofamiglia",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Tipologia del capofamiglia"
         },
         {
           "name": "sesso",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Sesso capofamiglia"
         },
         {
           "name": "cittadinanza_del_capofamiglia",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Cittadinanza del capofamiglia"
         },
         {
           "name": "numero_famiglie",
           "type": "BIGINT",
           "role": "metric",
-          "description": ""
+          "description": "Numero di famiglie"
         }
       ],
       "location": {
@@ -508,9 +508,9 @@
     },
     {
       "slug": "incarichi",
-      "name": "Incarichi",
-      "description": "",
-      "source": "",
+      "name": "Incarichi di collaborazione Comune",
+      "description": "Incarichi di collaborazione, consulenza e lavoro del Comune di Bologna",
+      "source": "OpenData Comune di Bologna — Amministrazione trasparente",
       "source_id": "comune_bologna_opendata",
       "period": {
         "start": 2012,
@@ -528,44 +528,44 @@
           "name": "id",
           "type": "BIGINT",
           "role": "metric",
-          "description": ""
+          "description": "Identificativo incarico"
         },
         {
           "name": "anno",
           "type": "INTEGER",
           "role": "dimension",
-          "description": "",
+          "description": "Anno di riferimento",
           "semantic_type": "year"
         },
         {
           "name": "anno_pg_atto",
           "type": "DATE",
           "role": "dimension",
-          "description": ""
+          "description": "Anno protocollo atto"
         },
         {
           "name": "durata_dal",
           "type": "DATE",
           "role": "dimension",
-          "description": ""
+          "description": "Data inizio incarico"
         },
         {
           "name": "durata_al",
           "type": "DATE",
           "role": "dimension",
-          "description": ""
+          "description": "Data fine incarico"
         },
         {
           "name": "oggetto",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Oggetto dell'incarico"
         },
         {
           "name": "classificazione_incarichi",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Classificazione"
         },
         {
           "name": "descrizione_classificazione_incarichi",
@@ -583,7 +583,7 @@
           "name": "importo_euro",
           "type": "DOUBLE",
           "role": "metric",
-          "description": ""
+          "description": "Importo in euro"
         },
         {
           "name": "n_pg_atto",
@@ -595,13 +595,13 @@
           "name": "settore_dipartimento_area",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Settore del Comune"
         },
         {
           "name": "servizio",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Servizio"
         },
         {
           "name": "uo",
@@ -613,39 +613,39 @@
           "name": "dirigente",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Dirigente"
         },
         {
           "name": "responsabile",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Responsabile"
         },
         {
           "name": "ragione_sociale",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Soggetto incaricato"
         },
         {
           "name": "partita_iva",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": "",
+          "description": "Partita IVA del soggetto",
           "semantic_type": "fiscal_code"
         },
         {
           "name": "codice_fiscale",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": "",
+          "description": "Codice fiscale del soggetto",
           "semantic_type": "fiscal_code"
         },
         {
           "name": "curriculum_link",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Link al curriculum"
         }
       ],
       "location": {
@@ -662,9 +662,9 @@
     },
     {
       "slug": "indici_fragilita",
-      "name": "Indici Fragilita",
-      "description": "",
-      "source": "",
+      "name": "Indici di fragilità per area statistica",
+      "description": "Indici sintetici di fragilità demografica, sociale ed economica per area statistica",
+      "source": "OpenData Comune di Bologna — Ufficio di Statistica",
       "source_id": "comune_bologna_opendata",
       "period": {
         "start": 2021,
@@ -682,26 +682,26 @@
           "name": "anno",
           "type": "INTEGER",
           "role": "dimension",
-          "description": "",
+          "description": "Anno di riferimento",
           "semantic_type": "year"
         },
         {
           "name": "area_statistica",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Area statistica"
         },
         {
           "name": "quartiere",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Quartiere"
         },
         {
           "name": "zona_pross",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Zona di prossimità"
         },
         {
           "name": "aree_escl",
@@ -713,7 +713,7 @@
           "name": "pop_res",
           "type": "BIGINT",
           "role": "metric",
-          "description": ""
+          "description": "Popolazione residente"
         },
         {
           "name": "var_5y_pop",
@@ -737,7 +737,7 @@
           "name": "soli_65",
           "type": "DOUBLE",
           "role": "metric",
-          "description": ""
+          "description": "Quota over 65 soli"
         },
         {
           "name": "imem_italia",
@@ -767,7 +767,7 @@
           "name": "perc_laur",
           "type": "DOUBLE",
           "role": "metric",
-          "description": ""
+          "description": "Quota laureati"
         },
         {
           "name": "perfragsan",
@@ -779,13 +779,13 @@
           "name": "peraffit",
           "type": "DOUBLE",
           "role": "metric",
-          "description": ""
+          "description": "Quota famiglie in affitto"
         },
         {
           "name": "rmpe_fam",
           "type": "DOUBLE",
           "role": "metric",
-          "description": ""
+          "description": "Reddito medio famiglie"
         },
         {
           "name": "perfam_r60",
@@ -821,31 +821,31 @@
           "name": "frag_demo",
           "type": "INTEGER",
           "role": "metric",
-          "description": ""
+          "description": "Indice fragilità demografica"
         },
         {
           "name": "frag_soc",
           "type": "INTEGER",
           "role": "metric",
-          "description": ""
+          "description": "Indice fragilità sociale"
         },
         {
           "name": "frag_econ",
           "type": "INTEGER",
           "role": "metric",
-          "description": ""
+          "description": "Indice fragilità economica"
         },
         {
           "name": "frag_compl",
           "type": "INTEGER",
           "role": "metric",
-          "description": ""
+          "description": "Indice fragilità complessiva"
         },
         {
           "name": "cluster_an",
           "type": "INTEGER",
           "role": "metric",
-          "description": ""
+          "description": "Cluster gerarchico della fonte"
         },
         {
           "name": "codareast",
@@ -867,9 +867,9 @@
     },
     {
       "slug": "popolazione_quartiere",
-      "name": "Popolazione Quartiere",
-      "description": "",
-      "source": "",
+      "name": "Popolazione per quartiere",
+      "description": "Popolazione residente per quartiere, zona, età e cittadinanza (serie 1986-2024)",
+      "source": "OpenData Comune di Bologna — Ufficio di Statistica",
       "source_id": "comune_bologna_opendata",
       "period": {
         "start": 1986,
@@ -886,26 +886,26 @@
           "name": "anno",
           "type": "INTEGER",
           "role": "dimension",
-          "description": "",
+          "description": "Anno di riferimento",
           "semantic_type": "year"
         },
         {
           "name": "cittadinanza",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Cittadinanza"
         },
         {
           "name": "eta_singolo",
           "type": "INTEGER",
           "role": "metric",
-          "description": ""
+          "description": "Età singola"
         },
         {
           "name": "eta_grandi",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Grande classe di età"
         },
         {
           "name": "eta_quinquennali",
@@ -917,13 +917,13 @@
           "name": "quartiere",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Quartiere"
         },
         {
           "name": "zona",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Zona"
         },
         {
           "name": "centro_storico_zone_periferiche",
@@ -935,13 +935,13 @@
           "name": "sesso",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Sesso"
         },
         {
           "name": "residenti",
           "type": "BIGINT",
           "role": "metric",
-          "description": ""
+          "description": "Popolazione residente"
         }
       ],
       "location": {
@@ -957,9 +957,9 @@
     },
     {
       "slug": "precipitazioni_bologna",
-      "name": "Precipitazioni Bologna",
-      "description": "",
-      "source": "",
+      "name": "Precipitazioni giornaliere",
+      "description": "Precipitazioni giornaliere in millimetri, con stagione di riferimento",
+      "source": "OpenData Comune di Bologna — Arpae",
       "source_id": "comune_bologna_opendata",
       "period": {
         "start": 2001,
@@ -977,19 +977,19 @@
           "name": "date",
           "type": "DATE",
           "role": "dimension",
-          "description": ""
+          "description": "Data"
         },
         {
           "name": "pioggia_mm",
           "type": "DOUBLE",
           "role": "metric",
-          "description": ""
+          "description": "Precipitazione in millimetri"
         },
         {
           "name": "stagione",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Stagione"
         }
       ],
       "location": {
@@ -1004,9 +1004,9 @@
     },
     {
       "slug": "reddito_mediano",
-      "name": "Reddito Mediano",
-      "description": "",
-      "source": "",
+      "name": "Reddito mediano per area statistica",
+      "description": "Reddito imponibile mediano e numero contribuenti per area statistica (2016-2024)",
+      "source": "OpenData Comune di Bologna — Ufficio di Statistica",
       "source_id": "comune_bologna_opendata",
       "period": {
         "start": 2016,
@@ -1024,26 +1024,26 @@
           "name": "anno",
           "type": "INTEGER",
           "role": "dimension",
-          "description": "",
+          "description": "Anno di riferimento",
           "semantic_type": "year"
         },
         {
           "name": "area_statistica",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Area statistica"
         },
         {
           "name": "reddito_imponibile_mediano",
           "type": "BIGINT",
           "role": "metric",
-          "description": ""
+          "description": "Reddito imponibile mediano (euro correnti)"
         },
         {
           "name": "numero_contribuenti",
           "type": "BIGINT",
           "role": "metric",
-          "description": ""
+          "description": "Numero contribuenti residenti"
         }
       ],
       "location": {
@@ -1058,9 +1058,9 @@
     },
     {
       "slug": "spire_traffico",
-      "name": "Spire Traffico",
-      "description": "",
-      "source": "",
+      "name": "Traffico fuori ZTL (spire)",
+      "description": "Passaggi veicolari sulle strade fuori ZTL rilevati dalle spire, per via e fascia oraria",
+      "source": "OpenData Comune di Bologna — Mobilità sostenibile",
       "source_id": "comune_bologna_opendata",
       "period": {
         "start": 2022,
@@ -1079,20 +1079,20 @@
           "name": "anno",
           "type": "INTEGER",
           "role": "dimension",
-          "description": "",
+          "description": "Anno di riferimento",
           "semantic_type": "year"
         },
         {
           "name": "data",
           "type": "DATE",
           "role": "dimension",
-          "description": ""
+          "description": "Data"
         },
         {
           "name": "id_uni",
           "type": "BIGINT",
           "role": "metric",
-          "description": ""
+          "description": "Identificativo spira"
         },
         {
           "name": "chiave",
@@ -1104,19 +1104,19 @@
           "name": "nome_via",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Via"
         },
         {
           "name": "tipologia",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Tipologia rilevatore"
         },
         {
           "name": "direzione",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Direzione"
         },
         {
           "name": "giorno_settimana",
@@ -1128,7 +1128,7 @@
           "name": "livello",
           "type": "INTEGER",
           "role": "metric",
-          "description": ""
+          "description": "Livello di flusso"
         },
         {
           "name": "codice_via",
@@ -1140,19 +1140,19 @@
           "name": "fascia_oraria",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Fascia oraria"
         },
         {
           "name": "ora_inizio",
           "type": "INTEGER",
           "role": "metric",
-          "description": ""
+          "description": "Ora di inizio fascia"
         },
         {
           "name": "passaggi",
           "type": "BIGINT",
           "role": "metric",
-          "description": ""
+          "description": "Passaggi veicolari"
         },
         {
           "name": "longitudine",
@@ -1181,9 +1181,9 @@
     },
     {
       "slug": "temperature_bologna",
-      "name": "Temperature Bologna",
-      "description": "",
-      "source": "",
+      "name": "Temperature giornaliere",
+      "description": "Temperature media, minima e massima giornaliera, con stagione di riferimento",
+      "source": "OpenData Comune di Bologna — Arpae",
       "source_id": "comune_bologna_opendata",
       "period": {
         "start": 2001,
@@ -1201,31 +1201,31 @@
           "name": "date",
           "type": "DATE",
           "role": "dimension",
-          "description": ""
+          "description": "Data"
         },
         {
           "name": "avg",
           "type": "DOUBLE",
           "role": "metric",
-          "description": ""
+          "description": "Temperatura media"
         },
         {
           "name": "max",
           "type": "DOUBLE",
           "role": "metric",
-          "description": ""
+          "description": "Temperatura massima"
         },
         {
           "name": "min",
           "type": "DOUBLE",
           "role": "metric",
-          "description": ""
+          "description": "Temperatura minima"
         },
         {
           "name": "stagione",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Stagione"
         }
       ],
       "location": {
@@ -1240,9 +1240,9 @@
     },
     {
       "slug": "varchi_ztl",
-      "name": "Varchi Ztl",
-      "description": "",
-      "source": "",
+      "name": "Passaggi veicolari ZTL",
+      "description": "Passaggi veicolari ai varchi ZTL per tipologia veicolo, direzione e ora",
+      "source": "OpenData Comune di Bologna — Mobilità sostenibile",
       "source_id": "comune_bologna_opendata",
       "period": {
         "start": 2019,
@@ -1261,32 +1261,32 @@
           "name": "anno",
           "type": "INTEGER",
           "role": "dimension",
-          "description": "",
+          "description": "Anno di riferimento",
           "semantic_type": "year"
         },
         {
           "name": "data",
           "type": "TIMESTAMP",
           "role": "metric",
-          "description": ""
+          "description": "Data e ora"
         },
         {
           "name": "varco",
           "type": "INTEGER",
           "role": "metric",
-          "description": ""
+          "description": "Numero varco"
         },
         {
           "name": "nome_varco",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Nome varco"
         },
         {
           "name": "direzione",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "Direzione di controllo"
         },
         {
           "name": "tipologia_varco",
@@ -1298,25 +1298,25 @@
           "name": "totale_passaggi",
           "type": "BIGINT",
           "role": "metric",
-          "description": ""
+          "description": "Totale passaggi"
         },
         {
           "name": "auto_furgoni",
           "type": "BIGINT",
           "role": "metric",
-          "description": ""
+          "description": "Auto e furgoni"
         },
         {
           "name": "moto_ciclomotori",
           "type": "BIGINT",
           "role": "metric",
-          "description": ""
+          "description": "Moto e ciclomotori"
         },
         {
           "name": "bus_camion",
           "type": "BIGINT",
           "role": "metric",
-          "description": ""
+          "description": "Bus e camion"
         },
         {
           "name": "non_classificato",
@@ -1334,7 +1334,7 @@
           "name": "lista_bianca_regolare",
           "type": "BIGINT",
           "role": "metric",
-          "description": ""
+          "description": "Passaggi autorizzati regolari"
         },
         {
           "name": "lista_bianca_fuori_fascia",
@@ -1358,13 +1358,13 @@
           "name": "transito_generico_irregolare",
           "type": "BIGINT",
           "role": "metric",
-          "description": ""
+          "description": "Transiti irregolari (semantica non documentata)"
         },
         {
           "name": "segnalazioni",
           "type": "BIGINT",
           "role": "metric",
-          "description": ""
+          "description": "Segnalazioni"
         },
         {
           "name": "longitudine",
