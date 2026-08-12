@@ -1,0 +1,71 @@
+root: "../../out"
+schema_version: 1
+
+dataset:
+  name: "indici_fragilita"
+  source_id: "comune_bologna_opendata"
+  tags: [demografia, welfare, fragilita, bologna]
+  category: welfare-lavoro
+  years: [2026]
+  time_coverage:
+    start_year: 2021
+    end_year: 2023
+
+raw:
+  output_policy: overwrite
+  sources:
+    - name: "ods_indici_fragilita"
+      type: "http_file"
+      args:
+        url: "https://opendata.comune.bologna.it/api/explore/v2.1/catalog/datasets/indici-di-fragilita-dal-2021/exports/parquet"
+        filename: "indici_fragilita.parquet"
+      primary: true
+
+clean:
+  sql: "sql/clean.sql"
+  read:
+    source: auto
+    mode: latest
+  required_columns:
+    - anno
+    - area_statistica
+    - quartiere
+    - zona_pross
+    - pop_res
+    - frag_demo
+    - frag_soc
+    - frag_econ
+    - frag_compl
+    - cluster_an
+  validate:
+    min_rows: 200
+    not_null:
+      - anno
+      - area_statistica
+      - quartiere
+    primary_key:
+      - anno
+      - area_statistica
+
+mart:
+  tables:
+    - name: "mart_fragilita_area"
+      sql: "sql/mart_fragilita_area.sql"
+    - name: "mart_fragilita_quartiere"
+      sql: "sql/mart_fragilita_quartiere.sql"
+  required_tables:
+    - "mart_fragilita_area"
+    - "mart_fragilita_quartiere"
+  validate:
+    table_rules:
+      mart_fragilita_area:
+        required_columns: [anno, area_statistica, quartiere, frag_demo, frag_soc, frag_econ, frag_compl, cluster_an]
+        primary_key: [anno, area_statistica]
+        min_rows: 200
+      mart_fragilita_quartiere:
+        required_columns: [anno, quartiere, aree, frag_compl_media]
+        primary_key: [anno, quartiere]
+        min_rows: 12
+
+validation:
+  fail_on_error: true
