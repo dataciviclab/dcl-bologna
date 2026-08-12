@@ -1,0 +1,58 @@
+root: "../../out"
+schema_version: 1
+
+dataset:
+  name: "reddito_mediano"
+  source_id: "comune_bologna_opendata"
+  tags: [economia, reddito, aree, bologna]
+  category: finanza-pubblica
+  years: [2026]
+  time_coverage:
+    start_year: 2016
+    end_year: 2024
+
+raw:
+  output_policy: overwrite
+  sources:
+    - name: "ods_reddito_mediano"
+      type: "http_file"
+      args:
+        url: "https://opendata.comune.bologna.it/api/explore/v2.1/catalog/datasets/reddito-mediano-per-area-statistica/exports/parquet"
+        filename: "reddito_mediano.parquet"
+      primary: true
+
+clean:
+  sql: "sql/clean.sql"
+  read:
+    source: auto
+    mode: latest
+  required_columns:
+    - anno
+    - area_statistica
+    - reddito_imponibile_mediano
+    - numero_contribuenti
+  validate:
+    min_rows: 500
+    not_null:
+      - anno
+      - area_statistica
+      - reddito_imponibile_mediano
+    primary_key:
+      - anno
+      - area_statistica
+
+mart:
+  tables:
+    - name: "mart_reddito_area"
+      sql: "sql/mart_reddito_area.sql"
+  required_tables:
+    - "mart_reddito_area"
+  validate:
+    table_rules:
+      mart_reddito_area:
+        required_columns: [anno, area_statistica, reddito_imponibile_mediano, numero_contribuenti]
+        primary_key: [anno, area_statistica]
+        min_rows: 500
+
+validation:
+  fail_on_error: true
