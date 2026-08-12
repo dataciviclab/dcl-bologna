@@ -93,7 +93,7 @@
       ],
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-clean/bolognawifi_matrice/2025/bolognawifi_matrice_2025_clean.parquet",
+        "path": "gs://dataciviclab-clean/bolognawifi_matrice/2026/bolognawifi_matrice_2026_clean.parquet",
         "multi_file": false
       },
       "stage": "incubating",
@@ -1003,6 +1003,60 @@
       ]
     },
     {
+      "slug": "reddito_mediano",
+      "name": "Reddito Mediano",
+      "description": "",
+      "source": "",
+      "source_id": "comune_bologna_opendata",
+      "period": {
+        "start": 2016,
+        "end": 2024
+      },
+      "tags": [
+        "economia",
+        "reddito",
+        "aree",
+        "bologna"
+      ],
+      "category": "finanza-pubblica",
+      "columns": [
+        {
+          "name": "anno",
+          "type": "INTEGER",
+          "role": "dimension",
+          "description": "",
+          "semantic_type": "year"
+        },
+        {
+          "name": "area_statistica",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "reddito_imponibile_mediano",
+          "type": "BIGINT",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "numero_contribuenti",
+          "type": "BIGINT",
+          "role": "metric",
+          "description": ""
+        }
+      ],
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-clean/reddito_mediano/2026/reddito_mediano_2026_clean.parquet",
+        "multi_file": false
+      },
+      "stage": "incubating",
+      "mart_refs": [
+        "reddito_mediano__mart_reddito_area"
+      ]
+    },
+    {
       "slug": "spire_traffico",
       "name": "Spire Traffico",
       "description": "",
@@ -1344,7 +1398,7 @@
       "table": "mart_wifi_anno",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/bolognawifi_matrice/2025/mart_wifi_anno.parquet",
+        "path": "gs://dataciviclab-mart/bolognawifi_matrice/2026/mart_wifi_anno.parquet",
         "multi_file": false
       }
     },
@@ -1354,7 +1408,7 @@
       "table": "mart_wifi_od",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/bolognawifi_matrice/2025/mart_wifi_od.parquet",
+        "path": "gs://dataciviclab-mart/bolognawifi_matrice/2026/mart_wifi_od.parquet",
         "multi_file": false
       }
     },
@@ -1364,7 +1418,7 @@
       "table": "mart_wifi_ora",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/bolognawifi_matrice/2025/mart_wifi_ora.parquet",
+        "path": "gs://dataciviclab-mart/bolognawifi_matrice/2026/mart_wifi_ora.parquet",
         "multi_file": false
       }
     },
@@ -1539,6 +1593,16 @@
       }
     },
     {
+      "slug": "reddito_mediano__mart_reddito_area",
+      "dataset": "reddito_mediano",
+      "table": "mart_reddito_area",
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-mart/reddito_mediano/2026/mart_reddito_area.parquet",
+        "multi_file": false
+      }
+    },
+    {
       "slug": "spire_traffico__mart_spire_ora",
       "dataset": "spire_traffico",
       "table": "mart_spire_ora",
@@ -1605,8 +1669,30 @@
       "source_id": "comune_bologna_opendata",
       "status": "ok",
       "label": "bolognawifi_matrice",
-      "detail": "anno 2025 — mart: si",
-      "action": ""
+      "detail": "anno 2026 — mart: si",
+      "action": "",
+      "run": {
+        "run_id": "20260812T163244Z_5010cfd4",
+        "year": 2026,
+        "status": "SUCCESS",
+        "quality_score": {
+          "raw": 100,
+          "clean": 100,
+          "mart": 100
+        },
+        "output_rows": {
+          "clean": 1469826,
+          "mart": 49
+        },
+        "output_bytes": {
+          "raw": 10219325,
+          "clean": 8543669,
+          "mart": 3070
+        },
+        "started_at": "2026-08-12T16:32:44.134439+00:00",
+        "finished_at": "2026-08-12T16:35:19.433178+00:00",
+        "duration_seconds": 155.299
+      }
     },
     {
       "id": "centraline_aria",
@@ -1857,6 +1943,36 @@
       }
     },
     {
+      "id": "reddito_mediano",
+      "source_id": "comune_bologna_opendata",
+      "status": "ok",
+      "label": "reddito_mediano",
+      "detail": "anno 2026 — mart: si",
+      "action": "",
+      "run": {
+        "run_id": "20260812T163521Z_e7595ce6",
+        "year": 2026,
+        "status": "SUCCESS",
+        "quality_score": {
+          "raw": 100,
+          "clean": 100,
+          "mart": 100
+        },
+        "output_rows": {
+          "clean": 817,
+          "mart": 817
+        },
+        "output_bytes": {
+          "raw": 11841,
+          "clean": 6271,
+          "mart": 7080
+        },
+        "started_at": "2026-08-12T16:35:21.383017+00:00",
+        "finished_at": "2026-08-12T16:35:22.067338+00:00",
+        "duration_seconds": 0.684
+      }
+    },
+    {
       "id": "spire_traffico",
       "source_id": "comune_bologna_opendata",
       "status": "ok",
@@ -2030,6 +2146,12 @@
             "semantic_type": "year"
           },
           {
+            "slug": "reddito_mediano",
+            "name": "Reddito Mediano",
+            "column": "anno",
+            "semantic_type": "year"
+          },
+          {
             "slug": "spire_traffico",
             "name": "Spire Traffico",
             "column": "anno",
@@ -2043,7 +2165,7 @@
           }
         ],
         "types": {
-          "year": 11
+          "year": 12
         }
       }
     },
