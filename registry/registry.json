@@ -2,8 +2,107 @@
   "schema_version": 1,
   "repo": "dcl-bologna",
   "source_repo": "dataciviclab/dcl-bologna",
-  "updated_at": "2026-08-08",
+  "updated_at": "2026-08-12",
   "datasets": [
+    {
+      "slug": "bolognawifi_matrice",
+      "name": "Bolognawifi Matrice",
+      "description": "",
+      "source": "",
+      "source_id": "comune_bologna_opendata",
+      "period": {
+        "start": 2021,
+        "end": 2025
+      },
+      "tags": [
+        "mobilita",
+        "pedoni",
+        "wifi",
+        "spostamenti",
+        "bologna"
+      ],
+      "category": "trasporti",
+      "columns": [
+        {
+          "name": "anno",
+          "type": "INTEGER",
+          "role": "dimension",
+          "description": "",
+          "semantic_type": "year"
+        },
+        {
+          "name": "data",
+          "type": "DATE",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "ora",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "giorno_num",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "giorno_label",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "id_origine",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "label_origine",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "id_destinazione",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "label_destinazione",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "totale",
+          "type": "BIGINT",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "percentile_50",
+          "type": "BIGINT",
+          "role": "metric",
+          "description": ""
+        }
+      ],
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-clean/bolognawifi_matrice/2025/bolognawifi_matrice_2025_clean.parquet",
+        "multi_file": false
+      },
+      "stage": "incubating",
+      "mart_refs": [
+        "bolognawifi_matrice__mart_wifi_anno",
+        "bolognawifi_matrice__mart_wifi_ora",
+        "bolognawifi_matrice__mart_wifi_od"
+      ]
+    },
     {
       "slug": "centraline_aria",
       "name": "Centraline Aria",
@@ -14,9 +113,6 @@
         "start": 2025,
         "end": 2026
       },
-      "years": [
-        2026
-      ],
       "tags": [
         "ambiente",
         "aria",
@@ -28,7 +124,7 @@
         {
           "name": "anno",
           "type": "INTEGER",
-          "role": "metric",
+          "role": "dimension",
           "description": "",
           "semantic_type": "year"
         },
@@ -63,33 +159,10 @@
         "multi_file": false
       },
       "stage": "incubating",
-      "registry_source": "derive_auto",
       "mart_refs": [
         "centraline_aria__mart_aria_stazione",
         "centraline_aria__mart_aria_ora"
-      ],
-      "run": {
-        "run_id": "20260808T142946Z_d1879d43",
-        "year": 2026,
-        "status": "SUCCESS",
-        "quality_score": {
-          "raw": 100,
-          "clean": 100,
-          "mart": 100
-        },
-        "output_rows": {
-          "clean": 47269,
-          "mart": 254
-        },
-        "output_bytes": {
-          "raw": 424992,
-          "clean": 164690,
-          "mart": 4941
-        },
-        "started_at": "2026-08-08T14:29:46.828915+00:00",
-        "finished_at": "2026-08-08T14:29:52.241475+00:00",
-        "duration_seconds": 5.413
-      }
+      ]
     },
     {
       "slug": "colonnine_bici",
@@ -101,9 +174,6 @@
         "start": 2018,
         "end": 2026
       },
-      "years": [
-        2026
-      ],
       "tags": [
         "trasporti",
         "mobilita",
@@ -115,7 +185,7 @@
         {
           "name": "anno",
           "type": "INTEGER",
-          "role": "metric",
+          "role": "dimension",
           "description": "",
           "semantic_type": "year"
         },
@@ -186,34 +256,11 @@
         "multi_file": false
       },
       "stage": "incubating",
-      "registry_source": "derive_auto",
       "mart_refs": [
         "colonnine_bici__mart_colonnine_anno",
         "colonnine_bici__mart_colonnine_quartiere",
         "colonnine_bici__mart_colonnine_ora"
-      ],
-      "run": {
-        "run_id": "20260808T145356Z_a46a8147",
-        "year": 2026,
-        "status": "SUCCESS",
-        "quality_score": {
-          "raw": 100,
-          "clean": 100,
-          "mart": 100
-        },
-        "output_rows": {
-          "clean": 526352,
-          "mart": 267
-        },
-        "output_bytes": {
-          "raw": 2990508,
-          "clean": 4442514,
-          "mart": 8421
-        },
-        "started_at": "2026-08-08T14:53:56.337317+00:00",
-        "finished_at": "2026-08-08T14:55:03.364393+00:00",
-        "duration_seconds": 67.027
-      }
+      ]
     },
     {
       "slug": "convivenze",
@@ -225,9 +272,6 @@
         "start": 1986,
         "end": 2024
       },
-      "years": [
-        2024
-      ],
       "tags": [
         "demografia",
         "convivenze",
@@ -238,7 +282,7 @@
         {
           "name": "anno",
           "type": "INTEGER",
-          "role": "metric",
+          "role": "dimension",
           "description": "",
           "semantic_type": "year"
         },
@@ -309,32 +353,9 @@
         "multi_file": false
       },
       "stage": "incubating",
-      "registry_source": "derive_auto",
       "mart_refs": [
         "convivenze__mart_convivenze_tipo"
-      ],
-      "run": {
-        "run_id": "20260806T232038Z_57426af1",
-        "year": 2024,
-        "status": "SUCCESS",
-        "quality_score": {
-          "raw": 100,
-          "clean": 100,
-          "mart": 100
-        },
-        "output_rows": {
-          "clean": 92633,
-          "mart": 231
-        },
-        "output_bytes": {
-          "raw": 331794,
-          "clean": 270046,
-          "mart": 2307
-        },
-        "started_at": "2026-08-06T23:20:38.681609+00:00",
-        "finished_at": "2026-08-06T23:20:46.950899+00:00",
-        "duration_seconds": 8.269
-      }
+      ]
     },
     {
       "slug": "emigrati_destinazione",
@@ -346,9 +367,6 @@
         "start": 1986,
         "end": 2024
       },
-      "years": [
-        2024
-      ],
       "tags": [
         "demografia",
         "emigrazione",
@@ -359,7 +377,7 @@
         {
           "name": "anno",
           "type": "INTEGER",
-          "role": "metric",
+          "role": "dimension",
           "description": "",
           "semantic_type": "year"
         },
@@ -406,32 +424,9 @@
         "multi_file": false
       },
       "stage": "incubating",
-      "registry_source": "derive_auto",
       "mart_refs": [
         "emigrati_destinazione__mart_emigrati_quartiere"
-      ],
-      "run": {
-        "run_id": "20260807T104059Z_c556f8f0",
-        "year": 2024,
-        "status": "SUCCESS",
-        "quality_score": {
-          "raw": 100,
-          "clean": 100,
-          "mart": 100
-        },
-        "output_rows": {
-          "clean": 81806,
-          "mart": 273
-        },
-        "output_bytes": {
-          "raw": 293869,
-          "clean": 216899,
-          "mart": 2652
-        },
-        "started_at": "2026-08-07T10:40:59.112616+00:00",
-        "finished_at": "2026-08-07T10:41:06.576399+00:00",
-        "duration_seconds": 7.464
-      }
+      ]
     },
     {
       "slug": "famiglie_tipologia",
@@ -443,9 +438,6 @@
         "start": 1986,
         "end": 2024
       },
-      "years": [
-        2024
-      ],
       "tags": [
         "demografia",
         "famiglie",
@@ -456,7 +448,7 @@
         {
           "name": "anno",
           "type": "INTEGER",
-          "role": "metric",
+          "role": "dimension",
           "description": "",
           "semantic_type": "year"
         },
@@ -509,33 +501,10 @@
         "multi_file": false
       },
       "stage": "incubating",
-      "registry_source": "derive_auto",
       "mart_refs": [
         "famiglie_tipologia__mart_famiglie_tipo",
         "famiglie_tipologia__mart_famiglie_quartiere"
-      ],
-      "run": {
-        "run_id": "20260807T104108Z_5c440bb9",
-        "year": 2024,
-        "status": "SUCCESS",
-        "quality_score": {
-          "raw": 100,
-          "clean": 100,
-          "mart": 100
-        },
-        "output_rows": {
-          "clean": 78270,
-          "mart": 351
-        },
-        "output_bytes": {
-          "raw": 232728,
-          "clean": 203393,
-          "mart": 4062
-        },
-        "started_at": "2026-08-07T10:41:08.847212+00:00",
-        "finished_at": "2026-08-07T10:41:15.476803+00:00",
-        "duration_seconds": 6.63
-      }
+      ]
     },
     {
       "slug": "incarichi",
@@ -547,9 +516,6 @@
         "start": 2012,
         "end": 2026
       },
-      "years": [
-        2026
-      ],
       "tags": [
         "pa",
         "incarichi",
@@ -567,7 +533,7 @@
         {
           "name": "anno",
           "type": "INTEGER",
-          "role": "metric",
+          "role": "dimension",
           "description": "",
           "semantic_type": "year"
         },
@@ -688,34 +654,216 @@
         "multi_file": false
       },
       "stage": "incubating",
-      "registry_source": "derive_auto",
       "mart_refs": [
         "incarichi__mart_incarichi_anno",
         "incarichi__mart_incarichi_tipo",
         "incarichi__mart_incarichi_soggetti"
+      ]
+    },
+    {
+      "slug": "indici_fragilita",
+      "name": "Indici Fragilita",
+      "description": "",
+      "source": "",
+      "source_id": "comune_bologna_opendata",
+      "period": {
+        "start": 2021,
+        "end": 2023
+      },
+      "tags": [
+        "demografia",
+        "welfare",
+        "fragilita",
+        "bologna"
       ],
-      "run": {
-        "run_id": "20260807T091631Z_76040b6c",
-        "year": 2026,
-        "status": "SUCCESS",
-        "quality_score": {
-          "raw": 100,
-          "clean": 100,
-          "mart": 100
+      "category": "welfare-lavoro",
+      "columns": [
+        {
+          "name": "anno",
+          "type": "INTEGER",
+          "role": "dimension",
+          "description": "",
+          "semantic_type": "year"
         },
-        "output_rows": {
-          "clean": 750,
-          "mart": 560
+        {
+          "name": "area_statistica",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
         },
-        "output_bytes": {
-          "raw": 109158,
-          "clean": 72384,
-          "mart": 14298
+        {
+          "name": "quartiere",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
         },
-        "started_at": "2026-08-07T09:16:31.873957+00:00",
-        "finished_at": "2026-08-07T09:16:32.938458+00:00",
-        "duration_seconds": 1.065
-      }
+        {
+          "name": "zona_pross",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "aree_escl",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "pop_res",
+          "type": "BIGINT",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "var_5y_pop",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "saldonat",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "ultra80",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "soli_65",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "imem_italia",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "imem_stra",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "stra_0_19",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "minori1gen",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "perc_laur",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "perfragsan",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "peraffit",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "rmpe_fam",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "perfam_r60",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "integrazione",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "spazinsuff",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "bil",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "bqe",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "frag_demo",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "frag_soc",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "frag_econ",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "frag_compl",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "cluster_an",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "codareast",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        }
+      ],
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-clean/indici_fragilita/2026/indici_fragilita_2026_clean.parquet",
+        "multi_file": false
+      },
+      "stage": "incubating",
+      "mart_refs": [
+        "indici_fragilita__mart_fragilita_area",
+        "indici_fragilita__mart_fragilita_quartiere"
+      ]
     },
     {
       "slug": "popolazione_quartiere",
@@ -727,9 +875,6 @@
         "start": 1986,
         "end": 2024
       },
-      "years": [
-        2024
-      ],
       "tags": [
         "demografia",
         "popolazione",
@@ -740,7 +885,7 @@
         {
           "name": "anno",
           "type": "INTEGER",
-          "role": "metric",
+          "role": "dimension",
           "description": "",
           "semantic_type": "year"
         },
@@ -805,33 +950,10 @@
         "multi_file": false
       },
       "stage": "incubating",
-      "registry_source": "derive_auto",
       "mart_refs": [
         "popolazione_quartiere__mart_pop_quartiere",
         "popolazione_quartiere__mart_pop_trend"
-      ],
-      "run": {
-        "run_id": "20260807T104148Z_fd1da3e3",
-        "year": 2024,
-        "status": "SUCCESS",
-        "quality_score": {
-          "raw": 100,
-          "clean": 100,
-          "mart": 100
-        },
-        "output_rows": {
-          "clean": 239075,
-          "mart": 280
-        },
-        "output_bytes": {
-          "raw": 894288,
-          "clean": 714163,
-          "mart": 4985
-        },
-        "started_at": "2026-08-07T10:41:48.960807+00:00",
-        "finished_at": "2026-08-07T10:42:09.482530+00:00",
-        "duration_seconds": 20.522
-      }
+      ]
     },
     {
       "slug": "precipitazioni_bologna",
@@ -843,9 +965,6 @@
         "start": 2001,
         "end": 2026
       },
-      "years": [
-        2026
-      ],
       "tags": [
         "ambiente",
         "meteo",
@@ -879,32 +998,9 @@
         "multi_file": false
       },
       "stage": "incubating",
-      "registry_source": "derive_auto",
       "mart_refs": [
         "precipitazioni_bologna__mart_precipitazioni_anno"
-      ],
-      "run": {
-        "run_id": "20260806T231359Z_13e982b6",
-        "year": 2026,
-        "status": "SUCCESS",
-        "quality_score": {
-          "raw": 100,
-          "clean": 100,
-          "mart": 100
-        },
-        "output_rows": {
-          "clean": 9348,
-          "mart": 26
-        },
-        "output_bytes": {
-          "raw": 63568,
-          "clean": 29563,
-          "mart": 1021
-        },
-        "started_at": "2026-08-06T23:13:59.591164+00:00",
-        "finished_at": "2026-08-06T23:14:02.858045+00:00",
-        "duration_seconds": 3.267
-      }
+      ]
     },
     {
       "slug": "spire_traffico",
@@ -916,12 +1012,6 @@
         "start": 2022,
         "end": 2025
       },
-      "years": [
-        2022,
-        2023,
-        2024,
-        2025
-      ],
       "tags": [
         "trasporti",
         "mobilita",
@@ -934,7 +1024,7 @@
         {
           "name": "anno",
           "type": "INTEGER",
-          "role": "metric",
+          "role": "dimension",
           "description": "",
           "semantic_type": "year"
         },
@@ -1029,34 +1119,11 @@
         "multi_file": true
       },
       "stage": "incubating",
-      "registry_source": "derive_auto",
       "mart_refs": [
         "spire_traffico__mart_spire_sintesi",
         "spire_traffico__mart_spire_ora",
         "spire_traffico__mart_spire_trend"
-      ],
-      "run": {
-        "run_id": "20260807T094219Z_8f7e19fb",
-        "year": 2025,
-        "status": "SUCCESS",
-        "quality_score": {
-          "raw": 100,
-          "clean": 95,
-          "mart": 100
-        },
-        "output_rows": {
-          "clean": 7315776,
-          "mart": 7825
-        },
-        "output_bytes": {
-          "raw": 17472473,
-          "clean": 12763818,
-          "mart": 64799
-        },
-        "started_at": "2026-08-07T09:42:19.442488+00:00",
-        "finished_at": "2026-08-07T09:43:20.863458+00:00",
-        "duration_seconds": 61.421
-      }
+      ]
     },
     {
       "slug": "temperature_bologna",
@@ -1068,9 +1135,6 @@
         "start": 2001,
         "end": 2026
       },
-      "years": [
-        2026
-      ],
       "tags": [
         "ambiente",
         "meteo",
@@ -1116,32 +1180,9 @@
         "multi_file": false
       },
       "stage": "incubating",
-      "registry_source": "derive_auto",
       "mart_refs": [
         "temperature_bologna__mart_temperatura_anno"
-      ],
-      "run": {
-        "run_id": "20260806T231356Z_bcba265b",
-        "year": 2026,
-        "status": "SUCCESS",
-        "quality_score": {
-          "raw": 100,
-          "clean": 100,
-          "mart": 100
-        },
-        "output_rows": {
-          "clean": 9348,
-          "mart": 26
-        },
-        "output_bytes": {
-          "raw": 91507,
-          "clean": 59263,
-          "mart": 1330
-        },
-        "started_at": "2026-08-06T23:13:56.052775+00:00",
-        "finished_at": "2026-08-06T23:13:57.406325+00:00",
-        "duration_seconds": 1.354
-      }
+      ]
     },
     {
       "slug": "varchi_ztl",
@@ -1153,9 +1194,6 @@
         "start": 2019,
         "end": 2026
       },
-      "years": [
-        2026
-      ],
       "tags": [
         "trasporti",
         "mobilita",
@@ -1168,7 +1206,7 @@
         {
           "name": "anno",
           "type": "INTEGER",
-          "role": "metric",
+          "role": "dimension",
           "description": "",
           "semantic_type": "year"
         },
@@ -1293,53 +1331,47 @@
         "multi_file": false
       },
       "stage": "incubating",
-      "registry_source": "derive_auto",
       "mart_refs": [
         "varchi_ztl__mart_varchi_ora",
         "varchi_ztl__mart_varchi_varco"
-      ],
-      "run": {
-        "run_id": "20260807T134538Z_123fb963",
-        "year": 2026,
-        "status": "SUCCESS",
-        "quality_score": {
-          "raw": 100,
-          "clean": 100,
-          "mart": 100
-        },
-        "output_rows": {
-          "clean": 18630531,
-          "mart": 849
-        },
-        "output_bytes": {
-          "raw": 165708045,
-          "clean": 111697375,
-          "mart": 17612
-        },
-        "started_at": "2026-08-07T13:45:38.813902+00:00",
-        "finished_at": "2026-08-07T13:47:13.126440+00:00",
-        "duration_seconds": 94.313
-      }
+      ]
     }
   ],
   "marts": [
     {
+      "slug": "bolognawifi_matrice__mart_wifi_anno",
+      "dataset": "bolognawifi_matrice",
+      "table": "mart_wifi_anno",
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-mart/bolognawifi_matrice/2025/mart_wifi_anno.parquet",
+        "multi_file": false
+      }
+    },
+    {
+      "slug": "bolognawifi_matrice__mart_wifi_od",
+      "dataset": "bolognawifi_matrice",
+      "table": "mart_wifi_od",
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-mart/bolognawifi_matrice/2025/mart_wifi_od.parquet",
+        "multi_file": false
+      }
+    },
+    {
+      "slug": "bolognawifi_matrice__mart_wifi_ora",
+      "dataset": "bolognawifi_matrice",
+      "table": "mart_wifi_ora",
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-mart/bolognawifi_matrice/2025/mart_wifi_ora.parquet",
+        "multi_file": false
+      }
+    },
+    {
       "slug": "centraline_aria__mart_aria_ora",
       "dataset": "centraline_aria",
       "table": "mart_aria_ora",
-      "description": "centraline_aria — mart mart_aria_ora",
-      "primary_key": [
-        "ora_inizio",
-        "stazione",
-        "agente_atm"
-      ],
-      "required_columns": [
-        "ora_inizio",
-        "stazione",
-        "agente_atm",
-        "media_valore"
-      ],
-      "min_rows": 10,
       "location": {
         "type": "gcs",
         "path": "gs://dataciviclab-mart/centraline_aria/2026/mart_aria_ora.parquet",
@@ -1350,21 +1382,6 @@
       "slug": "centraline_aria__mart_aria_stazione",
       "dataset": "centraline_aria",
       "table": "mart_aria_stazione",
-      "description": "centraline_aria — mart mart_aria_stazione",
-      "primary_key": [
-        "anno",
-        "stazione",
-        "agente_atm"
-      ],
-      "required_columns": [
-        "anno",
-        "stazione",
-        "agente_atm",
-        "media_valore",
-        "max_valore",
-        "giorni_rilevati"
-      ],
-      "min_rows": 10,
       "location": {
         "type": "gcs",
         "path": "gs://dataciviclab-mart/centraline_aria/2026/mart_aria_stazione.parquet",
@@ -1375,41 +1392,6 @@
       "slug": "colonnine_bici__mart_colonnine_anno",
       "dataset": "colonnine_bici",
       "table": "mart_colonnine_anno",
-      "description": "colonnine_bici — mart mart_colonnine_anno",
-      "primary_key": [
-        "anno",
-        "colonnina"
-      ],
-      "required_columns": [
-        "anno",
-        "colonnina",
-        "quartiere",
-        "giorni_rilevati",
-        "totale_passaggi"
-      ],
-      "min_rows": 10,
-      "run": {
-        "run_id": "20260808T145356Z_a46a8147",
-        "year": 2026,
-        "status": "SUCCESS",
-        "quality_score": {
-          "raw": 100,
-          "clean": 100,
-          "mart": 100
-        },
-        "output_rows": {
-          "clean": 526352,
-          "mart": 267
-        },
-        "output_bytes": {
-          "raw": 2990508,
-          "clean": 4442514,
-          "mart": 8421
-        },
-        "started_at": "2026-08-08T14:53:56.337317+00:00",
-        "finished_at": "2026-08-08T14:55:03.364393+00:00",
-        "duration_seconds": 67.027
-      },
       "location": {
         "type": "gcs",
         "path": "gs://dataciviclab-mart/colonnine_bici/2026/mart_colonnine_anno.parquet",
@@ -1420,39 +1402,6 @@
       "slug": "colonnine_bici__mart_colonnine_ora",
       "dataset": "colonnine_bici",
       "table": "mart_colonnine_ora",
-      "description": "colonnine_bici — mart mart_colonnine_ora",
-      "primary_key": [
-        "ora_inizio",
-        "quartiere"
-      ],
-      "required_columns": [
-        "ora_inizio",
-        "quartiere",
-        "bici_medie"
-      ],
-      "min_rows": 10,
-      "run": {
-        "run_id": "20260808T145356Z_a46a8147",
-        "year": 2026,
-        "status": "SUCCESS",
-        "quality_score": {
-          "raw": 100,
-          "clean": 100,
-          "mart": 100
-        },
-        "output_rows": {
-          "clean": 526352,
-          "mart": 267
-        },
-        "output_bytes": {
-          "raw": 2990508,
-          "clean": 4442514,
-          "mart": 8421
-        },
-        "started_at": "2026-08-08T14:53:56.337317+00:00",
-        "finished_at": "2026-08-08T14:55:03.364393+00:00",
-        "duration_seconds": 67.027
-      },
       "location": {
         "type": "gcs",
         "path": "gs://dataciviclab-mart/colonnine_bici/2026/mart_colonnine_ora.parquet",
@@ -1463,40 +1412,6 @@
       "slug": "colonnine_bici__mart_colonnine_quartiere",
       "dataset": "colonnine_bici",
       "table": "mart_colonnine_quartiere",
-      "description": "colonnine_bici — mart mart_colonnine_quartiere",
-      "primary_key": [
-        "anno",
-        "quartiere"
-      ],
-      "required_columns": [
-        "anno",
-        "quartiere",
-        "totale_passaggi",
-        "bici_giorno_medi"
-      ],
-      "min_rows": 5,
-      "run": {
-        "run_id": "20260808T145356Z_a46a8147",
-        "year": 2026,
-        "status": "SUCCESS",
-        "quality_score": {
-          "raw": 100,
-          "clean": 100,
-          "mart": 100
-        },
-        "output_rows": {
-          "clean": 526352,
-          "mart": 267
-        },
-        "output_bytes": {
-          "raw": 2990508,
-          "clean": 4442514,
-          "mart": 8421
-        },
-        "started_at": "2026-08-08T14:53:56.337317+00:00",
-        "finished_at": "2026-08-08T14:55:03.364393+00:00",
-        "duration_seconds": 67.027
-      },
       "location": {
         "type": "gcs",
         "path": "gs://dataciviclab-mart/colonnine_bici/2026/mart_colonnine_quartiere.parquet",
@@ -1507,18 +1422,6 @@
       "slug": "convivenze__mart_convivenze_tipo",
       "dataset": "convivenze",
       "table": "mart_convivenze_tipo",
-      "description": "convivenze — mart mart_convivenze_tipo",
-      "primary_key": [
-        "anno",
-        "dimensione"
-      ],
-      "required_columns": [
-        "anno",
-        "dimensione",
-        "residenti",
-        "quota_pct"
-      ],
-      "min_rows": 20,
       "location": {
         "type": "gcs",
         "path": "gs://dataciviclab-mart/convivenze/2024/mart_convivenze_tipo.parquet",
@@ -1529,18 +1432,6 @@
       "slug": "emigrati_destinazione__mart_emigrati_quartiere",
       "dataset": "emigrati_destinazione",
       "table": "mart_emigrati_quartiere",
-      "description": "emigrati_destinazione — mart mart_emigrati_quartiere",
-      "primary_key": [
-        "anno",
-        "quartiere"
-      ],
-      "required_columns": [
-        "anno",
-        "quartiere",
-        "totale_emigrati",
-        "quota_pct"
-      ],
-      "min_rows": 100,
       "location": {
         "type": "gcs",
         "path": "gs://dataciviclab-mart/emigrati_destinazione/2024/mart_emigrati_quartiere.parquet",
@@ -1551,18 +1442,6 @@
       "slug": "famiglie_tipologia__mart_famiglie_quartiere",
       "dataset": "famiglie_tipologia",
       "table": "mart_famiglie_quartiere",
-      "description": "famiglie_tipologia — mart mart_famiglie_quartiere",
-      "primary_key": [
-        "anno",
-        "quartiere"
-      ],
-      "required_columns": [
-        "anno",
-        "quartiere",
-        "totale_famiglie",
-        "quota_pct"
-      ],
-      "min_rows": 100,
       "location": {
         "type": "gcs",
         "path": "gs://dataciviclab-mart/famiglie_tipologia/2024/mart_famiglie_quartiere.parquet",
@@ -1573,18 +1452,6 @@
       "slug": "famiglie_tipologia__mart_famiglie_tipo",
       "dataset": "famiglie_tipologia",
       "table": "mart_famiglie_tipo",
-      "description": "famiglie_tipologia — mart mart_famiglie_tipo",
-      "primary_key": [
-        "anno",
-        "tipo_capofamiglia"
-      ],
-      "required_columns": [
-        "anno",
-        "tipo_capofamiglia",
-        "totale_famiglie",
-        "quota_pct"
-      ],
-      "min_rows": 20,
       "location": {
         "type": "gcs",
         "path": "gs://dataciviclab-mart/famiglie_tipologia/2024/mart_famiglie_tipo.parquet",
@@ -1595,17 +1462,6 @@
       "slug": "incarichi__mart_incarichi_anno",
       "dataset": "incarichi",
       "table": "mart_incarichi_anno",
-      "description": "incarichi — mart mart_incarichi_anno",
-      "primary_key": [
-        "anno"
-      ],
-      "required_columns": [
-        "anno",
-        "numero_incarichi",
-        "importo_totale",
-        "importo_medio"
-      ],
-      "min_rows": 10,
       "location": {
         "type": "gcs",
         "path": "gs://dataciviclab-mart/incarichi/2026/mart_incarichi_anno.parquet",
@@ -1616,17 +1472,6 @@
       "slug": "incarichi__mart_incarichi_soggetti",
       "dataset": "incarichi",
       "table": "mart_incarichi_soggetti",
-      "description": "incarichi — mart mart_incarichi_soggetti",
-      "primary_key": [
-        "ragione_sociale"
-      ],
-      "required_columns": [
-        "ragione_sociale",
-        "numero_incarichi",
-        "importo_totale",
-        "partita_iva"
-      ],
-      "min_rows": 5,
       "location": {
         "type": "gcs",
         "path": "gs://dataciviclab-mart/incarichi/2026/mart_incarichi_soggetti.parquet",
@@ -1637,18 +1482,6 @@
       "slug": "incarichi__mart_incarichi_tipo",
       "dataset": "incarichi",
       "table": "mart_incarichi_tipo",
-      "description": "incarichi — mart mart_incarichi_tipo",
-      "primary_key": [
-        "classificazione_incarichi"
-      ],
-      "required_columns": [
-        "classificazione_incarichi",
-        "numero_incarichi",
-        "importo_totale",
-        "quota_incarichi_pct",
-        "quota_importo_pct"
-      ],
-      "min_rows": 5,
       "location": {
         "type": "gcs",
         "path": "gs://dataciviclab-mart/incarichi/2026/mart_incarichi_tipo.parquet",
@@ -1656,22 +1489,29 @@
       }
     },
     {
+      "slug": "indici_fragilita__mart_fragilita_area",
+      "dataset": "indici_fragilita",
+      "table": "mart_fragilita_area",
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-mart/indici_fragilita/2026/mart_fragilita_area.parquet",
+        "multi_file": false
+      }
+    },
+    {
+      "slug": "indici_fragilita__mart_fragilita_quartiere",
+      "dataset": "indici_fragilita",
+      "table": "mart_fragilita_quartiere",
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-mart/indici_fragilita/2026/mart_fragilita_quartiere.parquet",
+        "multi_file": false
+      }
+    },
+    {
       "slug": "popolazione_quartiere__mart_pop_quartiere",
       "dataset": "popolazione_quartiere",
       "table": "mart_pop_quartiere",
-      "description": "popolazione_quartiere — mart mart_pop_quartiere",
-      "primary_key": [
-        "anno",
-        "quartiere"
-      ],
-      "required_columns": [
-        "anno",
-        "quartiere",
-        "residenti",
-        "quota_pct",
-        "indice_vecchiaia"
-      ],
-      "min_rows": 100,
       "location": {
         "type": "gcs",
         "path": "gs://dataciviclab-mart/popolazione_quartiere/2024/mart_pop_quartiere.parquet",
@@ -1682,19 +1522,6 @@
       "slug": "popolazione_quartiere__mart_pop_trend",
       "dataset": "popolazione_quartiere",
       "table": "mart_pop_trend",
-      "description": "popolazione_quartiere — mart mart_pop_trend",
-      "primary_key": [
-        "quartiere"
-      ],
-      "required_columns": [
-        "quartiere",
-        "first_year",
-        "last_year",
-        "residenti_primo",
-        "residenti_ultimo",
-        "cagr_pct"
-      ],
-      "min_rows": 5,
       "location": {
         "type": "gcs",
         "path": "gs://dataciviclab-mart/popolazione_quartiere/2024/mart_pop_trend.parquet",
@@ -1705,17 +1532,6 @@
       "slug": "precipitazioni_bologna__mart_precipitazioni_anno",
       "dataset": "precipitazioni_bologna",
       "table": "mart_precipitazioni_anno",
-      "description": "precipitazioni_bologna — mart mart_precipitazioni_anno",
-      "primary_key": [
-        "anno"
-      ],
-      "required_columns": [
-        "anno",
-        "pioggia_totale_mm",
-        "giorni_pioggia",
-        "max_giornaliero_mm"
-      ],
-      "min_rows": 20,
       "location": {
         "type": "gcs",
         "path": "gs://dataciviclab-mart/precipitazioni_bologna/2026/mart_precipitazioni_anno.parquet",
@@ -1726,19 +1542,6 @@
       "slug": "spire_traffico__mart_spire_ora",
       "dataset": "spire_traffico",
       "table": "mart_spire_ora",
-      "description": "spire_traffico — mart mart_spire_ora",
-      "primary_key": [
-        "anno",
-        "nome_via",
-        "ora_inizio"
-      ],
-      "required_columns": [
-        "anno",
-        "nome_via",
-        "ora_inizio",
-        "passaggi_medi"
-      ],
-      "min_rows": 3000,
       "location": {
         "type": "gcs",
         "path": "gs://dataciviclab-mart/spire_traffico/2025/mart_spire_ora.parquet",
@@ -1749,18 +1552,6 @@
       "slug": "spire_traffico__mart_spire_sintesi",
       "dataset": "spire_traffico",
       "table": "mart_spire_sintesi",
-      "description": "spire_traffico — mart mart_spire_sintesi",
-      "primary_key": [
-        "anno",
-        "nome_via"
-      ],
-      "required_columns": [
-        "anno",
-        "nome_via",
-        "giorni_rilevati",
-        "totale_passaggi"
-      ],
-      "min_rows": 300,
       "location": {
         "type": "gcs",
         "path": "gs://dataciviclab-mart/spire_traffico/2025/mart_spire_sintesi.parquet",
@@ -1771,24 +1562,9 @@
       "slug": "spire_traffico__mart_spire_trend",
       "dataset": "spire_traffico",
       "table": "mart_spire_trend",
-      "description": "spire_traffico — mart mart_spire_trend",
-      "primary_key": [
-        "nome_via"
-      ],
-      "required_columns": [
-        "nome_via",
-        "first_year",
-        "last_year",
-        "passaggi_giorno_primo_anno",
-        "passaggi_giorno_ultimo_anno",
-        "giorni_rilevati_primo_anno",
-        "giorni_rilevati_ultimo_anno",
-        "cagr_pct"
-      ],
-      "min_rows": 300,
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/spire_traffico/2025/mart_spire_trend.parquet",
+        "path": "gs://dataciviclab-mart/spire_traffico/mart_spire_trend.parquet",
         "multi_file": false
       }
     },
@@ -1796,18 +1572,6 @@
       "slug": "temperature_bologna__mart_temperatura_anno",
       "dataset": "temperature_bologna",
       "table": "mart_temperatura_anno",
-      "description": "temperature_bologna — mart mart_temperatura_anno",
-      "primary_key": [
-        "anno"
-      ],
-      "required_columns": [
-        "anno",
-        "avg_media",
-        "max_max",
-        "min_min",
-        "giorni_oltre_35"
-      ],
-      "min_rows": 20,
       "location": {
         "type": "gcs",
         "path": "gs://dataciviclab-mart/temperature_bologna/2026/mart_temperatura_anno.parquet",
@@ -1818,19 +1582,6 @@
       "slug": "varchi_ztl__mart_varchi_ora",
       "dataset": "varchi_ztl",
       "table": "mart_varchi_ora",
-      "description": "varchi_ztl — mart mart_varchi_ora",
-      "primary_key": [
-        "anno",
-        "ora_inizio"
-      ],
-      "required_columns": [
-        "anno",
-        "ora_inizio",
-        "totale_passaggi",
-        "auto_furgoni",
-        "moto_ciclomotori"
-      ],
-      "min_rows": 20,
       "location": {
         "type": "gcs",
         "path": "gs://dataciviclab-mart/varchi_ztl/2026/mart_varchi_ora.parquet",
@@ -1841,19 +1592,6 @@
       "slug": "varchi_ztl__mart_varchi_varco",
       "dataset": "varchi_ztl",
       "table": "mart_varchi_varco",
-      "description": "varchi_ztl — mart mart_varchi_varco",
-      "primary_key": [
-        "anno",
-        "varco"
-      ],
-      "required_columns": [
-        "anno",
-        "varco",
-        "nome_varco",
-        "giorni_rilevati",
-        "totale_passaggi"
-      ],
-      "min_rows": 100,
       "location": {
         "type": "gcs",
         "path": "gs://dataciviclab-mart/varchi_ztl/2026/mart_varchi_varco.parquet",
@@ -1863,15 +1601,20 @@
   ],
   "signals": [
     {
+      "id": "bolognawifi_matrice",
+      "source_id": "comune_bologna_opendata",
+      "status": "ok",
+      "label": "bolognawifi_matrice",
+      "detail": "anno 2025 — mart: si",
+      "action": ""
+    },
+    {
       "id": "centraline_aria",
       "source_id": "comune_bologna_opendata",
       "status": "ok",
       "label": "centraline_aria",
       "detail": "anno 2026 — mart: si",
       "action": "",
-      "years": [
-        2026
-      ],
       "run": {
         "run_id": "20260808T142946Z_d1879d43",
         "year": 2026,
@@ -1902,9 +1645,6 @@
       "label": "colonnine_bici",
       "detail": "anno 2026 — mart: si",
       "action": "",
-      "years": [
-        2026
-      ],
       "run": {
         "run_id": "20260808T145356Z_a46a8147",
         "year": 2026,
@@ -1935,9 +1675,6 @@
       "label": "convivenze",
       "detail": "anno 2024 — mart: si",
       "action": "",
-      "years": [
-        2024
-      ],
       "run": {
         "run_id": "20260806T232038Z_57426af1",
         "year": 2024,
@@ -1968,9 +1705,6 @@
       "label": "emigrati_destinazione",
       "detail": "anno 2024 — mart: si",
       "action": "",
-      "years": [
-        2024
-      ],
       "run": {
         "run_id": "20260807T104059Z_c556f8f0",
         "year": 2024,
@@ -2001,9 +1735,6 @@
       "label": "famiglie_tipologia",
       "detail": "anno 2024 — mart: si",
       "action": "",
-      "years": [
-        2024
-      ],
       "run": {
         "run_id": "20260807T104108Z_5c440bb9",
         "year": 2024,
@@ -2034,9 +1765,6 @@
       "label": "incarichi",
       "detail": "anno 2026 — mart: si",
       "action": "",
-      "years": [
-        2026
-      ],
       "run": {
         "run_id": "20260807T091631Z_76040b6c",
         "year": 2026,
@@ -2061,15 +1789,20 @@
       }
     },
     {
+      "id": "indici_fragilita",
+      "source_id": "comune_bologna_opendata",
+      "status": "ok",
+      "label": "indici_fragilita",
+      "detail": "anno 2026 — mart: si",
+      "action": ""
+    },
+    {
       "id": "popolazione_quartiere",
       "source_id": "comune_bologna_opendata",
       "status": "ok",
       "label": "popolazione_quartiere",
       "detail": "anno 2024 — mart: si",
       "action": "",
-      "years": [
-        2024
-      ],
       "run": {
         "run_id": "20260807T104148Z_fd1da3e3",
         "year": 2024,
@@ -2100,9 +1833,6 @@
       "label": "precipitazioni_bologna",
       "detail": "anno 2026 — mart: si",
       "action": "",
-      "years": [
-        2026
-      ],
       "run": {
         "run_id": "20260806T231359Z_13e982b6",
         "year": 2026,
@@ -2133,12 +1863,6 @@
       "label": "spire_traffico",
       "detail": "anni 2022-2025 — mart: si",
       "action": "",
-      "years": [
-        2022,
-        2023,
-        2024,
-        2025
-      ],
       "run": {
         "run_id": "20260807T094219Z_8f7e19fb",
         "year": 2025,
@@ -2169,9 +1893,6 @@
       "label": "temperature_bologna",
       "detail": "anno 2026 — mart: si",
       "action": "",
-      "years": [
-        2026
-      ],
       "run": {
         "run_id": "20260806T231356Z_bcba265b",
         "year": 2026,
@@ -2202,9 +1923,6 @@
       "label": "varchi_ztl",
       "detail": "anno 2026 — mart: si",
       "action": "",
-      "years": [
-        2026
-      ],
       "run": {
         "run_id": "20260807T134538Z_123fb963",
         "year": 2026,
@@ -2229,12 +1947,8 @@
       }
     }
   ],
-  "codelists": {
-    "source_repo": "dataciviclab/dcl-bologna",
-    "codelists": {}
-  },
+  "codelists": [],
   "entities": {
-    "generated_from": "clean_catalog.json",
     "entities": {
       "Ente (o Impresa)": {
         "entity": "Ente (o Impresa)",
@@ -2261,6 +1975,12 @@
         "entity": "Tempo",
         "label": "Tempo / data",
         "datasets": [
+          {
+            "slug": "bolognawifi_matrice",
+            "name": "Bolognawifi Matrice",
+            "column": "anno",
+            "semantic_type": "year"
+          },
           {
             "slug": "centraline_aria",
             "name": "Centraline Aria",
@@ -2298,6 +2018,12 @@
             "semantic_type": "year"
           },
           {
+            "slug": "indici_fragilita",
+            "name": "Indici Fragilita",
+            "column": "anno",
+            "semantic_type": "year"
+          },
+          {
             "slug": "popolazione_quartiere",
             "name": "Popolazione Quartiere",
             "column": "anno",
@@ -2317,19 +2043,10 @@
           }
         ],
         "types": {
-          "year": 9
+          "year": 11
         }
       }
     },
-    "bridges": [],
-    "summary": {
-      "total_entities": 2,
-      "total_relations": 0
-    }
-  },
-  "summary": {
-    "datasets": 11,
-    "marts": 21,
-    "signals": 11
+    "bridges": []
   }
 }
