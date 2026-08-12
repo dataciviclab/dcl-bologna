@@ -34,7 +34,7 @@ Output toolkit in `out/` (root: `../../out`), gitignorato.
 ## Run
 
 ```bash
-toolkit run --years 2023 --config datasets/indici-fragilita/dataset.yml
+toolkit run --config datasets/indici-fragilita/dataset.yml
 toolkit inspect config --config datasets/indici-fragilita/dataset.yml
 ```
 

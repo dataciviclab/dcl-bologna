@@ -6,7 +6,7 @@ dataset:
   source_id: "comune_bologna_opendata"
   tags: [demografia, welfare, fragilita, bologna]
   category: welfare-lavoro
-  years: [2023]
+  years: [2026]
   time_coverage:
     start_year: 2021
     end_year: 2023
