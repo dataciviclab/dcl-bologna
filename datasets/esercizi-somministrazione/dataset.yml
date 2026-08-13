@@ -31,9 +31,11 @@ clean:
     - quartiere
     - zona
     - area_statistica
+    - sottoarea
     - tipologia_esercizio
     - esercizio_via
     - civico
+    - attivita_secondaria
     - data_inizio_attivita
     - data_cessazione_attivita
     - bottega_storica
