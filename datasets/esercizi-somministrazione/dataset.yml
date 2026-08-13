@@ -1,0 +1,77 @@
+root: "../../out"
+schema_version: 1
+
+dataset:
+  name: "esercizi_somministrazione"
+  source_id: "comune_bologna_opendata"
+  tags: [commercio, esercizi, tessuto_commerciale, bologna]
+  category: economia
+  years: [2026]
+  time_coverage:
+    start_year: 1976
+    end_year: 2026
+
+raw:
+  output_policy: overwrite
+  sources:
+    - name: "ods_esercizi"
+      type: "http_file"
+      args:
+        url: "https://opendata.comune.bologna.it/api/explore/v2.1/catalog/datasets/elenco-esercizi-somministrazioni/exports/parquet"
+        filename: "esercizi_somministrazione.parquet"
+      primary: true
+
+clean:
+  sql: "sql/clean.sql"
+  read:
+    source: auto
+    mode: latest
+  required_columns:
+    - stato
+    - quartiere
+    - zona
+    - area_statistica
+    - tipologia_esercizio
+    - esercizio_via
+    - civico
+    - data_inizio_attivita
+    - data_cessazione_attivita
+    - bottega_storica
+    - centro_storico
+    - inserito_in_centro_commercale
+    - latitudine
+    - longitudine
+  validate:
+    min_rows: 10000
+    not_null:
+      - esercizio_via
+      - data_inizio_attivita
+    primary_key:
+      - esercizio_via
+      - civico
+      - tipologia_esercizio
+      - data_inizio_attivita
+      - stato
+
+mart:
+  tables:
+    - name: "mart_esercizi_quartiere"
+      sql: "sql/mart_esercizi_quartiere.sql"
+    - name: "mart_esercizi_stato"
+      sql: "sql/mart_esercizi_stato.sql"
+  required_tables:
+    - "mart_esercizi_quartiere"
+    - "mart_esercizi_stato"
+  validate:
+    table_rules:
+      mart_esercizi_quartiere:
+        required_columns: [quartiere, stato, n_esercizi, quartiere_attuale]
+        primary_key: [quartiere, stato]
+        min_rows: 20
+      mart_esercizi_stato:
+        required_columns: [stato, n_esercizi]
+        primary_key: [stato]
+        min_rows: 3
+
+validation:
+  fail_on_error: true
