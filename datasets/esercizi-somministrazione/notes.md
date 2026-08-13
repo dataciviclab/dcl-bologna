@@ -22,7 +22,8 @@ Quirk della fonte, rischi noti, decisioni metodologiche.
 - **`primary_key` clean**: `(esercizio_via, civico, tipologia_esercizio, data_inizio_attivita, stato)` — verificata empiricamente dopo dedup (17.984 = 17.984, poi -3 vuoti = 17.981).
 - **`stato` come verità** per attivo/cessato (non `data_cessazione`).
 - **Dedup con GROUP BY** (non ROW_NUMBER) — lezione varchi-ztl, riproducibile.
-- **Niente geopoint BLOB** nel clean: lat/lon già presenti.
+- **Niente geopoint BLOB** nel clean: lat/lon già presenti (ridondante).
+- **Colonne droppate con giustificazione empirica** (fix review): `area` = 1 valore costante su 18.710 righe (zero informazione); `attivita_prevalente_esercizio` = 0 valori non-null (colonna morta). `sottoarea` (natura giuridica: al pubblico/deroga/riservata) e `attivita_secondaria` (offerta accessoria: radio, videogiochi, mense — 428 valori) sono **informazione preservata nel clean** — prima erano state escluse per errore, ripristinate.
 - **Chiave con `area_statistica`** condivisa con reddito-mediano e indici-fragilita → join 1:1 per il blocco economia.
 - **Flag `quartiere_attuale` nel mart** (review PR #45): separa i 6 quartieri correnti dai valori soppressi nel 2016 (Borgo Panigale, Porto, Reno, San Donato, San Vitale, Saragozza). Chi consuma il mart filtra `quartiere_attuale = TRUE` — l'analisi 12 usa il flag, non un NOT IN hardcoded.
 - **Due definizioni di "centro storico"** (review PR #45): (a) campo `centro_storico` della fonte → 35,9% degli attivi; (b) quartieri Santo Stefano + Porto-Saragozza → 51,9%. La discussion #44 usa la (b); l'analisi Q1 usa la (a). Da definire quale è canonica nel Lab.
