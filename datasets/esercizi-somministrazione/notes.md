@@ -24,3 +24,5 @@ Quirk della fonte, rischi noti, decisioni metodologiche.
 - **Dedup con GROUP BY** (non ROW_NUMBER) — lezione varchi-ztl, riproducibile.
 - **Niente geopoint BLOB** nel clean: lat/lon già presenti.
 - **Chiave con `area_statistica`** condivisa con reddito-mediano e indici-fragilita → join 1:1 per il blocco economia.
+- **Flag `quartiere_attuale` nel mart** (review PR #45): separa i 6 quartieri correnti dai valori soppressi nel 2016 (Borgo Panigale, Porto, Reno, San Donato, San Vitale, Saragozza). Chi consuma il mart filtra `quartiere_attuale = TRUE` — l'analisi 12 usa il flag, non un NOT IN hardcoded.
+- **Due definizioni di "centro storico"** (review PR #45): (a) campo `centro_storico` della fonte → 35,9% degli attivi; (b) quartieri Santo Stefano + Porto-Saragozza → 51,9%. La discussion #44 usa la (b); l'analisi Q1 usa la (a). Da definire quale è canonica nel Lab.

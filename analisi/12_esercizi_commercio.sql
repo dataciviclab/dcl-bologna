@@ -47,19 +47,17 @@ FROM read_parquet('out/data/clean/esercizi_somministrazione/2026/esercizi_sommin
 WHERE data_cessazione_attivita IS NOT NULL AND extract(year FROM data_cessazione_attivita) >= 2015
 GROUP BY anno_cessazione ORDER BY anno_cessazione;
 
--- 4. Attivi per quartiere (quartieri attuali, 2026)
-SELECT quartiere, count(*) as attivi
-FROM read_parquet('out/data/clean/esercizi_somministrazione/2026/esercizi_somministrazione_2026_clean.parquet')
-WHERE stato='Attivo' AND quartiere IS NOT NULL
-  AND quartiere NOT IN ('Borgo Panigale','Porto','Reno','San Donato','San Vitale','Saragozza')
-GROUP BY quartiere ORDER BY attivi DESC;
+-- 4. Attivi per quartiere (solo quartieri attuali — flag dal mart, no NOT IN)
+SELECT quartiere, sum(n_esercizi) as attivi
+FROM read_parquet('out/data/mart/esercizi_somministrazione/2026/mart_esercizi_quartiere.parquet')
+WHERE stato='Attivo' AND quartiere_attuale = TRUE
+GROUP BY quartiere ORDER BY sum(n_esercizi) DESC;
 
--- 5. Cessati per quartiere (storico)
-SELECT quartiere, count(*) as cessati
-FROM read_parquet('out/data/clean/esercizi_somministrazione/2026/esercizi_somministrazione_2026_clean.parquet')
-WHERE stato='Cessato' AND quartiere IS NOT NULL
-  AND quartiere NOT IN ('Borgo Panigale','Porto','Reno','San Donato','San Vitale','Saragozza')
-GROUP BY quartiere ORDER BY cessati DESC;
+-- 5. Cessati per quartiere (storico, solo quartieri attuali)
+SELECT quartiere, sum(n_esercizi) as cessati
+FROM read_parquet('out/data/mart/esercizi_somministrazione/2026/mart_esercizi_quartiere.parquet')
+WHERE stato='Cessato' AND quartiere_attuale = TRUE
+GROUP BY quartiere ORDER BY sum(n_esercizi) DESC;
 
 -- 6. Le botteghe storiche (flag della fonte, 11 record)
 SELECT quartiere, esercizio_via, civico

@@ -65,7 +65,7 @@ mart:
   validate:
     table_rules:
       mart_esercizi_quartiere:
-        required_columns: [quartiere, stato, n_esercizi]
+        required_columns: [quartiere, stato, n_esercizi, quartiere_attuale]
         primary_key: [quartiere, stato]
         min_rows: 20
       mart_esercizi_stato:
