@@ -2,7 +2,7 @@
   "schema_version": 1,
   "repo": "dcl-bologna",
   "source_repo": "dataciviclab/dcl-bologna",
-  "updated_at": "2026-08-12",
+  "updated_at": "2026-08-13",
   "datasets": [
     {
       "slug": "bolognawifi_matrice",
@@ -426,6 +426,127 @@
       "stage": "incubating",
       "mart_refs": [
         "emigrati_destinazione__mart_emigrati_quartiere"
+      ]
+    },
+    {
+      "slug": "esercizi_somministrazione",
+      "name": "Esercizi Somministrazione",
+      "description": "",
+      "source": "",
+      "source_id": "comune_bologna_opendata",
+      "period": {
+        "start": 1976,
+        "end": 2026
+      },
+      "tags": [
+        "commercio",
+        "esercizi",
+        "tessuto_commerciale",
+        "bologna"
+      ],
+      "category": "economia",
+      "columns": [
+        {
+          "name": "stato",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": "",
+          "semantic_type": "country_code"
+        },
+        {
+          "name": "quartiere",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "zona",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "area_statistica",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "centro_storico",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "settore",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "tipologia_esercizio",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "esercizio_via",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "civico",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "bottega_storica",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "inserito_in_centro_commercale",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "data_inizio_attivita",
+          "type": "DATE",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "data_cessazione_attivita",
+          "type": "DATE",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "latitudine",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "longitudine",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        }
+      ],
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-clean/esercizi_somministrazione/2026/esercizi_somministrazione_2026_clean.parquet",
+        "multi_file": false
+      },
+      "stage": "incubating",
+      "mart_refs": [
+        "esercizi_somministrazione__mart_esercizi_quartiere",
+        "esercizi_somministrazione__mart_esercizi_stato"
       ]
     },
     {
@@ -1493,6 +1614,26 @@
       }
     },
     {
+      "slug": "esercizi_somministrazione__mart_esercizi_quartiere",
+      "dataset": "esercizi_somministrazione",
+      "table": "mart_esercizi_quartiere",
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-mart/esercizi_somministrazione/2026/mart_esercizi_quartiere.parquet",
+        "multi_file": false
+      }
+    },
+    {
+      "slug": "esercizi_somministrazione__mart_esercizi_stato",
+      "dataset": "esercizi_somministrazione",
+      "table": "mart_esercizi_stato",
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-mart/esercizi_somministrazione/2026/mart_esercizi_stato.parquet",
+        "multi_file": false
+      }
+    },
+    {
       "slug": "famiglie_tipologia__mart_famiglie_quartiere",
       "dataset": "famiglie_tipologia",
       "table": "mart_famiglie_quartiere",
@@ -1815,6 +1956,36 @@
       }
     },
     {
+      "id": "esercizi_somministrazione",
+      "source_id": "comune_bologna_opendata",
+      "status": "ok",
+      "label": "esercizi_somministrazione",
+      "detail": "anno 2026 — mart: si",
+      "action": "",
+      "run": {
+        "run_id": "20260813T120338Z_74a7f4ec",
+        "year": 2026,
+        "status": "SUCCESS",
+        "quality_score": {
+          "raw": 100,
+          "clean": 95,
+          "mart": 100
+        },
+        "output_rows": {
+          "clean": 17981,
+          "mart": 31
+        },
+        "output_bytes": {
+          "raw": 514721,
+          "clean": 296594,
+          "mart": 1854
+        },
+        "started_at": "2026-08-13T12:03:38.232659+00:00",
+        "finished_at": "2026-08-13T12:03:45.151839+00:00",
+        "duration_seconds": 6.919
+      }
+    },
+    {
       "id": "famiglie_tipologia",
       "source_id": "comune_bologna_opendata",
       "status": "ok",
@@ -2094,13 +2265,13 @@
         "datasets": [
           {
             "slug": "incarichi",
-            "name": "Incarichi",
+            "name": "Incarichi di collaborazione Comune",
             "column": "partita_iva",
             "semantic_type": "fiscal_code"
           },
           {
             "slug": "incarichi",
-            "name": "Incarichi",
+            "name": "Incarichi di collaborazione Comune",
             "column": "codice_fiscale",
             "semantic_type": "fiscal_code"
           }
@@ -2109,79 +2280,94 @@
           "fiscal_code": 2
         }
       },
+      "Nazione": {
+        "entity": "Nazione",
+        "label": "Nazione",
+        "datasets": [
+          {
+            "slug": "esercizi_somministrazione",
+            "name": "Esercizi Somministrazione",
+            "column": "stato",
+            "semantic_type": "country_code"
+          }
+        ],
+        "types": {
+          "country_code": 1
+        }
+      },
       "Tempo": {
         "entity": "Tempo",
         "label": "Tempo / data",
         "datasets": [
           {
             "slug": "bolognawifi_matrice",
-            "name": "Bolognawifi Matrice",
+            "name": "Matrice spostamenti pedonali WiFi",
             "column": "anno",
             "semantic_type": "year"
           },
           {
             "slug": "centraline_aria",
-            "name": "Centraline Aria",
+            "name": "Centraline qualità dell'aria",
             "column": "anno",
             "semantic_type": "year"
           },
           {
             "slug": "colonnine_bici",
-            "name": "Colonnine Bici",
+            "name": "Conta-bici per colonnina",
             "column": "anno",
             "semantic_type": "year"
           },
           {
             "slug": "convivenze",
-            "name": "Convivenze",
+            "name": "Popolazione in convivenza",
             "column": "anno",
             "semantic_type": "year"
           },
           {
             "slug": "emigrati_destinazione",
-            "name": "Emigrati Destinazione",
+            "name": "Emigrati per destinazione",
             "column": "anno",
             "semantic_type": "year"
           },
           {
             "slug": "famiglie_tipologia",
-            "name": "Famiglie Tipologia",
+            "name": "Famiglie per tipologia",
             "column": "anno",
             "semantic_type": "year"
           },
           {
             "slug": "incarichi",
-            "name": "Incarichi",
+            "name": "Incarichi di collaborazione Comune",
             "column": "anno",
             "semantic_type": "year"
           },
           {
             "slug": "indici_fragilita",
-            "name": "Indici Fragilita",
+            "name": "Indici di fragilità per area statistica",
             "column": "anno",
             "semantic_type": "year"
           },
           {
             "slug": "popolazione_quartiere",
-            "name": "Popolazione Quartiere",
+            "name": "Popolazione per quartiere",
             "column": "anno",
             "semantic_type": "year"
           },
           {
             "slug": "reddito_mediano",
-            "name": "Reddito Mediano",
+            "name": "Reddito mediano per area statistica",
             "column": "anno",
             "semantic_type": "year"
           },
           {
             "slug": "spire_traffico",
-            "name": "Spire Traffico",
+            "name": "Traffico fuori ZTL (spire)",
             "column": "anno",
             "semantic_type": "year"
           },
           {
             "slug": "varchi_ztl",
-            "name": "Varchi Ztl",
+            "name": "Passaggi veicolari ZTL",
             "column": "anno",
             "semantic_type": "year"
           }
