@@ -4,12 +4,10 @@
 #   1. bootstrap varchi-ztl (fetch 80 varchi + merge) con cache persistente
 #   2. run dei dataset (cambiati se PR merged, TUTTI se schedule/manuale)
 #   3. sync GCS (clean + mart) — GRACEFUL: skippata se le chiavi non ci sono
-#   4. `toolkit registry build --write` → PR draft se diff (pattern eurostat/DI)
+#   4. registry → PR draft (composite `registry-update-pr`)
 #
-# Triggers:
-#   - pull_request closed (merged) su datasets/** → run dei dataset cambiati
-#   - schedule mensile (1° del mese 06:00 UTC) → run completo (refresh dati)
-#   - workflow_dispatch → manuale, slug opzionale
+# Modello: dataset indipendenti (come eurostat) → detect "solo cambiati" su
+# PR merge, TUTTI su schedule/manuale.
 
 name: Pipeline
 
@@ -26,18 +24,10 @@ on:
         description: "Dataset slugs (comma-separated) o vuoto per tutti"
         required: false
         type: string
-      smoke:
-        description: "Smoke mode (--sample-rows 1000, skips GCS sync)"
-        required: false
-        default: false
-        type: boolean
 
 concurrency:
   group: dcl-bologna-pipeline-${{ github.event.pull_request.number || github.ref || 'schedule' }}
   cancel-in-progress: false
-
-env:
-  TOOLKIT_ALLOW_SCRIPT_SOURCE: "1"
 
 jobs:
   pipeline:
@@ -48,21 +38,15 @@ jobs:
       pull-requests: write
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.merge_commit_sha || github.ref }}
           fetch-depth: 0
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
-      - name: Install toolkit
-        run: |
-          pip install git+https://github.com/dataciviclab/toolkit.git
-          pip install git+https://github.com/dataciviclab/lab-connectors.git
+      - uses: dataciviclab/.github/actions/python-setup@main
 
       # ── Determinare i dataset da processare ─────────────────────────
+      # Produce dirs (per il gating varchi) e batch.txt (per il run).
       - name: Detect datasets to run
         id: detect
         env:
@@ -81,15 +65,17 @@ jobs:
             # Schedule/manuale senza slug: tutti
             find datasets -maxdepth 1 -mindepth 1 -type d -printf '%f\n' | sort > dirs.txt
           fi
+          # Filtra solo dir con dataset.yml e genera batch.txt + dirs
+          : > batch.txt
           DIRS=""
           while read -r d; do
-            [ -n "$d" ] && [ -f "datasets/$d/dataset.yml" ] && DIRS="$DIRS datasets/$d"
+            if [ -n "$d" ] && [ -f "datasets/$d/dataset.yml" ]; then
+              DIRS="$DIRS datasets/$d"
+              echo "datasets/$d/dataset.yml" >> batch.txt
+            fi
           done < dirs.txt
-          if [ -n "$DIRS" ]; then
-            echo "dirs=$DIRS" >> "$GITHUB_OUTPUT"
-          else
-            echo "dirs=" >> "$GITHUB_OUTPUT"
-          fi
+          echo "dirs=$DIRS" >> "$GITHUB_OUTPUT"
+          echo "dirs=$DIRS"
 
       # ── Bootstrap varchi-ztl (SOLO se varchi è tra i dataset processati) ──
       # I 80 varchi raw stanno in una cache persistente (actions/cache):
@@ -113,23 +99,16 @@ jobs:
           python datasets/varchi-ztl/fetch_varchi_toolkit.py --fetch
 
       # ── Run pipeline ─────────────────────────────────────────────────
+      # `toolkit run --batch` usa gli anni dichiarati nel dataset.yml.
       - name: Run datasets
         if: steps.detect.outputs.dirs != ''
-        env:
-          SMOKE: ${{ inputs.smoke && '--sample-rows 1000' || '' }}
-        run: |
-          YEAR=$(date +%Y)
-          for dir in ${{ steps.detect.outputs.dirs }}; do
-            echo "=== $dir ==="
-            toolkit run -c "$dir/dataset.yml" --years $YEAR $SMOKE
-          done
+        run: toolkit run --batch batch.txt
 
       # ── Sync GCS (placeholder D3: pubblicazione non ancora attiva) ──
       # Lo step è strutturato per auth + sync (pattern eurostat), ma la
       # pubblicazione vera non è decisa (D3). Con o senza chiavi fa solo
       # echo — da implementare quando si attiva la pubblicazione GCS.
       - name: Sync GCS (clean+mart)
-        if: ${{ !inputs.smoke }}
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY_DCL_BOLOGNA }}
         run: |
@@ -139,50 +118,9 @@ jobs:
             echo "✅ GCP auth disponibile — GCS sync da implementare (D3: pubblicazione non attiva)"
           fi
 
-      # ── Registry + PR draft (pattern eurostat/DI) ─────────────────────
-      # Escluso in smoke: il builder vedrebbe parquet sample (1000 righe)
-      # e produrrebbe un catalogo basato su dati parziali.
-      - name: Build registry
-        if: ${{ !inputs.smoke }}
-        run: toolkit registry build --write
-
-      - name: Check registry diff
-        if: ${{ !inputs.smoke }}
-        id: diff
-        run: |
-          # registry/ è untracked su main (generato dal builder) —
-          # git diff ignora gli untracked, quindi usiamo git status.
-          if git status --porcelain -- registry/ | grep -q .; then
-            echo "changed=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "changed=false" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Create draft registry PR
-        if: ${{ !inputs.smoke && steps.diff.outputs.changed == 'true' }}
+      # Registry → draft PR (composite, nello stesso job del run: il registry
+      # deriva le entry dai parquet locali in out/).
+      - name: Registry update PR
+        uses: dataciviclab/.github/actions/registry-update-pr@main
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_NUMBER: ${{ github.event.pull_request.number || 'schedule' }}
-        run: |
-          BRANCH="post-merge-registry/${PR_NUMBER}-registry"
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout -B "$BRANCH"
-          git add registry/
-          git commit -m "chore(post-merge): aggiorna registry ($PR_NUMBER)" || exit 0
-          git push --force-with-lease -u origin "$BRANCH"
-          EXISTING_PR=$(gh pr list --head "$BRANCH" --json number --jq '.[0].number // empty')
-          if [ -n "$EXISTING_PR" ]; then
-            gh pr edit "$EXISTING_PR" \
-              --title "chore(post-merge): aggiorna registry ($PR_NUMBER)" \
-              --body "Registry artifacts updated after pipeline run." \
-              --add-label post-merge
-          else
-            gh pr create \
-              --base main \
-              --head "$BRANCH" \
-              --title "chore(post-merge): aggiorna registry ($PR_NUMBER)" \
-              --body "Registry artifacts updated after pipeline run." \
-              --label post-merge \
-              --draft
-          fi
