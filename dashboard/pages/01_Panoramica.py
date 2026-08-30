@@ -104,7 +104,7 @@ st.subheader("🗺️ Cosa contiene")
 
 temi = {
     "👥 Demografia": "Popolazione per quartiere (1986–2024), famiglie, emigrati, convivenze, indici fragilità",
-    "🚲 Mobilità": "Varchi ZTL (18.6M passaggi), spire traffico, colonnine bici, matrice WiFi pedonale",
+    "🚲 Mobilità": "Varchi ZTL, spire traffico, colonnine bici, matrice WiFi pedonale",
     "🌿 Ambiente": "Qualità dell'aria (NO₂), temperature, precipitazioni",
     "💰 Economia": "Reddito mediano per area statistica, esercizi commerciali",
     "🏛️ PA": "Incarichi di collaborazione del Comune (2012–2026)",

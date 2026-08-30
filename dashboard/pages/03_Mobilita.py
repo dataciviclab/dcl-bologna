@@ -7,7 +7,7 @@ import streamlit as st
 from sources import fmt_num, load_mart
 
 st.title("🚲 ZTL · Bici · Spire")
-st.markdown("18,6 milioni di passaggi ai varchi ZTL, 27 colonnine bici, spire di traffico, flussi WiFi pedonali.")
+st.markdown("Passaggi ai varchi ZTL, colonnine bici, spire di traffico, flussi WiFi pedonali.")
 
 # ══════════════════════════════════════════════════════════════════════════════
 # KPI Mobilità
