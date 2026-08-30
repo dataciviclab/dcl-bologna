@@ -72,7 +72,7 @@ if not df_esercizi.empty:
             x=alt.X("n_esercizi:Q", title="N. esercizi"),
             tooltip=["quartiere", alt.Tooltip("n_esercizi:Q", format=",.0f")],
         )
-        .properties(height=max(25 * len(eser), 120))
+        .properties(height=max(30 * len(eser), 180))
     )
     st.altair_chart(chart, width="stretch")
 

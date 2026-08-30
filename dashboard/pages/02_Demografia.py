@@ -42,7 +42,7 @@ if not df_anno.empty:
             x=alt.X("residenti:Q", title="Residenti", axis=alt.Axis(format="~s")),
             tooltip=["quartiere", alt.Tooltip("residenti:Q", format=",.0f")],
         )
-        .properties(height=max(25 * len(pop_q), 120))
+        .properties(height=max(30 * len(pop_q), 180))
     )
     st.altair_chart(chart, width="stretch")
 else:
@@ -124,7 +124,7 @@ if not df_fam.empty:
             x=alt.X("totale_famiglie:Q", title="Famiglie", axis=alt.Axis(format="~s")),
             tooltip=["quartiere", alt.Tooltip("totale_famiglie:Q", format=",.0f")],
         )
-        .properties(height=max(25 * len(fam_q), 120))
+        .properties(height=max(30 * len(fam_q), 180))
     )
     st.altair_chart(chart, width="stretch")
 else:
@@ -148,7 +148,7 @@ if not df_emig.empty:
             x=alt.X("totale_emigrati:Q", title="Emigrati"),
             tooltip=["quartiere", alt.Tooltip("totale_emigrati:Q", format=",.0f")],
         )
-        .properties(height=max(25 * len(emig), 120))
+        .properties(height=max(30 * len(emig), 180))
     )
     st.altair_chart(chart, width="stretch")
 

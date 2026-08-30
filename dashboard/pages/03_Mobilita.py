@@ -87,7 +87,7 @@ if not df_varchi.empty:
                 alt.Tooltip("passaggi_giorno_medi:Q", title="Media/giorno", format=",.0f"),
             ],
         )
-        .properties(height=max(25 * len(top_v), 120))
+        .properties(height=max(30 * len(top_v), 180))
     )
     st.altair_chart(chart, width="stretch")
 else:
@@ -116,7 +116,7 @@ if not df_bici_q.empty:
                 alt.Tooltip("bici_giorno_medi:Q", title="Media/giorno", format=",.0f"),
             ],
         )
-        .properties(height=max(25 * len(bici_q), 120))
+        .properties(height=max(30 * len(bici_q), 180))
     )
     st.altair_chart(chart, width="stretch")
 else:

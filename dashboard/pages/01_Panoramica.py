@@ -13,8 +13,10 @@ st.markdown("**Panoramica** — 15 dataset, 6 temi, dal 1986 ad oggi.")
 # KPI generali
 # ══════════════════════════════════════════════════════════════════════════════
 
-# Popolazione latest
-df_pop = load_mart("popolazione_quartiere", "mart_pop_quartiere", 2024)
+# Popolazione latest — filtra ultimo anno
+df_pop_all = load_mart("popolazione_quartiere", "mart_pop_quartiere", 2024)
+anno_pop = int(df_pop_all["anno"].max()) if not df_pop_all.empty else 2024
+df_pop = df_pop_all[df_pop_all["anno"] == anno_pop] if not df_pop_all.empty else df_pop_all
 pop_totale = int(df_pop["residenti"].sum()) if not df_pop.empty else 0
 
 # Varchi ZTL — solo ultimo anno
@@ -36,7 +38,7 @@ df_aria = load_mart("centraline_aria", "mart_aria_stazione", 2026)
 n_stazioni = df_aria["stazione"].nunique() if not df_aria.empty else 0
 
 k1, k2, k3, k4 = st.columns(4)
-k1.metric("👥 Residenti", fmt_num(pop_totale) if pop_totale else "—", "2024")
+k1.metric("👥 Residenti", fmt_num(pop_totale) if pop_totale else "—", f"{anno_pop}")
 k2.metric("🚗 Varchi ZTL", fmt_num(n_varchi), f"{fmt_num(tot_passaggi_ztl)} passaggi · {anno_ztl}")
 k3.metric("🚲 Colonnine bici", fmt_num(n_colonnine), f"{fmt_num(tot_bici)} passaggi · {anno_bici}")
 k4.metric("🌬️ Stazioni aria", n_stazioni, "2026")
@@ -47,7 +49,7 @@ st.markdown("---")
 # Popolazione per quartiere (latest)
 # ══════════════════════════════════════════════════════════════════════════════
 
-st.subheader("👥 Popolazione per quartiere (2024)")
+st.subheader(f"👥 Popolazione per quartiere ({anno_pop})")
 
 if not df_pop.empty:
     # aggrega per quartiere (somma su tutte le età/sesso/cittadinanza)
@@ -64,7 +66,7 @@ if not df_pop.empty:
             x=alt.X("residenti:Q", title="Residenti", axis=alt.Axis(format="~s")),
             tooltip=["quartiere", alt.Tooltip("residenti:Q", format=",.0f")],
         )
-        .properties(height=max(25 * len(pop_q), 120))
+        .properties(height=max(30 * len(pop_q), 180))
     )
     st.altair_chart(chart, width="stretch")
 
@@ -76,9 +78,9 @@ st.markdown("---")
 
 st.subheader("📈 Trend popolazione totale")
 
-if not df_pop.empty:
+if not df_pop_all.empty:
     trend = (
-        df_pop.groupby("anno", as_index=False)
+        df_pop_all.groupby("anno", as_index=False)
         .agg(residenti=("residenti", "sum"))
         .sort_values("anno")
     )

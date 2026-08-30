@@ -33,7 +33,7 @@ if not df_aria.empty:
                     alt.Tooltip("pct_sopra_soglia:Q", title="% sopra soglia", format=".1f%%"),
                 ],
             )
-            .properties(height=max(25 * len(no2), 100))
+            .properties(height=max(30 * len(no2), 150))
         )
         st.altair_chart(chart, width="stretch")
     else:

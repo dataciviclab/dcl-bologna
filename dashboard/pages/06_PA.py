@@ -88,7 +88,7 @@ if not df_tipo.empty:
                 alt.Tooltip("quota_importo_pct:Q", title="% importo", format=".1f%%"),
             ],
         )
-        .properties(height=max(25 * len(tipo), 100))
+        .properties(height=max(30 * len(tipo), 150))
     )
     st.altair_chart(chart, width="stretch")
 
