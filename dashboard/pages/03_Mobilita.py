@@ -142,9 +142,9 @@ if not df_trend_spire.empty:
     st.dataframe(
         display,
         column_config={
-            "Media/giorno (inizio)": st.column_config.NumberColumn(format=",.0f"),
-            "Media/giorno (fine)": st.column_config.NumberColumn(format=",.0f"),
-            "CAGR %": st.column_config.NumberColumn(format="%.1f%%"),
+            "Media/giorno (inizio)": st.column_config.NumberColumn(format="%d"),
+            "Media/giorno (fine)": st.column_config.NumberColumn(format="%d"),
+            "CAGR %": st.column_config.NumberColumn(format="%+.1f"),
         },
         hide_index=True,
         width="stretch",

@@ -1,7 +1,8 @@
 """Data sources per la dashboard dcl-bologna.
 
-Layer sottile che wrappa DuckDB su parquet locali (out/data/clean|mart).
-Quando i dati saranno su GCS, basta cambiare i path in _base_path().
+Pattern standard: wrappa lab_connectors con @st.cache_data.
+Per ora i dati sono locali (out/data/) — quando saranno su GCS,
+basta swappare load_mart per usare lab_connectors.duckdb.queries.
 """
 
 from __future__ import annotations
@@ -12,7 +13,13 @@ import duckdb
 import pandas as pd
 import streamlit as st
 
-# ── Path ──────────────────────────────────────────────────────────────────────
+from lab_connectors.formatters import fmt_eur, fmt_num, fmt_pct
+from lab_connectors.registry import load_registry
+
+# Re-export per comodità delle pagine
+__all__ = ["fmt_num", "fmt_pct", "fmt_eur", "load_mart", "load_clean", "run_sql", "load_registry"]
+
+# ── Path (temporaneo — rimuovere quando i dati saranno su GCS) ────────────────
 
 REPO = Path(__file__).resolve().parent.parent
 CLEAN_DIR = REPO / "out" / "data" / "clean"
@@ -21,11 +28,11 @@ REGISTRY_PATH = REPO / "registry" / "registry.json"
 
 
 def _parquet_path(layer: str, slug: str, table: str, year: int | None = None) -> Path | None:
-    """Ritorna il path di un parquet clean o mart.
+    """Ritorna il path di un parquet clean o mart (locale).
 
     clean: out/data/clean/<slug>/<year>/<slug>_<year>_clean.parquet
     mart:  out/data/mart/<slug>/<year>/<table>.parquet
-          oppure out/data/mart/<slug>/<table>.parquet (senza anno, es. spire_trend)
+          oppure out/data/mart/<slug>/<table>.parquet (flat, es. spire_trend)
     """
     base = MART_DIR if layer == "mart" else CLEAN_DIR
     if layer == "mart":
@@ -33,7 +40,6 @@ def _parquet_path(layer: str, slug: str, table: str, year: int | None = None) ->
             p = base / slug / str(year) / f"{table}.parquet"
             if p.exists():
                 return p
-        # fallback: senza anno (es. spire_trend)
         p = base / slug / f"{table}.parquet"
         return p if p.exists() else None
     else:
@@ -51,7 +57,12 @@ def _read_parquet(path: Path) -> pd.DataFrame:
 
 @st.cache_data(ttl=3600, show_spinner=False)
 def load_mart(slug: str, table: str, year: int | None = None) -> pd.DataFrame:
-    """Carica un singolo mart table (cached 1h)."""
+    """Carica un singolo mart table (cached 1h).
+
+    Quando i dati saranno su GCS, sostituire con:
+        from lab_connectors.duckdb.queries import load_mart_table
+        return load_mart_table(slug, table, year)
+    """
     p = _parquet_path("mart", slug, table, year)
     if p is None:
         return pd.DataFrame()
@@ -74,29 +85,10 @@ def run_sql(sql: str) -> pd.DataFrame:
         return con.sql(sql).df()
 
 
+# ── Registry ──────────────────────────────────────────────────────────────────
+
+
 @st.cache_data(ttl=3600, show_spinner=False)
-def load_registry() -> list[dict]:
-    """Carica il registry.json del repo."""
-    import json
-
-    if not REGISTRY_PATH.exists():
-        return []
-    with open(REGISTRY_PATH) as f:
-        data = json.load(f)
-    return data.get("datasets", [])
-
-
-# ── Formatters ────────────────────────────────────────────────────────────────
-
-
-def fmt_num(n: float | int) -> str:
-    """Formatta numeri: 1234567 → 1.234.567."""
-    return f"{int(n):,}".replace(",", ".")
-
-
-def fmt_pct(p: float) -> str:
-    return f"{p:.1f}%"
-
-
-def fmt_mm(mm: float) -> str:
-    return f"{mm:.0f} mm"
+def get_registry():
+    """Carica il registry del repo via lab_connectors."""
+    return load_registry(REGISTRY_PATH)

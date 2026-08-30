@@ -97,10 +97,10 @@ if not df_trend_tab.empty:
     st.dataframe(
         display.sort_values("Var %", ascending=False),
         column_config={
-            "1986": st.column_config.NumberColumn(format=",.0f"),
-            "2024": st.column_config.NumberColumn(format=",.0f"),
-            "Var %": st.column_config.NumberColumn(format="%.1f%%"),
-            "CAGR %": st.column_config.NumberColumn(format="%.2f%%"),
+            "1986": st.column_config.NumberColumn(format="%d"),
+            "2024": st.column_config.NumberColumn(format="%d"),
+            "Var %": st.column_config.NumberColumn(format="%+.1f"),
+            "CAGR %": st.column_config.NumberColumn(format="%+.2f"),
         },
         hide_index=True,
         width="stretch",

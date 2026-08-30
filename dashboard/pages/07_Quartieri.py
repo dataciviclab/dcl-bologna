@@ -32,15 +32,18 @@ metrics = {}
 
 # Popolazione
 if not df_pop.empty:
-    q_pop = df_pop[df_pop["quartiere"] == q_selected]
-    metrics["👥 Popolazione (2024)"] = fmt_num(int(q_pop["residenti"].sum()))
+    # Popolazione — filtra ultimo anno
+    latest_pop_year = int(df_pop["anno"].max())
+    q_pop = df_pop[(df_pop["quartiere"] == q_selected) & (df_pop["anno"] == latest_pop_year)]
+    metrics["👥 Popolazione"] = fmt_num(int(q_pop["residenti"].sum()))
 
-# Famiglie
+# Famiglie — filtra ultimo anno
 df_fam = load_mart("famiglie_tipologia", "mart_famiglie_quartiere", 2024)
 if not df_fam.empty:
-    q_fam = df_fam[df_fam["quartiere"] == q_selected]
+    latest_fam_year = int(df_fam["anno"].max())
+    q_fam = df_fam[(df_fam["quartiere"] == q_selected) & (df_fam["anno"] == latest_fam_year)]
     if not q_fam.empty:
-        metrics["👨‍👩‍👧‍👦 Famiglie (2024)"] = fmt_num(int(q_fam["totale_famiglie"].sum()))
+        metrics["👨‍👩‍👧‍👦 Famiglie"] = fmt_num(int(q_fam["totale_famiglie"].sum()))
 
 # Bici
 df_bici = load_mart("colonnine_bici", "mart_colonnine_quartiere", 2026)
@@ -49,19 +52,21 @@ if not df_bici.empty:
     if not q_bici.empty:
         metrics["🚲 Passaggi bici (2026)"] = fmt_num(int(q_bici["totale_passaggi"].sum()))
 
-# Emigrati
+# Emigrati — filtra ultimo anno
 df_emig = load_mart("emigrati_destinazione", "mart_emigrati_quartiere", 2024)
 if not df_emig.empty:
-    q_emig = df_emig[df_emig["quartiere"] == q_selected]
+    latest_emig_year = int(df_emig["anno"].max())
+    q_emig = df_emig[(df_emig["quartiere"] == q_selected) & (df_emig["anno"] == latest_emig_year)]
     if not q_emig.empty:
-        metrics["🚶 Emigrati (2024)"] = fmt_num(int(q_emig["totale_emigrati"].sum()))
+        metrics["🚶 Emigrati"] = fmt_num(int(q_emig["totale_emigrati"].sum()))
 
-# Fragilità
+# Fragilità — filtra ultimo anno
 df_frag = load_mart("indici_fragilita", "mart_fragilita_quartiere", 2026)
 if not df_frag.empty:
-    q_frag = df_frag[df_frag["quartiere"] == q_selected]
+    latest_frag_year = int(df_frag["anno"].max())
+    q_frag = df_frag[(df_frag["quartiere"] == q_selected) & (df_frag["anno"] == latest_frag_year)]
     if not q_frag.empty:
-        metrics["🔍 Fragilità complessiva"] = f"{q_frag['frag_compl_media'].iloc[0]:.2f}"
+        metrics["🔍 Fragilità"] = f"{q_frag['frag_compl_media'].iloc[0]:.1f}"
 
 # Mostra KPI in colonne
 if metrics:
