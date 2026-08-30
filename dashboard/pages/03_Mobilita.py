@@ -99,11 +99,12 @@ st.markdown("---")
 # Bici per quartiere
 # ══════════════════════════════════════════════════════════════════════════════
 
-st.subheader("🚲 Colonnine bici per quartiere (2026)")
+st.subheader("🚲 Colonnine bici per quartiere")
 
 df_bici_q = load_mart("colonnine_bici", "mart_colonnine_quartiere", 2026)
 if not df_bici_q.empty:
-    bici_q = df_bici_q.sort_values("totale_passaggi", ascending=False)
+    latest_bici_q = int(df_bici_q["anno"].max())
+    bici_q = df_bici_q[df_bici_q["anno"] == latest_bici_q].sort_values("totale_passaggi", ascending=False)
     chart = (
         alt.Chart(bici_q)
         .mark_bar(cornerRadiusTopLeft=4, cornerRadiusTopRight=4, color="#22c55e")
@@ -119,6 +120,7 @@ if not df_bici_q.empty:
         .properties(height=max(30 * len(bici_q), 180))
     )
     st.altair_chart(chart, width="stretch")
+    st.caption(f"Dati {latest_bici_q}")
 else:
     st.info("Dati bici per quartiere non disponibili.")
 

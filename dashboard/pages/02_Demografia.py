@@ -111,11 +111,12 @@ if not df_trend_tab.empty:
 # ══════════════════════════════════════════════════════════════════════════════
 
 st.markdown("---")
-st.subheader("👨‍👩‍👧‍👦 Famiglie per quartiere (2024)")
+st.subheader("👨‍👩‍👧‍👦 Famiglie per quartiere")
 
 df_fam = load_mart("famiglie_tipologia", "mart_famiglie_quartiere", 2024)
 if not df_fam.empty:
-    fam_q = df_fam.sort_values("totale_famiglie", ascending=False)
+    latest_fam = int(df_fam["anno"].max())
+    fam_q = df_fam[df_fam["anno"] == latest_fam].sort_values("totale_famiglie", ascending=False)
     chart = (
         alt.Chart(fam_q)
         .mark_bar(cornerRadiusTopLeft=4, cornerRadiusTopRight=4, color="#8b5cf6")
@@ -127,6 +128,7 @@ if not df_fam.empty:
         .properties(height=max(30 * len(fam_q), 180))
     )
     st.altair_chart(chart, width="stretch")
+    st.caption(f"Dati {latest_fam}")
 else:
     st.info("Dati famiglie non disponibili.")
 
@@ -135,11 +137,12 @@ else:
 # ══════════════════════════════════════════════════════════════════════════════
 
 st.markdown("---")
-st.subheader("🚶 Emigrati per quartiere (2024)")
+st.subheader("🚶 Emigrati per quartiere")
 
 df_emig = load_mart("emigrati_destinazione", "mart_emigrati_quartiere", 2024)
 if not df_emig.empty:
-    emig = df_emig.sort_values("totale_emigrati", ascending=False)
+    latest_emig = int(df_emig["anno"].max())
+    emig = df_emig[df_emig["anno"] == latest_emig].sort_values("totale_emigrati", ascending=False)
     chart = (
         alt.Chart(emig)
         .mark_bar(cornerRadiusTopLeft=4, cornerRadiusTopRight=4, color="#ef4444")
@@ -151,30 +154,34 @@ if not df_emig.empty:
         .properties(height=max(30 * len(emig), 180))
     )
     st.altair_chart(chart, width="stretch")
+    st.caption(f"Dati {latest_emig}")
 
 # ══════════════════════════════════════════════════════════════════════════════
 # Indici di fragilità
 # ══════════════════════════════════════════════════════════════════════════════
 
 st.markdown("---")
-st.subheader("🔍 Indici di fragilità per quartiere (2026)")
+st.subheader("🔍 Indici di fragilità per quartiere")
 
 df_frag = load_mart("indici_fragilita", "mart_fragilita_quartiere", 2026)
 if not df_frag.empty:
-    display = df_frag[
+    latest_frag = int(df_frag["anno"].max())
+    df_frag_yr = df_frag[df_frag["anno"] == latest_frag]
+    display = df_frag_yr[
         ["quartiere", "frag_demo_media", "frag_soc_media", "frag_econ_media", "frag_compl_media"]
     ].copy()
     display.columns = ["Quartiere", "Frag. Demografica", "Frag. Sociale", "Frag. Economica", "Frag. Complessiva"]
     st.dataframe(
         display.sort_values("Frag. Complessiva", ascending=False),
         column_config={
-            "Frag. Demografica": st.column_config.NumberColumn(format="%.2f"),
-            "Frag. Sociale": st.column_config.NumberColumn(format="%.2f"),
-            "Frag. Economica": st.column_config.NumberColumn(format="%.2f"),
-            "Frag. Complessiva": st.column_config.NumberColumn(format="%.2f"),
+            "Frag. Demografica": st.column_config.NumberColumn(format="%.1f"),
+            "Frag. Sociale": st.column_config.NumberColumn(format="%.1f"),
+            "Frag. Economica": st.column_config.NumberColumn(format="%.1f"),
+            "Frag. Complessiva": st.column_config.NumberColumn(format="%.1f"),
         },
         hide_index=True,
         width="stretch",
     )
+    st.caption(f"Dati {latest_frag}")
 
 st.caption("Fonte: OpenData Comune di Bologna — Popolazione, Famiglie, Emigrati, Indici fragilità · CC BY 4.0")

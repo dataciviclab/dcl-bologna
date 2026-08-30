@@ -17,8 +17,11 @@ st.subheader("🌬️ NO₂ medio per stazione (2026)")
 
 df_aria = load_mart("centraline_aria", "mart_aria_stazione", 2026)
 if not df_aria.empty:
-    # solo NO2
-    no2 = df_aria[df_aria["agente_atm"].str.contains("NO2", case=False, na=False)].copy()
+    # solo NO2, solo ultimo anno
+    no2 = df_aria[
+        df_aria["agente_atm"].str.contains("NO2", case=False, na=False)
+        & (df_aria["anno"] == df_aria["anno"].max())
+    ].copy()
     if not no2.empty:
         chart = (
             alt.Chart(no2)
