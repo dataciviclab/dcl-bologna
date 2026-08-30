@@ -17,13 +17,17 @@ st.markdown("**Panoramica** — 15 dataset, 6 temi, dal 1986 ad oggi.")
 df_pop = load_mart("popolazione_quartiere", "mart_pop_quartiere", 2024)
 pop_totale = int(df_pop["residenti"].sum()) if not df_pop.empty else 0
 
-# Varchi ZTL
-df_varchi = load_mart("varchi_ztl", "mart_varchi_varco", 2026)
+# Varchi ZTL — solo ultimo anno
+df_varchi_all = load_mart("varchi_ztl", "mart_varchi_varco", 2026)
+anno_ztl = int(df_varchi_all["anno"].max()) if not df_varchi_all.empty else 2026
+df_varchi = df_varchi_all[df_varchi_all["anno"] == anno_ztl] if not df_varchi_all.empty else df_varchi_all
 n_varchi = len(df_varchi) if not df_varchi.empty else 0
 tot_passaggi_ztl = int(df_varchi["totale_passaggi"].sum()) if not df_varchi.empty else 0
 
-# Colonnine bici
-df_bici = load_mart("colonnine_bici", "mart_colonnine_anno", 2026)
+# Colonnine bici — solo ultimo anno
+df_bici_all = load_mart("colonnine_bici", "mart_colonnine_anno", 2026)
+anno_bici = int(df_bici_all["anno"].max()) if not df_bici_all.empty else 2026
+df_bici = df_bici_all[df_bici_all["anno"] == anno_bici] if not df_bici_all.empty else df_bici_all
 n_colonnine = len(df_bici) if not df_bici.empty else 0
 tot_bici = int(df_bici["totale_passaggi"].sum()) if not df_bici.empty else 0
 
@@ -33,8 +37,8 @@ n_stazioni = df_aria["stazione"].nunique() if not df_aria.empty else 0
 
 k1, k2, k3, k4 = st.columns(4)
 k1.metric("👥 Residenti", fmt_num(pop_totale) if pop_totale else "—", "2024")
-k2.metric("🚗 Varchi ZTL", fmt_num(n_varchi), f"{fmt_num(tot_passaggi_ztl)} passaggi")
-k3.metric("🚲 Colonnine bici", fmt_num(n_colonnine), f"{fmt_num(tot_bici)} passaggi")
+k2.metric("🚗 Varchi ZTL", fmt_num(n_varchi), f"{fmt_num(tot_passaggi_ztl)} passaggi · {anno_ztl}")
+k3.metric("🚲 Colonnine bici", fmt_num(n_colonnine), f"{fmt_num(tot_bici)} passaggi · {anno_bici}")
 k4.metric("🌬️ Stazioni aria", n_stazioni, "2026")
 
 st.markdown("---")
@@ -49,7 +53,7 @@ if not df_pop.empty:
     # aggrega per quartiere (somma su tutte le età/sesso/cittadinanza)
     pop_q = (
         df_pop.groupby("quartiere", as_index=False)
-        .agg(residenti=("residenti", "sum"), quota=("quota_pct", "first"))
+        .agg(residenti=("residenti", "sum"))
         .sort_values("residenti", ascending=False)
     )
     chart = (
@@ -72,10 +76,9 @@ st.markdown("---")
 
 st.subheader("📈 Trend popolazione totale")
 
-df_clean = load_mart("popolazione_quartiere", "mart_pop_quartiere", 2024)
-if not df_clean.empty:
+if not df_pop.empty:
     trend = (
-        df_clean.groupby("anno", as_index=False)
+        df_pop.groupby("anno", as_index=False)
         .agg(residenti=("residenti", "sum"))
         .sort_values("anno")
     )

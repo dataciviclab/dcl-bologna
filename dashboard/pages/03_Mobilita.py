@@ -13,20 +13,29 @@ st.markdown("18,6 milioni di passaggi ai varchi ZTL, 27 colonnine bici, spire di
 # KPI Mobilità
 # ══════════════════════════════════════════════════════════════════════════════
 
-df_varchi = load_mart("varchi_ztl", "mart_varchi_varco", 2026)
-df_bici = load_mart("colonnine_bici", "mart_colonnine_anno", 2026)
+df_varchi_all = load_mart("varchi_ztl", "mart_varchi_varco", 2026)
+df_bici_all = load_mart("colonnine_bici", "mart_colonnine_anno", 2026)
 df_spire = load_mart("spire_traffico", "mart_spire_sintesi", 2025)
-df_wifi = load_mart("bolognawifi_matrice", "mart_wifi_anno", 2026)
+df_wifi_all = load_mart("bolognawifi_matrice", "mart_wifi_anno", 2026)
+
+# Filtra all'ultimo anno disponibile
+anno_ztl = int(df_varchi_all["anno"].max()) if not df_varchi_all.empty else 2026
+df_varchi = df_varchi_all[df_varchi_all["anno"] == anno_ztl] if not df_varchi_all.empty else df_varchi_all
+anno_bici = int(df_bici_all["anno"].max()) if not df_bici_all.empty else 2026
+df_bici = df_bici_all[df_bici_all["anno"] == anno_bici] if not df_bici_all.empty else df_bici_all
+# WiFi: il mart contiene tutti gli anni (2021-2025) — prendi l'ultimo
+anno_wifi = int(df_wifi_all["anno"].max()) if not df_wifi_all.empty else 2025
+df_wifi = df_wifi_all[df_wifi_all["anno"] == anno_wifi] if not df_wifi_all.empty else df_wifi_all
 
 k1, k2, k3, k4 = st.columns(4)
 tot_ztl = int(df_varchi["totale_passaggi"].sum()) if not df_varchi.empty else 0
 tot_bici = int(df_bici["totale_passaggi"].sum()) if not df_bici.empty else 0
 tot_spire = int(df_spire["totale_passaggi"].sum()) if not df_spire.empty else 0
 tot_wifi = int(df_wifi["flussi_totali"].sum()) if not df_wifi.empty else 0
-k1.metric("🚗 Passaggi ZTL", fmt_num(tot_ztl), "2026")
-k2.metric("🚲 Passaggi bici", fmt_num(tot_bici), "2026")
+k1.metric("🚗 Passaggi ZTL", fmt_num(tot_ztl), f"{anno_ztl}")
+k2.metric("🚲 Passaggi bici", fmt_num(tot_bici), f"{anno_bici}")
 k3.metric("📡 Passaggi spire", fmt_num(tot_spire), "2025")
-k4.metric("📶 Flussi WiFi", fmt_num(tot_wifi), "2026")
+k4.metric("📶 Flussi WiFi", fmt_num(tot_wifi), f"{anno_wifi}")
 
 st.markdown("---")
 
@@ -123,12 +132,15 @@ st.subheader("📈 Trend spire di traffico")
 
 df_trend_spire = load_mart("spire_traffico", "mart_spire_trend", None)
 if not df_trend_spire.empty:
-    display = df_trend_spire[
+    st.caption(f"Mostrando top {min(30, len(df_trend_spire))} vie su {len(df_trend_spire)} totali, ordinate per crescita CAGR")
+    # Mostra top 30 vie per variazione percentuale (CAGR)
+    top_n = min(30, len(df_trend_spire))
+    display = df_trend_spire.nlargest(top_n, "cagr_pct")[
         ["nome_via", "first_year", "last_year", "passaggi_giorno_primo_anno", "passaggi_giorno_ultimo_anno", "cagr_pct"]
     ].copy()
     display.columns = ["Via", "Dal", "Al", "Media/giorno (inizio)", "Media/giorno (fine)", "CAGR %"]
     st.dataframe(
-        display.sort_values("CAGR %", ascending=False),
+        display,
         column_config={
             "Media/giorno (inizio)": st.column_config.NumberColumn(format=",.0f"),
             "Media/giorno (fine)": st.column_config.NumberColumn(format=",.0f"),
