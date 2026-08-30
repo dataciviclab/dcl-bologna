@@ -75,17 +75,19 @@ st.markdown("---")
 st.subheader("🏷️ Distribuzione per tipo incarico")
 
 if not df_tipo.empty:
-    tipo = df_tipo.sort_values("quota_incarichi_pct", ascending=False)
+    tipo = df_tipo.sort_values("numero_incarichi", ascending=False)
+    tipo["label"] = tipo["classificazione_incarichi"] + " (" + tipo["numero_incarichi"].astype(str) + ")"
     chart = (
         alt.Chart(tipo)
         .mark_bar(cornerRadiusTopLeft=4, cornerRadiusTopRight=4, color="#f59e0b")
         .encode(
-            y=alt.Y("classificazione_incarichi:N", title="", sort="-x"),
-            x=alt.X("quota_incarichi_pct:Q", title="% incarichi", axis=alt.Axis(format=".1f%%")),
+            y=alt.Y("label:N", title="", sort="-x"),
+            x=alt.X("numero_incarichi:Q", title="N. incarichi"),
             tooltip=[
                 "classificazione_incarichi",
-                alt.Tooltip("quota_incarichi_pct:Q", title="% incarichi", format=".1f%%"),
-                alt.Tooltip("quota_importo_pct:Q", title="% importo", format=".1f%%"),
+                alt.Tooltip("numero_incarichi:Q", title="N. incarichi"),
+                alt.Tooltip("quota_incarichi_pct:Q", title="% incarichi", format=".1f"),
+                alt.Tooltip("importo_totale:Q", title="Importo €", format=",.0f"),
             ],
         )
         .properties(height=max(30 * len(tipo), 150))
