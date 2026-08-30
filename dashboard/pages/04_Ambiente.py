@@ -22,18 +22,20 @@ if not df_aria.empty:
         df_aria["agente_atm"].str.contains("NO2", case=False, na=False)
         & (df_aria["anno"] == df_aria["anno"].max())
     ].copy()
+    # abbrevia nomi stazione (troppo lunghi per il chart)
+    no2["stazione_short"] = no2["stazione"].str.split(",").str[0]
     if not no2.empty:
         chart = (
             alt.Chart(no2)
             .mark_bar(cornerRadiusTopLeft=4, cornerRadiusTopRight=4, color="#06b6d4")
             .encode(
-                y=alt.Y("stazione:N", title="", sort="-x"),
+                y=alt.Y("stazione_short:N", title="", sort="-x"),
                 x=alt.X("media_valore:Q", title="NO₂ medio (µg/m³)"),
                 tooltip=[
                     "stazione",
                     alt.Tooltip("media_valore:Q", title="Media", format=",.1f"),
                     alt.Tooltip("max_valore:Q", title="Max", format=",.1f"),
-                    alt.Tooltip("pct_sopra_soglia:Q", title="% sopra soglia", format=".1f%%"),
+                    alt.Tooltip("pct_sopra_soglia:Q", title="% sopra soglia", format=".1f"),
                 ],
             )
             .properties(height=max(30 * len(no2), 150))
