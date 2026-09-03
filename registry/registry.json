@@ -2,7 +2,7 @@
   "schema_version": 1,
   "repo": "dcl-bologna",
   "source_repo": "dataciviclab/dcl-bologna",
-  "updated_at": "2026-08-15",
+  "updated_at": "2026-09-03",
   "datasets": [
     {
       "slug": "bolognawifi_matrice",
@@ -93,7 +93,7 @@
       ],
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-clean/bolognawifi_matrice/2026/bolognawifi_matrice_2026_clean.parquet",
+        "path": "gs://dataciviclab-clean/bologna/bolognawifi_matrice/2026/bolognawifi_matrice_2026_clean.parquet",
         "multi_file": false
       },
       "stage": "incubating",
@@ -155,7 +155,7 @@
       ],
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-clean/centraline_aria/2026/centraline_aria_2026_clean.parquet",
+        "path": "gs://dataciviclab-clean/bologna/centraline_aria/2026/centraline_aria_2026_clean.parquet",
         "multi_file": false
       },
       "stage": "incubating",
@@ -252,7 +252,7 @@
       ],
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-clean/colonnine_bici/2026/colonnine_bici_2026_clean.parquet",
+        "path": "gs://dataciviclab-clean/bologna/colonnine_bici/2026/colonnine_bici_2026_clean.parquet",
         "multi_file": false
       },
       "stage": "incubating",
@@ -349,7 +349,7 @@
       ],
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-clean/convivenze/2024/convivenze_2024_clean.parquet",
+        "path": "gs://dataciviclab-clean/bologna/convivenze/2024/convivenze_2024_clean.parquet",
         "multi_file": false
       },
       "stage": "incubating",
@@ -420,7 +420,7 @@
       ],
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-clean/emigrati_destinazione/2024/emigrati_destinazione_2024_clean.parquet",
+        "path": "gs://dataciviclab-clean/bologna/emigrati_destinazione/2024/emigrati_destinazione_2024_clean.parquet",
         "multi_file": false
       },
       "stage": "incubating",
@@ -552,7 +552,7 @@
       ],
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-clean/esercizi_somministrazione/2026/esercizi_somministrazione_2026_clean.parquet",
+        "path": "gs://dataciviclab-clean/bologna/esercizi_somministrazione/2026/esercizi_somministrazione_2026_clean.parquet",
         "multi_file": false
       },
       "stage": "incubating",
@@ -630,7 +630,7 @@
       ],
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-clean/famiglie_tipologia/2024/famiglie_tipologia_2024_clean.parquet",
+        "path": "gs://dataciviclab-clean/bologna/famiglie_tipologia/2024/famiglie_tipologia_2024_clean.parquet",
         "multi_file": false
       },
       "stage": "incubating",
@@ -783,7 +783,7 @@
       ],
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-clean/incarichi/2026/incarichi_2026_clean.parquet",
+        "path": "gs://dataciviclab-clean/bologna/incarichi/2026/incarichi_2026_clean.parquet",
         "multi_file": false
       },
       "stage": "incubating",
@@ -989,7 +989,7 @@
       ],
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-clean/indici_fragilita/2026/indici_fragilita_2026_clean.parquet",
+        "path": "gs://dataciviclab-clean/bologna/indici_fragilita/2026/indici_fragilita_2026_clean.parquet",
         "multi_file": false
       },
       "stage": "incubating",
@@ -1079,7 +1079,7 @@
       ],
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-clean/popolazione_quartiere/2024/popolazione_quartiere_2024_clean.parquet",
+        "path": "gs://dataciviclab-clean/bologna/popolazione_quartiere/2024/popolazione_quartiere_2024_clean.parquet",
         "multi_file": false
       },
       "stage": "incubating",
@@ -1127,7 +1127,7 @@
       ],
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-clean/precipitazioni_bologna/2026/precipitazioni_bologna_2026_clean.parquet",
+        "path": "gs://dataciviclab-clean/bologna/precipitazioni_bologna/2026/precipitazioni_bologna_2026_clean.parquet",
         "multi_file": false
       },
       "stage": "incubating",
@@ -1181,7 +1181,7 @@
       ],
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-clean/reddito_mediano/2026/reddito_mediano_2026_clean.parquet",
+        "path": "gs://dataciviclab-clean/bologna/reddito_mediano/2026/reddito_mediano_2026_clean.parquet",
         "multi_file": false
       },
       "stage": "incubating",
@@ -1302,7 +1302,7 @@
       ],
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-clean/spire_traffico/*/spire_traffico_*_clean.parquet",
+        "path": "gs://dataciviclab-clean/bologna/spire_traffico/*/spire_traffico_*_clean.parquet",
         "multi_file": true
       },
       "stage": "incubating",
@@ -1363,7 +1363,7 @@
       ],
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-clean/temperature_bologna/2026/temperature_bologna_2026_clean.parquet",
+        "path": "gs://dataciviclab-clean/bologna/temperature_bologna/2026/temperature_bologna_2026_clean.parquet",
         "multi_file": false
       },
       "stage": "incubating",
@@ -1531,7 +1531,7 @@
       "table": "mart_wifi_anno",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/bolognawifi_matrice/2026/mart_wifi_anno.parquet",
+        "path": "gs://dataciviclab-mart/bologna/bolognawifi_matrice/2026/mart_wifi_anno.parquet",
         "multi_file": false
       }
     },
@@ -1541,7 +1541,7 @@
       "table": "mart_wifi_od",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/bolognawifi_matrice/2026/mart_wifi_od.parquet",
+        "path": "gs://dataciviclab-mart/bologna/bolognawifi_matrice/2026/mart_wifi_od.parquet",
         "multi_file": false
       }
     },
@@ -1551,7 +1551,7 @@
       "table": "mart_wifi_ora",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/bolognawifi_matrice/2026/mart_wifi_ora.parquet",
+        "path": "gs://dataciviclab-mart/bologna/bolognawifi_matrice/2026/mart_wifi_ora.parquet",
         "multi_file": false
       }
     },
@@ -1561,7 +1561,7 @@
       "table": "mart_aria_ora",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/centraline_aria/2026/mart_aria_ora.parquet",
+        "path": "gs://dataciviclab-mart/bologna/centraline_aria/2026/mart_aria_ora.parquet",
         "multi_file": false
       }
     },
@@ -1571,7 +1571,7 @@
       "table": "mart_aria_stazione",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/centraline_aria/2026/mart_aria_stazione.parquet",
+        "path": "gs://dataciviclab-mart/bologna/centraline_aria/2026/mart_aria_stazione.parquet",
         "multi_file": false
       }
     },
@@ -1581,7 +1581,7 @@
       "table": "mart_colonnine_anno",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/colonnine_bici/2026/mart_colonnine_anno.parquet",
+        "path": "gs://dataciviclab-mart/bologna/colonnine_bici/2026/mart_colonnine_anno.parquet",
         "multi_file": false
       }
     },
@@ -1591,7 +1591,7 @@
       "table": "mart_colonnine_ora",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/colonnine_bici/2026/mart_colonnine_ora.parquet",
+        "path": "gs://dataciviclab-mart/bologna/colonnine_bici/2026/mart_colonnine_ora.parquet",
         "multi_file": false
       }
     },
@@ -1601,7 +1601,7 @@
       "table": "mart_colonnine_quartiere",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/colonnine_bici/2026/mart_colonnine_quartiere.parquet",
+        "path": "gs://dataciviclab-mart/bologna/colonnine_bici/2026/mart_colonnine_quartiere.parquet",
         "multi_file": false
       }
     },
@@ -1611,7 +1611,7 @@
       "table": "mart_convivenze_tipo",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/convivenze/2024/mart_convivenze_tipo.parquet",
+        "path": "gs://dataciviclab-mart/bologna/convivenze/2024/mart_convivenze_tipo.parquet",
         "multi_file": false
       }
     },
@@ -1621,7 +1621,7 @@
       "table": "mart_emigrati_quartiere",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/emigrati_destinazione/2024/mart_emigrati_quartiere.parquet",
+        "path": "gs://dataciviclab-mart/bologna/emigrati_destinazione/2024/mart_emigrati_quartiere.parquet",
         "multi_file": false
       }
     },
@@ -1631,7 +1631,7 @@
       "table": "mart_esercizi_quartiere",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/esercizi_somministrazione/2026/mart_esercizi_quartiere.parquet",
+        "path": "gs://dataciviclab-mart/bologna/esercizi_somministrazione/2026/mart_esercizi_quartiere.parquet",
         "multi_file": false
       }
     },
@@ -1641,7 +1641,7 @@
       "table": "mart_esercizi_stato",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/esercizi_somministrazione/2026/mart_esercizi_stato.parquet",
+        "path": "gs://dataciviclab-mart/bologna/esercizi_somministrazione/2026/mart_esercizi_stato.parquet",
         "multi_file": false
       }
     },
@@ -1651,7 +1651,7 @@
       "table": "mart_famiglie_quartiere",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/famiglie_tipologia/2024/mart_famiglie_quartiere.parquet",
+        "path": "gs://dataciviclab-mart/bologna/famiglie_tipologia/2024/mart_famiglie_quartiere.parquet",
         "multi_file": false
       }
     },
@@ -1661,7 +1661,7 @@
       "table": "mart_famiglie_tipo",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/famiglie_tipologia/2024/mart_famiglie_tipo.parquet",
+        "path": "gs://dataciviclab-mart/bologna/famiglie_tipologia/2024/mart_famiglie_tipo.parquet",
         "multi_file": false
       }
     },
@@ -1671,7 +1671,7 @@
       "table": "mart_incarichi_anno",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/incarichi/2026/mart_incarichi_anno.parquet",
+        "path": "gs://dataciviclab-mart/bologna/incarichi/2026/mart_incarichi_anno.parquet",
         "multi_file": false
       }
     },
@@ -1681,7 +1681,7 @@
       "table": "mart_incarichi_soggetti",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/incarichi/2026/mart_incarichi_soggetti.parquet",
+        "path": "gs://dataciviclab-mart/bologna/incarichi/2026/mart_incarichi_soggetti.parquet",
         "multi_file": false
       }
     },
@@ -1691,7 +1691,7 @@
       "table": "mart_incarichi_tipo",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/incarichi/2026/mart_incarichi_tipo.parquet",
+        "path": "gs://dataciviclab-mart/bologna/incarichi/2026/mart_incarichi_tipo.parquet",
         "multi_file": false
       }
     },
@@ -1701,7 +1701,7 @@
       "table": "mart_fragilita_area",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/indici_fragilita/2026/mart_fragilita_area.parquet",
+        "path": "gs://dataciviclab-mart/bologna/indici_fragilita/2026/mart_fragilita_area.parquet",
         "multi_file": false
       }
     },
@@ -1711,7 +1711,7 @@
       "table": "mart_fragilita_quartiere",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/indici_fragilita/2026/mart_fragilita_quartiere.parquet",
+        "path": "gs://dataciviclab-mart/bologna/indici_fragilita/2026/mart_fragilita_quartiere.parquet",
         "multi_file": false
       }
     },
@@ -1721,7 +1721,7 @@
       "table": "mart_pop_quartiere",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/popolazione_quartiere/2024/mart_pop_quartiere.parquet",
+        "path": "gs://dataciviclab-mart/bologna/popolazione_quartiere/2024/mart_pop_quartiere.parquet",
         "multi_file": false
       }
     },
@@ -1731,7 +1731,7 @@
       "table": "mart_pop_trend",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/popolazione_quartiere/2024/mart_pop_trend.parquet",
+        "path": "gs://dataciviclab-mart/bologna/popolazione_quartiere/2024/mart_pop_trend.parquet",
         "multi_file": false
       }
     },
@@ -1741,7 +1741,7 @@
       "table": "mart_precipitazioni_anno",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/precipitazioni_bologna/2026/mart_precipitazioni_anno.parquet",
+        "path": "gs://dataciviclab-mart/bologna/precipitazioni_bologna/2026/mart_precipitazioni_anno.parquet",
         "multi_file": false
       }
     },
@@ -1751,7 +1751,7 @@
       "table": "mart_reddito_area",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/reddito_mediano/2026/mart_reddito_area.parquet",
+        "path": "gs://dataciviclab-mart/bologna/reddito_mediano/2026/mart_reddito_area.parquet",
         "multi_file": false
       }
     },
@@ -1761,7 +1761,7 @@
       "table": "mart_spire_ora",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/spire_traffico/2025/mart_spire_ora.parquet",
+        "path": "gs://dataciviclab-mart/bologna/spire_traffico/2025/mart_spire_ora.parquet",
         "multi_file": false
       }
     },
@@ -1771,7 +1771,7 @@
       "table": "mart_spire_sintesi",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/spire_traffico/2025/mart_spire_sintesi.parquet",
+        "path": "gs://dataciviclab-mart/bologna/spire_traffico/2025/mart_spire_sintesi.parquet",
         "multi_file": false
       }
     },
@@ -1781,7 +1781,7 @@
       "table": "mart_spire_trend",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/spire_traffico/mart_spire_trend.parquet",
+        "path": "gs://dataciviclab-mart/bologna/spire_traffico/mart_spire_trend.parquet",
         "multi_file": false
       }
     },
@@ -1791,7 +1791,7 @@
       "table": "mart_temperatura_anno",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/temperature_bologna/2026/mart_temperatura_anno.parquet",
+        "path": "gs://dataciviclab-mart/bologna/temperature_bologna/2026/mart_temperatura_anno.parquet",
         "multi_file": false
       }
     },
@@ -1801,7 +1801,7 @@
       "table": "mart_varchi_ora",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/varchi_ztl/2026/mart_varchi_ora.parquet",
+        "path": "gs://dataciviclab-mart/bologna/varchi_ztl/2026/mart_varchi_ora.parquet",
         "multi_file": false
       }
     },
@@ -1811,7 +1811,7 @@
       "table": "mart_varchi_varco",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/varchi_ztl/2026/mart_varchi_varco.parquet",
+        "path": "gs://dataciviclab-mart/bologna/varchi_ztl/2026/mart_varchi_varco.parquet",
         "multi_file": false
       }
     }
@@ -1825,7 +1825,7 @@
       "detail": "anno 2026 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20260812T163244Z_5010cfd4",
+        "run_id": "20260903T170407Z_2cd36641",
         "year": 2026,
         "status": "SUCCESS",
         "quality_score": {
@@ -1838,13 +1838,13 @@
           "mart": 49
         },
         "output_bytes": {
-          "raw": 10219325,
-          "clean": 8543669,
+          "raw": 10224935,
+          "clean": 8524727,
           "mart": 3070
         },
-        "started_at": "2026-08-12T16:32:44.134439+00:00",
-        "finished_at": "2026-08-12T16:35:19.433178+00:00",
-        "duration_seconds": 155.299
+        "started_at": "2026-09-03T17:04:07.613135+00:00",
+        "finished_at": "2026-09-03T17:06:26.471245+00:00",
+        "duration_seconds": 138.858
       }
     },
     {
@@ -1855,7 +1855,7 @@
       "detail": "anno 2026 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20260808T142946Z_d1879d43",
+        "run_id": "20260903T170627Z_2226ef18",
         "year": 2026,
         "status": "SUCCESS",
         "quality_score": {
@@ -1864,17 +1864,17 @@
           "mart": 100
         },
         "output_rows": {
-          "clean": 47269,
+          "clean": 52530,
           "mart": 254
         },
         "output_bytes": {
-          "raw": 424992,
-          "clean": 164690,
-          "mart": 4941
+          "raw": 471329,
+          "clean": 182286,
+          "mart": 4923
         },
-        "started_at": "2026-08-08T14:29:46.828915+00:00",
-        "finished_at": "2026-08-08T14:29:52.241475+00:00",
-        "duration_seconds": 5.413
+        "started_at": "2026-09-03T17:06:27.540382+00:00",
+        "finished_at": "2026-09-03T17:06:34.499158+00:00",
+        "duration_seconds": 6.959
       }
     },
     {
@@ -1885,7 +1885,7 @@
       "detail": "anno 2026 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20260808T145356Z_a46a8147",
+        "run_id": "20260903T170635Z_93d69865",
         "year": 2026,
         "status": "SUCCESS",
         "quality_score": {
@@ -1894,17 +1894,17 @@
           "mart": 100
         },
         "output_rows": {
-          "clean": 526352,
+          "clean": 541064,
           "mart": 267
         },
         "output_bytes": {
-          "raw": 2990508,
-          "clean": 4442514,
-          "mart": 8421
+          "raw": 3059228,
+          "clean": 4590932,
+          "mart": 8436
         },
-        "started_at": "2026-08-08T14:53:56.337317+00:00",
-        "finished_at": "2026-08-08T14:55:03.364393+00:00",
-        "duration_seconds": 67.027
+        "started_at": "2026-09-03T17:06:35.078864+00:00",
+        "finished_at": "2026-09-03T17:07:43.027908+00:00",
+        "duration_seconds": 67.949
       }
     },
     {
@@ -1915,7 +1915,7 @@
       "detail": "anno 2024 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20260806T232038Z_57426af1",
+        "run_id": "20260903T170743Z_c2809369",
         "year": 2024,
         "status": "SUCCESS",
         "quality_score": {
@@ -1930,11 +1930,11 @@
         "output_bytes": {
           "raw": 331794,
           "clean": 270046,
-          "mart": 2307
+          "mart": 2297
         },
-        "started_at": "2026-08-06T23:20:38.681609+00:00",
-        "finished_at": "2026-08-06T23:20:46.950899+00:00",
-        "duration_seconds": 8.269
+        "started_at": "2026-09-03T17:07:43.900542+00:00",
+        "finished_at": "2026-09-03T17:07:52.470777+00:00",
+        "duration_seconds": 8.57
       }
     },
     {
@@ -1945,7 +1945,7 @@
       "detail": "anno 2024 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20260807T104059Z_c556f8f0",
+        "run_id": "20260903T170752Z_17141cc3",
         "year": 2024,
         "status": "SUCCESS",
         "quality_score": {
@@ -1958,13 +1958,13 @@
           "mart": 273
         },
         "output_bytes": {
-          "raw": 293869,
-          "clean": 216899,
-          "mart": 2652
+          "raw": 290510,
+          "clean": 219400,
+          "mart": 2631
         },
-        "started_at": "2026-08-07T10:40:59.112616+00:00",
-        "finished_at": "2026-08-07T10:41:06.576399+00:00",
-        "duration_seconds": 7.464
+        "started_at": "2026-09-03T17:07:52.880704+00:00",
+        "finished_at": "2026-09-03T17:07:59.290391+00:00",
+        "duration_seconds": 6.41
       }
     },
     {
@@ -1975,7 +1975,7 @@
       "detail": "anno 2026 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20260815T144115Z_f43e38df",
+        "run_id": "20260903T170759Z_a05a130f",
         "year": 2026,
         "status": "SUCCESS",
         "quality_score": {
@@ -1988,13 +1988,13 @@
           "mart": 31
         },
         "output_bytes": {
-          "raw": 515147,
-          "clean": 315704,
+          "raw": 514721,
+          "clean": 315796,
           "mart": 1854
         },
-        "started_at": "2026-08-15T14:41:15.733364+00:00",
-        "finished_at": "2026-08-15T14:41:20.518692+00:00",
-        "duration_seconds": 4.785
+        "started_at": "2026-09-03T17:07:59.733903+00:00",
+        "finished_at": "2026-09-03T17:08:04.247229+00:00",
+        "duration_seconds": 4.513
       }
     },
     {
@@ -2005,7 +2005,7 @@
       "detail": "anno 2024 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20260807T104108Z_5c440bb9",
+        "run_id": "20260903T170804Z_2b0add81",
         "year": 2024,
         "status": "SUCCESS",
         "quality_score": {
@@ -2018,13 +2018,13 @@
           "mart": 351
         },
         "output_bytes": {
-          "raw": 232728,
-          "clean": 203393,
-          "mart": 4062
+          "raw": 231945,
+          "clean": 198851,
+          "mart": 4030
         },
-        "started_at": "2026-08-07T10:41:08.847212+00:00",
-        "finished_at": "2026-08-07T10:41:15.476803+00:00",
-        "duration_seconds": 6.63
+        "started_at": "2026-09-03T17:08:04.777307+00:00",
+        "finished_at": "2026-09-03T17:08:11.832566+00:00",
+        "duration_seconds": 7.055
       }
     },
     {
@@ -2035,7 +2035,7 @@
       "detail": "anno 2026 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20260807T091631Z_76040b6c",
+        "run_id": "20260903T170812Z_57926109",
         "year": 2026,
         "status": "SUCCESS",
         "quality_score": {
@@ -2044,17 +2044,17 @@
           "mart": 100
         },
         "output_rows": {
-          "clean": 750,
-          "mart": 560
+          "clean": 752,
+          "mart": 562
         },
         "output_bytes": {
-          "raw": 109158,
-          "clean": 72384,
-          "mart": 14298
+          "raw": 109721,
+          "clean": 72667,
+          "mart": 14172
         },
-        "started_at": "2026-08-07T09:16:31.873957+00:00",
-        "finished_at": "2026-08-07T09:16:32.938458+00:00",
-        "duration_seconds": 1.065
+        "started_at": "2026-09-03T17:08:12.288751+00:00",
+        "finished_at": "2026-09-03T17:08:13.233737+00:00",
+        "duration_seconds": 0.945
       }
     },
     {
@@ -2065,7 +2065,7 @@
       "detail": "anno 2026 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20260812T165204Z_505c0c37",
+        "run_id": "20260903T170813Z_3dffac66",
         "year": 2026,
         "status": "SUCCESS",
         "quality_score": {
@@ -2078,13 +2078,13 @@
           "mart": 256
         },
         "output_bytes": {
-          "raw": 29010,
-          "clean": 20213,
-          "mart": 11989
+          "raw": 29082,
+          "clean": 20258,
+          "mart": 11988
         },
-        "started_at": "2026-08-12T16:52:04.915908+00:00",
-        "finished_at": "2026-08-12T16:52:06.362321+00:00",
-        "duration_seconds": 1.446
+        "started_at": "2026-09-03T17:08:13.845553+00:00",
+        "finished_at": "2026-09-03T17:08:14.643923+00:00",
+        "duration_seconds": 0.798
       }
     },
     {
@@ -2095,7 +2095,7 @@
       "detail": "anno 2024 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20260807T104148Z_fd1da3e3",
+        "run_id": "20260903T170815Z_d8ab3631",
         "year": 2024,
         "status": "SUCCESS",
         "quality_score": {
@@ -2108,13 +2108,13 @@
           "mart": 280
         },
         "output_bytes": {
-          "raw": 894288,
-          "clean": 714163,
-          "mart": 4985
+          "raw": 890389,
+          "clean": 709601,
+          "mart": 5010
         },
-        "started_at": "2026-08-07T10:41:48.960807+00:00",
-        "finished_at": "2026-08-07T10:42:09.482530+00:00",
-        "duration_seconds": 20.522
+        "started_at": "2026-09-03T17:08:15.102934+00:00",
+        "finished_at": "2026-09-03T17:08:37.870792+00:00",
+        "duration_seconds": 22.768
       }
     },
     {
@@ -2125,7 +2125,7 @@
       "detail": "anno 2026 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20260806T231359Z_13e982b6",
+        "run_id": "20260903T170838Z_89db32d3",
         "year": 2026,
         "status": "SUCCESS",
         "quality_score": {
@@ -2134,17 +2134,17 @@
           "mart": 100
         },
         "output_rows": {
-          "clean": 9348,
+          "clean": 9376,
           "mart": 26
         },
         "output_bytes": {
-          "raw": 63568,
-          "clean": 29563,
-          "mart": 1021
+          "raw": 63764,
+          "clean": 29573,
+          "mart": 1020
         },
-        "started_at": "2026-08-06T23:13:59.591164+00:00",
-        "finished_at": "2026-08-06T23:14:02.858045+00:00",
-        "duration_seconds": 3.267
+        "started_at": "2026-09-03T17:08:38.311519+00:00",
+        "finished_at": "2026-09-03T17:08:39.539685+00:00",
+        "duration_seconds": 1.228
       }
     },
     {
@@ -2155,7 +2155,7 @@
       "detail": "anno 2026 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20260812T163521Z_e7595ce6",
+        "run_id": "20260903T170840Z_286dd850",
         "year": 2026,
         "status": "SUCCESS",
         "quality_score": {
@@ -2168,13 +2168,13 @@
           "mart": 817
         },
         "output_bytes": {
-          "raw": 11841,
-          "clean": 6271,
+          "raw": 11842,
+          "clean": 6262,
           "mart": 7080
         },
-        "started_at": "2026-08-12T16:35:21.383017+00:00",
-        "finished_at": "2026-08-12T16:35:22.067338+00:00",
-        "duration_seconds": 0.684
+        "started_at": "2026-09-03T17:08:40.601270+00:00",
+        "finished_at": "2026-09-03T17:08:41.150905+00:00",
+        "duration_seconds": 0.55
       }
     },
     {
@@ -2185,7 +2185,7 @@
       "detail": "anni 2022-2025 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20260807T094219Z_8f7e19fb",
+        "run_id": "20260903T171200Z_4bfa3b64",
         "year": 2025,
         "status": "SUCCESS",
         "quality_score": {
@@ -2200,11 +2200,11 @@
         "output_bytes": {
           "raw": 17472473,
           "clean": 12763818,
-          "mart": 64799
+          "mart": 60491
         },
-        "started_at": "2026-08-07T09:42:19.442488+00:00",
-        "finished_at": "2026-08-07T09:43:20.863458+00:00",
-        "duration_seconds": 61.421
+        "started_at": "2026-09-03T17:12:00.131513+00:00",
+        "finished_at": "2026-09-03T17:13:02.961848+00:00",
+        "duration_seconds": 62.83
       }
     },
     {
@@ -2215,7 +2215,7 @@
       "detail": "anno 2026 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20260806T231356Z_bcba265b",
+        "run_id": "20260903T171304Z_24651a19",
         "year": 2026,
         "status": "SUCCESS",
         "quality_score": {
@@ -2224,17 +2224,17 @@
           "mart": 100
         },
         "output_rows": {
-          "clean": 9348,
+          "clean": 9376,
           "mart": 26
         },
         "output_bytes": {
-          "raw": 91507,
-          "clean": 59263,
-          "mart": 1330
+          "raw": 91718,
+          "clean": 59326,
+          "mart": 1328
         },
-        "started_at": "2026-08-06T23:13:56.052775+00:00",
-        "finished_at": "2026-08-06T23:13:57.406325+00:00",
-        "duration_seconds": 1.354
+        "started_at": "2026-09-03T17:13:04.476706+00:00",
+        "finished_at": "2026-09-03T17:13:05.779923+00:00",
+        "duration_seconds": 1.303
       }
     },
     {
