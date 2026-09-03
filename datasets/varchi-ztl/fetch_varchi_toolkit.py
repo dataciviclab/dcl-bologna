@@ -2,15 +2,8 @@
 """
 Fetch + merge dei 80 varchi ZTL per la pipeline toolkit (bootstrap).
 
-Questo script è il BOOTSTRAP del candidate `varchi-ztl`: scarica i 80 dataset
-`varco-n-*` da OpenData Bologna in una CACHE locale, li unisce in un unico
-parquet e produce `varchi_ztl.parquet` (nella candidate root), che il
-`dataset.yml` legge via `raw.type: local_file`.
-
-Perché bootstrap e non source `script`:
-- il toolkit riesegue lo `script` a ogni run (output_policy overwrite/versioned,
-  niente skip) → su 18,6M righe il raw supera il timeout di 600s del toolkit;
-- `local_file` legge il mergiato già pronto, senza re-eseguire il merge.
+Scarica i CSV da OpenData Bologna (più veloci dei parquet: 0.84 MB/s vs 0.07 MB/s),
+li unisce via DuckDB e produce `varchi_ztl.parquet`.
 
 Uso (dalla candidate root):
   python fetch_varchi_toolkit.py                 # merge da cache
@@ -23,12 +16,10 @@ from pathlib import Path
 from lab_connectors.duckdb import safe_connect
 from lab_connectors.http import download
 
-# Candidate root (dove gira lo script nel toolkit)
 BASE = Path(__file__).resolve().parent
 DEFAULT_CACHE = BASE / "cache"
 DEFAULT_OUT = BASE / "varchi_ztl.parquet"
 
-# Lista varchi dal catalogo ODS live (API del portale, non file statico locale)
 API = "https://opendata.comune.bologna.it/api/explore/v2.1/catalog/datasets"
 
 
@@ -41,11 +32,11 @@ def list_varchi():
 
 
 def fetch_one(varco_id, cache):
-    """Scarica un varco in parquet nella cache. Ritorna (id, ok, status)."""
-    dest = cache / f"{varco_id}.parquet"
+    """Scarica un varco in CSV nella cache. Ritorna (id, ok, status)."""
+    dest = cache / f"{varco_id}.csv"
     if dest.exists():
         return (varco_id, True, "cached")
-    url = f"{API}/{varco_id}/exports/parquet"
+    url = f"{API}/{varco_id}/exports/csv"
     try:
         content = download(url, timeout=180, max_retries=3)
         dest.write_bytes(content)
@@ -69,8 +60,8 @@ def main():
     varchi = list_varchi()
     print(f"Varchi nel catalogo: {len(varchi)}")
 
-    # Fetch dei mancanti (se richiesto o se la cache è vuota)
-    missing = [v for v in varchi if not (cache / f"{v}.parquet").exists()]
+    # Fetch dei mancanti (CSV, non parquet — 12x più veloce)
+    missing = [v for v in varchi if not (cache / f"{v}.csv").exists()]
     if do_fetch or missing:
         if missing and not do_fetch:
             print(f"Cache parziale: {len(varchi)-len(missing)}/{len(varchi)} presenti. "
@@ -90,41 +81,45 @@ def main():
                     print(f"  ❌ {vid}: {status}")
         print(f"Fetch: {ok} ok, {err} errori")
 
-    # Cache completa? Se no, exit (il fetch deve riuscire prima del merge)
-    files = [cache / f"{v}.parquet" for v in varchi if (cache / f"{v}.parquet").exists()]
+    # Cache completa?
+    files = [cache / f"{v}.csv" for v in varchi if (cache / f"{v}.csv").exists()]
     if len(files) != len(varchi):
         print(f"❌ Cache incompleta: {len(files)}/{len(varchi)} varchi. Esegui --fetch.")
         sys.exit(1)
 
-    # Merge + decodifica coordinate + dedup per chiave via DuckDB con safe_connect
-    # (memory_limit=2GB da lab_connectors: spilla su disco invece di esplodere —
-    # lezione D4: MAI duckdb.connect() puro su dataset grandi).
-    #
-    # NOTA: il dedup usa GROUP BY (data,varco) + max(), NON ROW_NUMBER() OVER —
-    # il window su 18,6M righe esplode la RAM (OOM anche con memory_limit 2GB).
-    # GROUP BY dedup: 0.7s, nessun window. Righe duplicate: ~3817 (0.02%).
-    #
-    # La colonna GEOMETRY castata a VARCHAR diventa "POINT (lon lat)" → regex.
+    # Merge via DuckDB — legge tutti i CSV, estrae lat/lon, dedup, scrive parquet
     files_sql = ", ".join(f"'{f}'" for f in files)
     with safe_connect() as con:
-        con.execute(f"CREATE TABLE merged AS SELECT * FROM read_parquet([{files_sql}])")
-        con.execute("CREATE OR REPLACE TABLE merged AS "
-                    "SELECT *, "
-                    "CAST(regexp_extract(CAST(coordinate AS VARCHAR), 'POINT \\(([0-9.\\-]+) ', 1) AS DOUBLE) AS longitudine, "
-                    "CAST(regexp_extract(CAST(coordinate AS VARCHAR), 'POINT \\([0-9.\\-]+ ([0-9.\\-]+)\\)', 1) AS DOUBLE) AS latitudine "
-                    "FROM merged")
-        con.execute("ALTER TABLE merged DROP COLUMN coordinate")
-        con.execute("CREATE OR REPLACE TABLE merged AS "
-                    "SELECT data, varco, "
-                    "max(nome_varco) nome_varco, max(direzione) direzione, max(tipologia_varco) tipologia_varco, "
-                    "max(totale_passaggi) totale_passaggi, max(non_classificato) non_classificato, "
-                    "max(moto_ciclomotori) moto_ciclomotori, max(auto_furgoni) auto_furgoni, "
-                    "max(bus_camion) bus_camion, max(sintatticamente_corretta) sintatticamente_corretta, "
-                    "max(lista_bianca_fuori_fascia) lista_bianca_fuori_fascia, max(lista_bianca_regolare) lista_bianca_regolare, "
-                    "max(lista_speciale) lista_speciale, max(lista_nera) lista_nera, "
-                    "max(transito_generico_irregolare) transito_generico_irregolare, max(segnalazioni) segnalazioni, "
-                    "max(descrizione) descrizione, max(longitudine) longitudine, max(latitudine) latitudine "
-                    "FROM merged GROUP BY data, varco")
+        con.execute(f"""
+            CREATE TABLE merged AS
+            SELECT
+                data, varco, totale_passaggi, non_classificato,
+                moto_ciclomotori, auto_furgoni, bus_camion,
+                sintatticamente_corretta, lista_bianca_fuori_fascia,
+                lista_bianca_regolare, lista_speciale, lista_nera,
+                transito_generico_irregolare, segnalazioni,
+                nome_varco, descrizione, direzione, tipologia_varco,
+                CAST(split_part(coordinate, CHR(44) || CHR(32), 1) AS DOUBLE) AS latitudine,
+                CAST(split_part(coordinate, CHR(44) || CHR(32), 2) AS DOUBLE) AS longitudine
+            FROM read_csv([{files_sql}], sep=';', auto_detect=true)
+        """)
+        # Dedup: GROUP BY (data, varco) + max() — vettoriale, nessun window
+        con.execute("""
+            CREATE OR REPLACE TABLE merged AS
+            SELECT data, varco,
+                max(nome_varco) nome_varco, max(direzione) direzione,
+                max(tipologia_varco) tipologia_varco,
+                max(totale_passaggi) totale_passaggi, max(non_classificato) non_classificato,
+                max(moto_ciclomotori) moto_ciclomotori, max(auto_furgoni) auto_furgoni,
+                max(bus_camion) bus_camion, max(sintatticamente_corretta) sintatticamente_corretta,
+                max(lista_bianca_fuori_fascia) lista_bianca_fuori_fascia,
+                max(lista_bianca_regolare) lista_bianca_regolare,
+                max(lista_speciale) lista_speciale, max(lista_nera) lista_nera,
+                max(transito_generico_irregolare) transito_generico_irregolare,
+                max(segnalazioni) segnalazioni, max(descrizione) descrizione,
+                max(longitudine) longitudine, max(latitudine) latitudine
+            FROM merged GROUP BY data, varco
+        """)
         con.execute(f"COPY merged TO '{out}' (FORMAT PARQUET)")
         records = con.execute("SELECT count(*) FROM merged").fetchone()[0]
     size_mb = out.stat().st_size / 1024 / 1024
