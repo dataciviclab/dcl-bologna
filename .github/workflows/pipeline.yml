@@ -69,13 +69,13 @@ jobs:
             find datasets -maxdepth 1 -mindepth 1 -type d -printf '%f\n' | sort > dirs.txt
           fi
 
-          # Filtra solo dir con dataset.yml, escludi varchi-ztl dal batch
+          # Filtra solo dir con dataset.yml
           DIRS=""
           while read -r d; do
             [ -z "$d" ] && continue
             [ -f "datasets/$d/dataset.yml" ] || continue
             DIRS="$DIRS $d"
-            [ "$d" != "varchi-ztl" ] && echo "datasets/$d/dataset.yml" >> batch.txt || true
+            echo "datasets/$d/dataset.yml" >> batch.txt
           done < dirs.txt
           echo "dirs=$DIRS" >> "$GITHUB_OUTPUT"
           echo "dirs=$DIRS"
