@@ -25,4 +25,5 @@ jobs:
       - uses: dataciviclab/.github/actions/python-setup@main
         with:
           extra-requirements: dashboard/requirements.txt
+          extra-packages: pytest
       - run: pytest dashboard/tests/ -q
