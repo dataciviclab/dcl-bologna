@@ -57,8 +57,13 @@ sel_indicatore = st.selectbox("Indicatore", list(INDICATORI.keys()), key="chorop
 slug, table, col, agg, col_label = INDICATORI[sel_indicatore]
 df_map = load_mart(slug, table, 2026 if "fragilita" in slug or "bici" in slug else 2024)
 
-# Aggrega per quartiere
-if not df_map.empty and col in df_map.columns:
+# Aggrega per quartiere (ultimo anno disponibile)
+if not df_map.empty and col in df_map.columns and "anno" in df_map.columns:
+    latest_year = int(df_map["anno"].max())
+    df_latest = df_map[df_map["anno"] == latest_year]
+    agg_map = df_latest.groupby("quartiere", as_index=False).agg(valore=(col, agg))
+    agg_map = agg_map[agg_map["quartiere"] != "Senza fissa dimora"]
+elif not df_map.empty and col in df_map.columns:
     agg_map = df_map.groupby("quartiere", as_index=False).agg(valore=(col, agg))
     agg_map = agg_map[agg_map["quartiere"] != "Senza fissa dimora"]
 else:
@@ -216,54 +221,54 @@ st.markdown("---")
 # Indici normalizzati (0–1) per quartiere
 # ══════════════════════════════════════════════════════════════════════════════
 
-st.subheader("🕸️ Indici normalizzati (0–1) vs media città")
+st.subheader("🕸️ Indici vs media città (1.0 = media)")
 
-# Costruisci un mini-dataset con indici normalizzati
+# Costruisci un mini-dataset con indici rispetto alla media città
 radar_data = []
 if not df_pop.empty:
     pop_q_all = df_pop.groupby("quartiere", as_index=False).agg(residenti=("residenti", "sum"))
-    max_pop = pop_q_all["residenti"].max()
+    mean_pop = pop_q_all["residenti"].mean()
     for _, r in pop_q_all.iterrows():
         radar_data.append({
             "quartiere": r["quartiere"],
             "indice": "Popolazione",
-            "valore": r["residenti"] / max_pop if max_pop else 0,
+            "valore": r["residenti"] / mean_pop if mean_pop else 0,
         })
 
 if not df_bici.empty:
-    max_bici = df_bici["totale_passaggi"].max()
+    mean_bici = df_bici["totale_passaggi"].mean()
     for _, r in df_bici.iterrows():
         radar_data.append({
             "quartiere": r["quartiere"],
             "indice": "Bici",
-            "valore": r["totale_passaggi"] / max_bici if max_bici else 0,
+            "valore": r["totale_passaggi"] / mean_bici if mean_bici else 0,
         })
 
 if not df_frag.empty:
-    max_frag = df_frag["frag_compl_media"].max()
+    mean_frag = df_frag["frag_compl_media"].mean()
     for _, r in df_frag.iterrows():
         radar_data.append({
             "quartiere": r["quartiere"],
             "indice": "Fragilità",
-            "valore": r["frag_compl_media"] / max_frag if max_frag else 0,
+            "valore": r["frag_compl_media"] / mean_frag if mean_frag else 0,
         })
 
 if radar_data:
     df_radar = pd.DataFrame(radar_data)
     df_radar_q = df_radar[df_radar["quartiere"] == q_selected]
     if not df_radar_q.empty:
-        chart = (
+        bars = (
             alt.Chart(df_radar_q)
             .mark_bar(cornerRadiusTopLeft=3, cornerRadiusTopRight=3)
             .encode(
                 y=alt.Y("indice:N", title=""),
-                x=alt.X("valore:Q", title="Valore normalizzato (0–1)", axis=alt.Axis(format=".1f")),
+                x=alt.X("valore:Q", title="Rapporto vs media città (1.0 = media)", axis=alt.Axis(format=".1f")),
                 color=alt.Color("indice:N", legend=None),
-                tooltip=["indice", alt.Tooltip("valore:Q", format=",.2f")],
+                tooltip=["indice", alt.Tooltip("valore:Q", format=".2f")],
             )
-            .properties(height=150)
         )
-        st.altair_chart(chart, width="stretch")
+        rule = alt.Chart(pd.DataFrame({"x": [1.0]})).mark_rule(color="white", strokeDash=[4, 4], strokeWidth=1.5).encode(x="x:Q")
+        st.altair_chart((bars + rule).properties(height=150), width="stretch")
 else:
     st.info("Dati insufficienti per il confronto normalizzato.")
 
