@@ -18,9 +18,10 @@ Uso (dalla candidate root):
   python fetch_varchi_toolkit.py --cache <dir>   # cache alternativa
   python fetch_varchi_toolkit.py --out <file>    # output alternativo
 """
-import os, sys, json, urllib.request, urllib.parse, concurrent.futures, struct
+import os, sys, json, urllib.parse, concurrent.futures
 from pathlib import Path
 from lab_connectors.duckdb import safe_connect
+from lab_connectors.http import download
 
 # Candidate root (dove gira lo script nel toolkit)
 BASE = Path(__file__).resolve().parent
@@ -32,29 +33,21 @@ API = "https://opendata.comune.bologna.it/api/explore/v2.1/catalog/datasets"
 
 
 def list_varchi():
-    """Ritorna gli id dei dataset varco-n-* dal catalogo ODS live.
-
-    Interroga l'API del portale (search("varco")) e filtra i dataset
-    `varco-n-*`. Il catalogo statico locale è stato eliminato: l'API è
-    sempre fresca (metadati ODS aggiornati dal Comune).
-    """
+    """Ritorna gli id dei dataset varco-n-* dal catalogo ODS live."""
     url = f"{API}?where=" + urllib.parse.quote('search("varco")') + "&limit=100&select=dataset_id"
-    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-    with urllib.request.urlopen(req, timeout=30) as resp:
-        data = json.loads(resp.read())
+    content = download(url, timeout=30, max_retries=2)
+    data = json.loads(content)
     return [x["dataset_id"] for x in data["results"] if x["dataset_id"].startswith("varco-n-")]
 
 
 def fetch_one(varco_id, cache):
-    """Scarica un varco in parquet nella cache. Ritorna (id, ok)."""
+    """Scarica un varco in parquet nella cache. Ritorna (id, ok, status)."""
     dest = cache / f"{varco_id}.parquet"
     if dest.exists():
         return (varco_id, True, "cached")
     url = f"{API}/{varco_id}/exports/parquet"
     try:
-        req = urllib.request.Request(url, headers={"Accept": "application/octet-stream"})
-        with urllib.request.urlopen(req, timeout=180) as resp:
-            content = resp.read()
+        content = download(url, timeout=180, max_retries=3)
         dest.write_bytes(content)
         return (varco_id, True, "downloaded")
     except Exception as e:
