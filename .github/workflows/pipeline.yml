@@ -1,13 +1,10 @@
 # Pipeline — dcl-bologna
 #
-# Run post-merge + schedule. Fa tutto:
-#   1. bootstrap varchi-ztl (fetch 80 varchi + merge) con cache persistente
-#   2. run dei dataset (cambiati se PR merged, TUTTI se schedule/manuale)
-#   3. sync GCS (clean + mart) — GRACEFUL: skippata se le chiavi non ci sono
-#   4. registry → PR draft (composite `registry-update-pr`)
-#
-# Modello: dataset indipendenti (come eurostat) → detect "solo cambiati" su
-# PR merge, TUTTI su schedule/manuale.
+# Post-merge + schedule. Struttura semplificata:
+#   1. detect dataset cambiati (PR) o tutti (schedule/dispatch)
+#   2. bootstrap varchi-ztl se necessario
+#   3. toolkit run via make run-batch
+#   4. GCS sync + registry PR (composite action condivise)
 
 name: Pipeline
 
@@ -45,43 +42,40 @@ jobs:
 
       - uses: dataciviclab/.github/actions/python-setup@main
 
-      # ── Determinare i dataset da processare ─────────────────────────
-      # Produce dirs (per il gating varchi) e batch.txt (per il run).
-      - name: Detect datasets to run
+      # ── Detect + batch ──────────────────────────────────────────────
+      - name: Detect datasets
         id: detect
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
           INPUT_DATASETS: ${{ inputs.datasets }}
-          EVENT: ${{ github.event_name }}
         run: |
-          if [ "$EVENT" = "pull_request" ]; then
-            # PR merged: solo i dataset cambiati
-            gh pr view "$PR_NUMBER" --json files --jq ".files[].path" | \
-              grep '^datasets/' | cut -d/ -f2 | sort -u > dirs.txt
-          elif [ -n "$INPUT_DATASETS" ]; then
+          : > batch.txt
+
+          if [ -n "$INPUT_DATASETS" ]; then
+            # Manual dispatch con slug specifici
             echo "$INPUT_DATASETS" | tr ',' '\n' | sed 's/_/-/g' > dirs.txt
+          elif [ "${{ github.event_name }}" = "pull_request" ]; then
+            # PR merged: usa detect-changed-datasets pattern
+            PR_NUMBER="${{ github.event.pull_request.number }}"
+            gh pr view "$PR_NUMBER" --json files --jq '.files[].path' | \
+              grep '^datasets/' | cut -d/ -f2 | sort -u > dirs.txt
           else
-            # Schedule/manuale senza slug: tutti
+            # Schedule o dispatch senza slug: tutti
             find datasets -maxdepth 1 -mindepth 1 -type d -printf '%f\n' | sort > dirs.txt
           fi
-          # Filtra solo dir con dataset.yml e genera batch.txt + dirs
-          : > batch.txt
+
+          # Filtra solo dir con dataset.yml, escludi varchi-ztl dal batch
           DIRS=""
           while read -r d; do
-            if [ -n "$d" ] && [ -f "datasets/$d/dataset.yml" ]; then
-              DIRS="$DIRS datasets/$d"
-              echo "datasets/$d/dataset.yml" >> batch.txt
-            fi
+            [ -z "$d" ] && continue
+            [ -f "datasets/$d/dataset.yml" ] || continue
+            DIRS="$DIRS $d"
+            [ "$d" != "varchi-ztl" ] && echo "datasets/$d/dataset.yml" >> batch.txt || true
           done < dirs.txt
           echo "dirs=$DIRS" >> "$GITHUB_OUTPUT"
           echo "dirs=$DIRS"
 
-      # ── Bootstrap varchi-ztl (SOLO se varchi è tra i dataset processati) ──
-      # I 80 varchi raw stanno in una cache persistente (actions/cache):
-      # al primo run si scaricano (~20-25 min), ai successivi solo il merge.
-      # La key è basata sullo script di fetch: lo script --fetch è
-      # incrementale, quindi i nuovi varchi dall'API vengono scaricati comunque.
+      # ── Bootstrap varchi-ztl ────────────────────────────────────────
       - name: Cache varchi raw
         if: contains(steps.detect.outputs.dirs, 'varchi-ztl')
         uses: actions/cache@v4
@@ -93,34 +87,33 @@ jobs:
 
       - name: Bootstrap varchi-ztl
         if: contains(steps.detect.outputs.dirs, 'varchi-ztl')
-        run: |
-          # Fallisce se il mergiato non viene prodotto (es. API ODS down):
-          # meglio un errore chiaro che un run con dati stale.
-          python datasets/varchi-ztl/fetch_varchi_toolkit.py --fetch
+        run: python datasets/varchi-ztl/fetch_varchi_toolkit.py --fetch
 
-      # ── Run pipeline ─────────────────────────────────────────────────
-      # `toolkit run --batch` usa gli anni dichiarati nel dataset.yml.
+      # ── Run ─────────────────────────────────────────────────────────
       - name: Run datasets
-        if: steps.detect.outputs.dirs != ''
-        run: toolkit run --batch batch.txt
-
-      # ── Sync GCS (placeholder D3: pubblicazione non ancora attiva) ──
-      # Lo step è strutturato per auth + sync (pattern eurostat), ma la
-      # pubblicazione vera non è decisa (D3). Con o senza chiavi fa solo
-      # echo — da implementare quando si attiva la pubblicazione GCS.
-      - name: Sync GCS (clean+mart)
-        env:
-          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY_DCL_BOLOGNA }}
         run: |
-          if [ -z "$GCP_SA_KEY" ]; then
-            echo "⚠️ GCP_SA_KEY_DCL_BOLOGNA non configurata — skip GCS sync (D3)"
+          if [ -s batch.txt ]; then
+            toolkit run --batch batch.txt
           else
-            echo "✅ GCP auth disponibile — GCS sync da implementare (D3: pubblicazione non attiva)"
+            echo "Nessun dataset da processare"
           fi
 
-      # Registry → draft PR (composite, nello stesso job del run: il registry
-      # deriva le entry dai parquet locali in out/).
+      # ── GCS sync + registry (composite condivise) ───────────────────
+      - name: GCS Auth
+        uses: dataciviclab/.github/actions/gcs-auth@main
+        env:
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY_DCL_BOLOGNA }}
+
+      - name: Sync to GCS
+        if: steps.gcs.outputs.ready == 'true'
+        run: |
+          gsutil -m rsync -r out/data/mart/ gs://dataciviclab-mart/bologna/
+          gsutil -m rsync -r out/data/clean/ gs://dataciviclab-clean/bologna/
+          echo "✅ Synced to gs://dataciviclab-mart|clean/bologna/"
+
       - name: Registry update PR
         uses: dataciviclab/.github/actions/registry-update-pr@main
+        with:
+          prefix: bologna
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

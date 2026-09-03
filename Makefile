@@ -19,6 +19,12 @@ CONFIG = datasets
 run/%:
 	@$(TOOLKIT) run --config $(CONFIG)/$*/dataset.yml
 
+run-all:
+	@$(TOOLKIT) run --config $(CONFIG)
+
+run-batch:
+	@test -s batch.txt && $(TOOLKIT) run --batch batch.txt || $(TOOLKIT) run --config $(CONFIG)
+
 status/%:
 	@$(TOOLKIT) inspect config --config $(CONFIG)/$*/dataset.yml
 
@@ -38,6 +44,8 @@ help:
 	@echo "dcl-bologna — Makefile (toolkit)"
 	@echo ""
 	@echo "make run/popolazione-quartiere    Esegue la pipeline completa"
+	@echo "make run-all                     Esegue tutti i dataset"
+	@echo "make run-batch                   Esegue batch.txt (o tutti se assente)"
 	@echo "make status/popolazione-quartiere Stato + readiness"
 	@echo "make fetch/popolazione-quartiere  Aggiorna i dati raw"
 	@echo "make clean/popolazione-quartiere  Rimuove l'output del dataset"
