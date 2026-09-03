@@ -1,10 +1,9 @@
 """PA & Trasparenza — incarichi di collaborazione del Comune."""
 
 import altair as alt
-import pandas as pd
 import streamlit as st
 
-from sources import fmt_num, load_mart
+from sources import fmt_eur, load_mart
 
 st.title("🏛️ Incarichi Comune di Bologna")
 st.markdown("Incarichi di collaborazione 2012–2026 — trasparenza attiva.")

@@ -1,21 +1,134 @@
-"""Quartieri — vista cross-tematica per quartiere."""
+"""Quartieri — mappa choropleth + profilo cross-tematico."""
+
+import json
+from pathlib import Path
 
 import altair as alt
 import pandas as pd
+import pydeck as pdk
 import streamlit as st
 
 from sources import fmt_num, load_mart
 
 st.title("🗺️ Quartieri di Bologna")
-st.markdown("Profilo cross-tematico: popolazione, mobilità, fragilità, reddito, esercizi — tutto insieme.")
+st.markdown("Mappa interattiva e profilo cross-tematico: popolazione, mobilità, fragilità.")
 
 # ══════════════════════════════════════════════════════════════════════════════
-# Selezione quartiere
+# GeoJSON quartieri (boundaries reali da OpenData Comune di Bologna)
 # ══════════════════════════════════════════════════════════════════════════════
+
+_GEOJSON_PATH = Path(__file__).resolve().parent.parent / "quartieri.geojson"
+with open(_GEOJSON_PATH) as f:
+    _quartieri_geo = json.load(f)
+
+# Pre-converti GeoJSON → lista poligoni pydeck (formato PolygonLayer)
+_POLYGONS = []
+for feat in _quartieri_geo["features"]:
+    geom = feat["geometry"]
+    coords = geom["coordinates"]
+    # Polygon → [[ring]]; MultiPolygon → [[[ring]], ...]
+    if geom["type"] == "Polygon":
+        rings = coords
+    else:
+        rings = [ring for poly in coords for ring in poly]
+    for ring in rings:
+        # deck.gl vuole [lng, lat] — già nel formato corretto
+        _POLYGONS.append({
+            "quartiere": feat["properties"].get("quartiere", ""),
+            "polygon": [ring],
+        })
+
+# ══════════════════════════════════════════════════════════════════════════════
+# Choropleth interattiva
+# ══════════════════════════════════════════════════════════════════════════════
+
+st.subheader("🗺️ Mappa quartieri")
+
+INDICATORI = {
+    "Popolazione": ("popolazione_quartiere", "mart_pop_quartiere", "residenti", "sum", "Residenti"),
+    "Fragilità complessiva": ("indici_fragilita", "mart_fragilita_quartiere", "frag_compl_media", "mean", "Indice fragilità"),
+    "Passaggi bici": ("colonnine_bici", "mart_colonnine_quartiere", "totale_passaggi", "sum", "Passaggi bici"),
+    "Emigrati": ("emigrati_destinazione", "mart_emigrati_quartiere", "totale_emigrati", "sum", "Emigrati"),
+    "Famiglie": ("famiglie_tipologia", "mart_famiglie_quartiere", "totale_famiglie", "sum", "Famiglie"),
+}
+
+sel_indicatore = st.selectbox("Indicatore", list(INDICATORI.keys()), key="choropleth_ind")
+
+slug, table, col, agg, col_label = INDICATORI[sel_indicatore]
+df_map = load_mart(slug, table, 2026 if "fragilita" in slug or "bici" in slug else 2024)
+
+# Aggrega per quartiere
+if not df_map.empty and col in df_map.columns:
+    agg_map = df_map.groupby("quartiere", as_index=False).agg(valore=(col, agg))
+    agg_map = agg_map[agg_map["quartiere"] != "Senza fissa dimora"]
+else:
+    agg_map = pd.DataFrame(columns=["quartiere", "valore"])
+
+valori = dict(zip(agg_map["quartiere"], agg_map["valore"]))
+
+# Color scale: blu (basso) → giallo → rosso (alto), 0–255
+vals = list(valori.values())
+v_max = max(vals) if vals else 1
+v_min = min(vals) if vals else 0
+
+def _color(v):
+    t = (v - v_min) / (v_max - v_min) if v_max > v_min else 0.5
+    r = int(min(255, t * 2 * 255))
+    g = int(min(255, (1 - abs(t - 0.5) * 2) * 255))
+    b = int(min(255, (1 - t) * 2 * 255))
+    return [r, g, b, 200]
+
+# Build data per PolygonLayer
+data = []
+for poly in _POLYGONS:
+    q = poly["quartiere"]
+    v = valori.get(q, 0)
+    data.append({
+        "polygon": poly["polygon"],
+        "quartiere": q,
+        "valore": v,
+        "valore_fmt": f"{v:,.0f}",
+        "fill_color": _color(v),
+    })
+
+layer = pdk.Layer(
+    "PolygonLayer",
+    data,
+    get_polygon="polygon",
+    get_fill_color="fill_color",
+    get_line_color=[100, 100, 100],
+    get_line_width=50,
+    line_width_min_pixels=1,
+    filled=True,
+    stroked=True,
+    pickable=True,
+    auto_highlight=True,
+)
+
+tooltip = {
+    "html": f"<b>{{quartiere}}</b><br>{col_label}: {{valore_fmt}}",
+    "style": {"backgroundColor": "rgba(0,0,0,0.8)", "color": "white", "padding": "8px"},
+}
+
+view = pdk.ViewState(latitude=44.495, longitude=11.342, zoom=11, pitch=0)
+
+st.pydeck_chart(pdk.Deck(
+    layers=[layer],
+    initial_view_state=view,
+    tooltip=tooltip,
+    map_style="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
+    height=450,
+))
+
+# ══════════════════════════════════════════════════════════════════════════════
+# Selezione quartiere per profilo dettagliato
+# ══════════════════════════════════════════════════════════════════════════════
+
+st.markdown("---")
 
 df_pop = load_mart("popolazione_quartiere", "mart_pop_quartiere", 2024)
 quartieri = sorted(df_pop["quartiere"].unique().tolist()) if not df_pop.empty else []
-q_selected = st.selectbox("Seleziona quartiere", quartieri, key="q_selector")
+q_selected = st.selectbox("Seleziona quartiere per il profilo", quartieri, key="q_selector")
 
 if not q_selected:
     st.stop()
@@ -100,7 +213,7 @@ if not df_pop.empty:
 st.markdown("---")
 
 # ══════════════════════════════════════════════════════════════════════════════
-# Radar chart comparativo (tutti i quartieri)
+# Indici normalizzati (0–1) per quartiere
 # ══════════════════════════════════════════════════════════════════════════════
 
 st.subheader("🕸️ Indici normalizzati (0–1) vs media città")

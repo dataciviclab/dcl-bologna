@@ -1,7 +1,5 @@
 # CI — dcl-bologna
-# Validazione leggera su PR/push: config dataset validi via toolkit preflight.
-# varchi-ztl è escluso: usa local_file su un mergiato generato dal bootstrap
-# (fetch_varchi_toolkit.py), non disponibile su PR.
+# Validazione leggera su PR/push: config dataset validi + smoke test dashboard.
 
 name: CI
 
@@ -19,3 +17,12 @@ jobs:
       globs: "datasets"
       years: "from-config"
       exclude: "varchi-ztl"
+
+  test-dashboard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dataciviclab/.github/actions/python-setup@main
+        with:
+          extra-requirements: dashboard/requirements.txt
+      - run: pytest dashboard/tests/ -q

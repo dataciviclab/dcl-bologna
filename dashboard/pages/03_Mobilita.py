@@ -1,7 +1,6 @@
 """Mobilità — ZTL, bici, spire, WiFi pedonale."""
 
 import altair as alt
-import pandas as pd
 import streamlit as st
 
 from sources import fmt_num, load_mart
@@ -23,6 +22,7 @@ anno_ztl = int(df_varchi_all["anno"].max()) if not df_varchi_all.empty else 2026
 df_varchi = df_varchi_all[df_varchi_all["anno"] == anno_ztl] if not df_varchi_all.empty else df_varchi_all
 anno_bici = int(df_bici_all["anno"].max()) if not df_bici_all.empty else 2026
 df_bici = df_bici_all[df_bici_all["anno"] == anno_bici] if not df_bici_all.empty else df_bici_all
+anno_spire = int(df_spire["anno"].max()) if not df_spire.empty else 2025
 # WiFi: il mart contiene tutti gli anni (2021-2025) — prendi l'ultimo
 anno_wifi = int(df_wifi_all["anno"].max()) if not df_wifi_all.empty else 2025
 df_wifi = df_wifi_all[df_wifi_all["anno"] == anno_wifi] if not df_wifi_all.empty else df_wifi_all
@@ -34,7 +34,7 @@ tot_spire = int(df_spire["totale_passaggi"].sum()) if not df_spire.empty else 0
 tot_wifi = int(df_wifi["flussi_totali"].sum()) if not df_wifi.empty else 0
 k1.metric("🚗 Passaggi ZTL", fmt_num(tot_ztl), f"{anno_ztl}")
 k2.metric("🚲 Passaggi bici", fmt_num(tot_bici), f"{anno_bici}")
-k3.metric("📡 Passaggi spire", fmt_num(tot_spire), "2025")
+k3.metric("📡 Passaggi spire", fmt_num(tot_spire), f"{anno_spire}")
 k4.metric("📶 Flussi WiFi", fmt_num(tot_wifi), f"{anno_wifi}")
 
 st.markdown("---")
@@ -123,6 +123,99 @@ if not df_bici_q.empty:
     st.caption(f"Dati {latest_bici_q}")
 else:
     st.info("Dati bici per quartiere non disponibili.")
+
+st.markdown("---")
+
+# ══════════════════════════════════════════════════════════════════════════════
+# Profilo orario bici — centro vs periferia
+# ══════════════════════════════════════════════════════════════════════════════
+
+st.subheader("🚲 Profilo orario bici — centro vs periferia")
+
+df_bici_ora = load_mart("colonnine_bici", "mart_colonnine_ora", 2026)
+if not df_bici_ora.empty:
+    bici_ora_agg = df_bici_ora.groupby("ora_inizio", as_index=False).agg(
+        centro=("centro_medi", "mean"),
+        periferia=("periferia_medi", "mean"),
+    )
+    chart = (
+        alt.Chart(bici_ora_agg)
+        .transform_fold(["centro", "periferia"], as_=["Zona", "value"])
+        .mark_line(point=True, strokeWidth=2)
+        .encode(
+            x=alt.X("ora_inizio:O", title="Ora"),
+            y=alt.Y("value:Q", title="Media passaggi/ora"),
+            color=alt.Color("Zona:N", scale=alt.Scale(domain=["centro", "periferia"], range=["#22c55e", "#86efac"])),
+            tooltip=[
+                alt.Tooltip("ora_inizio:O", title="Ora"),
+                alt.Tooltip("value:Q", title="Media", format=",.1f"),
+                alt.Tooltip("Zona:N", title="Zona"),
+            ],
+        )
+        .properties(height=250)
+    )
+    st.altair_chart(chart, width="stretch")
+else:
+    st.info("Dati profilo orario bici non disponibili.")
+
+st.markdown("---")
+
+# ══════════════════════════════════════════════════════════════════════════════
+# Profilo orario WiFi pedonale
+# ══════════════════════════════════════════════════════════════════════════════
+
+st.subheader(f"📶 Profilo orario WiFi pedonale ({anno_wifi})")
+
+df_wifi_ora = load_mart("bolognawifi_matrice", "mart_wifi_ora", 2026)
+if not df_wifi_ora.empty:
+    chart = (
+        alt.Chart(df_wifi_ora)
+        .mark_bar(cornerRadiusTopLeft=3, cornerRadiusTopRight=3, color="#6366f1")
+        .encode(
+            x=alt.X("ora:O", title="Ora"),
+            y=alt.Y("media_flussi:Q", title="Media flussi/ora", axis=alt.Axis(format="~s")),
+            tooltip=[
+                alt.Tooltip("ora:O", title="Ora"),
+                alt.Tooltip("media_flussi:Q", title="Media", format=",.0f"),
+                alt.Tooltip("flussi_totali:Q", title="Totale", format=",.0f"),
+            ],
+        )
+        .properties(height=250)
+    )
+    st.altair_chart(chart, width="stretch")
+else:
+    st.info("Dati profilo orario WiFi non disponibili.")
+
+st.markdown("---")
+
+# ══════════════════════════════════════════════════════════════════════════════
+# Top percorsi WiFi (origine → destinazione)
+# ══════════════════════════════════════════════════════════════════════════════
+
+st.subheader("🚶 Top 10 percorsi WiFi (origine → destinazione)")
+
+df_wifi_od = load_mart("bolognawifi_matrice", "mart_wifi_od", 2026)
+if not df_wifi_od.empty:
+    top_od = df_wifi_od.nlargest(10, "flussi_totali")
+    top_od = top_od.copy()
+    top_od["percorso"] = top_od["label_origine"] + " → " + top_od["label_destinazione"]
+    chart = (
+        alt.Chart(top_od)
+        .mark_bar(cornerRadiusTopLeft=3, cornerRadiusTopRight=3, color="#6366f1")
+        .encode(
+            y=alt.Y("percorso:N", title="", sort="-x"),
+            x=alt.X("flussi_totali:Q", title="Flussi totali", axis=alt.Axis(format="~s")),
+            tooltip=[
+                "percorso",
+                alt.Tooltip("flussi_totali:Q", title="Totale", format=",.0f"),
+                alt.Tooltip("flussi_giorno_media:Q", title="Media/giorno", format=",.0f"),
+            ],
+        )
+        .properties(height=max(25 * len(top_od), 120))
+    )
+    st.altair_chart(chart, width="stretch")
+else:
+    st.info("Dati percorsi WiFi non disponibili.")
 
 st.markdown("---")
 

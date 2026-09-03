@@ -1,7 +1,6 @@
 """Panoramica — il quadro generale di Bologna in dati."""
 
 import altair as alt
-import pandas as pd
 import streamlit as st
 
 from sources import fmt_num, load_mart
@@ -36,12 +35,13 @@ tot_bici = int(df_bici["totale_passaggi"].sum()) if not df_bici.empty else 0
 # Qualità aria
 df_aria = load_mart("centraline_aria", "mart_aria_stazione", 2026)
 n_stazioni = df_aria["stazione"].nunique() if not df_aria.empty else 0
+anno_aria = int(df_aria["anno"].max()) if not df_aria.empty else 2026
 
 k1, k2, k3, k4 = st.columns(4)
 k1.metric("👥 Residenti", fmt_num(pop_totale) if pop_totale else "—", f"{anno_pop}")
 k2.metric("🚗 Varchi ZTL", fmt_num(n_varchi), f"{fmt_num(tot_passaggi_ztl)} passaggi · {anno_ztl}")
 k3.metric("🚲 Colonnine bici", fmt_num(n_colonnine), f"{fmt_num(tot_bici)} passaggi · {anno_bici}")
-k4.metric("🌬️ Stazioni aria", n_stazioni, "2026")
+k4.metric("🌬️ Stazioni aria", n_stazioni, f"{anno_aria}")
 
 st.markdown("---")
 

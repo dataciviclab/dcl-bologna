@@ -4,7 +4,7 @@ import altair as alt
 import pandas as pd
 import streamlit as st
 
-from sources import fmt_num, fmt_pct, load_mart
+from sources import fmt_num, load_mart
 
 st.title("👥 Popolazione & Quartieri")
 st.markdown("Serie storiche demografiche di Bologna per quartiere — dal 1986 ad oggi.")

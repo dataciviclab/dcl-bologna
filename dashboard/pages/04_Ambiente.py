@@ -1,7 +1,6 @@
 """Ambiente — qualità dell'aria, temperature, precipitazioni."""
 
 import altair as alt
-import pandas as pd
 import streamlit as st
 
 from sources import load_mart

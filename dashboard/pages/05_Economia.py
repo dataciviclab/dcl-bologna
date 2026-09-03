@@ -4,7 +4,7 @@ import altair as alt
 import pandas as pd
 import streamlit as st
 
-from sources import fmt_num, load_mart
+from sources import fmt_eur, fmt_num, load_mart
 
 st.title("💰 Reddito & Commercio")
 st.markdown("Reddito mediano per area statistica e distribuzione esercizi commerciali.")
@@ -44,10 +44,51 @@ if anno_r and not df_reddito.empty:
     with col_table:
         st.metric("📊 Aree totali", len(df_r))
         mediana = df_r["reddito_imponibile_mediano"].median()
-        st.metric("Mediana delle aree", f"€ {mediana:,.0f}")
+        st.metric("Mediana delle aree", fmt_eur(int(mediana)))
         st.metric("Contribuenti totali", fmt_num(int(df_r["numero_contribuenti"].sum())))
 else:
     st.info("Dati reddito non disponibili per l'anno selezionato.")
+
+st.markdown("---")
+
+# ══════════════════════════════════════════════════════════════════════════════
+# Trend reddito mediano (2016–2024)
+# ══════════════════════════════════════════════════════════════════════════════
+
+st.subheader("📈 Trend reddito mediano (2016–2024)")
+
+if not df_reddito.empty:
+    trend_r = (
+        df_reddito.groupby("anno", as_index=False)
+        .agg(mediana=("reddito_imponibile_mediano", "median"),
+             contribuenti=("numero_contribuenti", "sum"))
+        .sort_values("anno")
+    )
+    chart = (
+        alt.Chart(trend_r)
+        .mark_line(point=True, color="#10b981", strokeWidth=2.5)
+        .encode(
+            x=alt.X("anno:O", title="Anno"),
+            y=alt.Y("mediana:Q", title="Reddito mediano (€)", axis=alt.Axis(format="~s")),
+            tooltip=[
+                "anno",
+                alt.Tooltip("mediana:Q", title="Mediana €", format=",.0f"),
+                alt.Tooltip("contribuenti:Q", title="Contribuenti", format=",.0f"),
+            ],
+        )
+        .properties(height=250)
+    )
+    st.altair_chart(chart, width="stretch")
+
+    # Variazione primo/ultimo anno
+    if len(trend_r) >= 2:
+        primo = trend_r.iloc[0]
+        ultimo = trend_r.iloc[-1]
+        var_eur = ultimo["mediana"] - primo["mediana"]
+        var_pct = (var_eur / primo["mediana"]) * 100 if primo["mediana"] else 0
+        col1, col2 = st.columns(2)
+        col1.metric(f"Variazione {int(primo['anno'])}→{int(ultimo['anno'])}", fmt_eur(int(var_eur)), f"{var_pct:+.1f}%")
+        col2.metric("Contribuenti ultimo anno", fmt_num(int(ultimo["contribuenti"])))
 
 st.markdown("---")
 
