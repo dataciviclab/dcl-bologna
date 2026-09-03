@@ -14,7 +14,7 @@ from lab_connectors.formatters import fmt_eur, fmt_num, fmt_pct
 
 __all__ = ["fmt_num", "fmt_pct", "fmt_eur", "load_mart", "run_sql"]
 
-PREFIX = "bologna"
+PREFIX = "bologna/"
 
 
 @st.cache_data(ttl=3600, show_spinner=False)
