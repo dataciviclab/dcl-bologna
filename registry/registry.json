@@ -1514,7 +1514,7 @@
       ],
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-clean/varchi_ztl/2026/varchi_ztl_2026_clean.parquet",
+        "path": "gs://dataciviclab-clean/bologna/varchi_ztl/2026/varchi_ztl_2026_clean.parquet",
         "multi_file": false
       },
       "stage": "incubating",
@@ -2245,7 +2245,7 @@
       "detail": "anno 2026 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20260807T134538Z_123fb963",
+        "run_id": "20260903T181314Z_797e0776",
         "year": 2026,
         "status": "SUCCESS",
         "quality_score": {
@@ -2254,17 +2254,17 @@
           "mart": 100
         },
         "output_rows": {
-          "clean": 18630531,
+          "clean": 18868611,
           "mart": 849
         },
         "output_bytes": {
-          "raw": 165708045,
-          "clean": 111697375,
-          "mart": 17612
+          "raw": 198437842,
+          "clean": 131083948,
+          "mart": 17588
         },
-        "started_at": "2026-08-07T13:45:38.813902+00:00",
-        "finished_at": "2026-08-07T13:47:13.126440+00:00",
-        "duration_seconds": 94.313
+        "started_at": "2026-09-03T18:13:14.111202+00:00",
+        "finished_at": "2026-09-03T18:13:32.475710+00:00",
+        "duration_seconds": 18.365
       }
     }
   ],
