@@ -5,6 +5,7 @@ Bologna in dati — 15 dataset, 6 temi, dal 1986 ad oggi.
 """
 
 import streamlit as st
+from lab_connectors.branding import apply_branding
 
 st.set_page_config(
     page_title="Bologna in Dati · Dashboard",
@@ -12,6 +13,8 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
 )
+
+apply_branding(repo_name="dcl-bologna", repo_url="https://github.com/dataciviclab/dcl-bologna")
 
 # Navigazione tematica
 pages = {
@@ -40,10 +43,5 @@ pages = {
 }
 
 pg = st.navigation(pages, position="sidebar")
-
-st.sidebar.markdown("---")
-st.sidebar.caption("Dati: [OpenData Comune di Bologna](https://opendata.comune.bologna.it) · CC BY 4.0")
-st.sidebar.caption("Codice: [dataciviclab/dcl-bologna](https://github.com/dataciviclab/dcl-bologna)")
-st.sidebar.caption("[DataCivicLab](https://dataciviclab.org/)")
 
 pg.run()
