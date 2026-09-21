@@ -1,5 +1,0 @@
-# Dipendenze runtime del repo (dataset puro — requirements.txt è l'unica
-# fonte, ADR-001 §8). lab-connectors arriva transitivamente da toolkit
-# (il fetch varchi usa safe_connect, fornito da lab-connectors transitivo).
-dataciviclab-toolkit @ git+https://github.com/dataciviclab/toolkit.git
-duckdb>=1.0
