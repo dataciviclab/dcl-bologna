@@ -4,7 +4,8 @@
 #   1. detect dataset cambiati (PR) o tutti (schedule/dispatch)
 #   2. bootstrap varchi-ztl se necessario
 #   3. toolkit run via make run-batch
-#   4. GCS sync + registry PR (composite action condivise)
+#   4. registry PR (composite action condivisa)
+#   5. GCS sync (reusable workflow gcs-sync-reusable, job separato)
 
 name: Pipeline
 
@@ -33,11 +34,6 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
-      id-token: write
-
-    env:
-      GCP_WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
-      GCP_SERVICE_ACCOUNT: ${{ secrets.GCP_SERVICE_ACCOUNT }}
 
     steps:
       - uses: actions/checkout@v7
@@ -103,28 +99,19 @@ jobs:
             echo "Nessun dataset da processare"
           fi
 
-      # ── GCS sync + registry (composite condivise) ───────────────────
-      - name: GCP Auth
-        if: env.GCP_WORKLOAD_IDENTITY_PROVIDER != '' && env.GCP_SERVICE_ACCOUNT != ''
-        uses: google-github-actions/auth@v3
-        with:
-          workload_identity_provider: ${{ env.GCP_WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ env.GCP_SERVICE_ACCOUNT }}
-
-      - name: Set up gcloud
-        if: env.GCP_WORKLOAD_IDENTITY_PROVIDER != '' && env.GCP_SERVICE_ACCOUNT != ''
-        uses: google-github-actions/setup-gcloud@v3
-
-      - name: Sync to GCS
-        if: env.GCP_WORKLOAD_IDENTITY_PROVIDER != '' && env.GCP_SERVICE_ACCOUNT != ''
-        run: |
-          gsutil -m rsync -r out/data/mart/ gs://dataciviclab-mart/bologna/
-          gsutil -m rsync -r out/data/clean/ gs://dataciviclab-clean/bologna/
-          echo "✅ Synced to gs://dataciviclab-mart|clean/bologna/"
-
       - name: Registry update PR
         uses: dataciviclab/.github/actions/registry-update-pr@main
         with:
           prefix: bologna
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  gcs-sync:
+    needs: pipeline
+    uses: dataciviclab/.github/.github/workflows/gcs-sync-reusable.yml@main
+    with:
+      repo-slug: bologna
+      sync-pattern: flat
+    secrets:
+      GCP_WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+      GCP_SERVICE_ACCOUNT: ${{ secrets.GCP_SERVICE_ACCOUNT }}
