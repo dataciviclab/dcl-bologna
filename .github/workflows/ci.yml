@@ -13,7 +13,6 @@ jobs:
   validate-config:
     uses: dataciviclab/.github/.github/workflows/dataset-config-check-reusable.yml@main
     with:
-      install: "pip install -r requirements.txt"
       globs: "datasets"
       years: "from-config"
       exclude: "varchi-ztl"
