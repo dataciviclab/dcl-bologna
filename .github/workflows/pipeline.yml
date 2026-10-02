@@ -46,6 +46,8 @@ jobs:
           fetch-depth: 0
 
       - uses: dataciviclab/.github/actions/python-setup@main
+        with:
+          install-extras: dev,pipeline
 
       # ── Detect + batch ──────────────────────────────────────────────
       - name: Detect datasets
