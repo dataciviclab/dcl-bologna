@@ -18,7 +18,7 @@ on:
   workflow_dispatch:
     inputs:
       datasets:
-        description: "Dataset slugs (comma-separated) o vuoto per tutti"
+        description: "Uno o più slug separati da virgola (spazi tollerati). Vuoto = tutti. Vedi ADR-002."
         required: false
         type: string
 
@@ -59,8 +59,10 @@ jobs:
           : > batch.txt
 
           if [ -n "$INPUT_DATASETS" ]; then
-            # Manual dispatch con slug specifici
-            echo "$INPUT_DATASETS" | tr ',' '\n' | sed 's/_/-/g' > dirs.txt
+            # Manual dispatch con slug specifici (ADR-002: virgola, spazi tollerati)
+            echo "$INPUT_DATASETS" | tr ',' '\n' | \
+              sed 's/^[[:space:]]*//;s/[[:space:]]*$//;s/_/-/g' | \
+              grep -v '^$' > dirs.txt
           elif [ "${{ github.event_name }}" = "pull_request" ]; then
             # PR merged: usa detect-changed-datasets pattern
             PR_NUMBER="${{ github.event.pull_request.number }}"
