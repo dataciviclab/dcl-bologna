@@ -36,13 +36,39 @@ Quirk della fonte, rischi noti, decisioni metodologiche.
 
 ## Rischi noti
 
-- **Confini 2016 e 2026 sono parziali**: 17 righe nel 2016 e la serie 2026 ferma a ottobre; il
+- **Copertura non uniforme**: solo NO2 e PM10 hanno 3 stazioni; CO, NO, NOX e C6H6 esistono
+  soltanto a Porta San Felice. Qualunque conclusione "di città" su quegli inquinanti è impropria.
+- **PM10 e PM2.5 non sono orari**: la fonte li pubblica come valore giornaliero (stampato alle
+  23:00, con qualche ora sporadica in più). `mart_aria_ora` li esclude per questo.
+- **NO/NOX si fermano il 2026-09-16**: il 2026 non è comparabile su quegli agenti.
+- **Confini 2016 e 2026 sono parziali**: 17 righe nel 2016 e la serie 2026 ferma a novembre; il
   confronto va fatto su finestre comparabili (o su `mart_aria_mese`), non sui totali annui.
-- **Soglie**: `pct_ore_sopra_soglia` (PM10>50, NO2>40, O3>120) e la quota in
-  `mart_aria_stazione` sono riferimenti indicativi, non normativi.
-- **Tre stazioni non coprono la città**: Giardini Margherita (parco), Porta San Felice e Via
-  Chiarini (traffico). Le medie comunali non sono rappresentative di tutti i quartieri.
+- **Soglie**: `pct_sopra_soglia` (PM10>50, NO2>40, O3>120) sono riferimenti indicativi, non
+  normativi. La quota è su ore per NO2/O3 e su giorni per PM10/PM2.5.
+- **2023 è l'anno più pulito della serie PM10** (3 giorni sopra 50 contro 11-28 degli altri anni):
+  usarlo come baseline pre-Città 30 gonfia qualunque effetto. Meglio media 2021-2023.
 - **`source_id`**: `comune_bologna_opendata` placeholder condiviso con gli altri dataset del repo.
+
+## Difetto strumentale a Porta San Felice (2024)
+
+Il calo di NO2 del 2024 sembrava un effetto Città 30 (−32% a Porta San Felice, −20% sulla media
+città). Non lo è: la serie della stazione di traffico non è comparabile in quell'anno.
+
+| Evidenza | Dato |
+|---|---|
+| Non è uno scalino a gennaio | calo progressivo da maggio, minimo a settembre-ottobre 2024 |
+| Profilo orario | a set-ott 2024 la curva ha la stessa forma del 2023, scalata a ~⅓ |
+| NO vs NO2 | NO **+51%** mentre NO2 **−63%** nella stessa finestra |
+| Rapporto NO2/NOX | 0,27-0,42 a set-dic 2024 contro 0,66-0,79 negli stessi mesi 2023/2025 |
+| Rientro | ottobre 2025: rapporto 0,67, NO2 di nuovo 42,9 µg/m³ |
+| Altre stazioni | Giardini −3,2%, Chiarini +0,2% (piatte) |
+
+Se fosse traffico, NO e NO2 scenderebbero insieme e il rapporto NO2/NOX resterebbe stabile.
+La firma è quella del canale NOx (convertitore/calibrazione). CO (+18%), C6H6 (+8%) e PM10 (−5%)
+della stessa stazione non mostrano lo stesso salto: il difetto è del canale NOx, non della stazione.
+
+Il flag `misura_affidabile` è quindi FALSE per `(PORTA SAN FELICE, 2024, NO/NO2/NOX)`.
+Va riesaminato se il Comune pubblica una revisione dei dati 2024.
 
 ## Decisioni metodologiche
 
@@ -58,3 +84,10 @@ Quirk della fonte, rischi noti, decisioni metodologiche.
 - **`mart_aria_mese`**: aggiunto per la valutazione di policy (Città 30 da gennaio 2024). La
   granularità annuale nasconde il punto di rottura.
 - **CO escluso dalle soglie**: è in mg/m³, quindi non ha una soglia confrontabile con le altre.
+- **`misura_affidabile` nel clean, non nel mart**: è un attributo dell'osservazione, non
+  dell'aggregato. I mart lo propagano con `MIN(...)`, così un consumatore che filtra
+  `misura_affidabile` non mescola anni comparabili e non comparabili.
+- **`mart_aria_ora` solo inquinanti orari**: PM10/PM2.5 sono giornalieri e in un profilo orario
+  produrrebbero una barra isolata alle 23:00.
+- **`giorni_rilevati` = giorni distinti, non righe**: con agenti orari la vecchia definizione
+  (COUNT(*)) restituiva le ore, non i giorni.

@@ -46,6 +46,7 @@ clean:
     - value
     - um
     - fonte
+    - misura_affidabile
   validate:
     min_rows: 600000
     not_null:
@@ -74,15 +75,15 @@ mart:
   validate:
     table_rules:
       mart_aria_stazione:
-        required_columns: [anno, stazione, agente_atm, media_valore, max_valore, giorni_rilevati]
+        required_columns: [anno, stazione, agente_atm, giorni_rilevati, media_valore, max_valore, misura_affidabile]
         primary_key: [anno, stazione, agente_atm]
         min_rows: 50
       mart_aria_ora:
-        required_columns: [anno, ora_inizio, stazione, agente_atm, media_valore]
+        required_columns: [anno, ora_inizio, stazione, agente_atm, media_valore, misura_affidabile]
         primary_key: [anno, ora_inizio, stazione, agente_atm]
         min_rows: 500
       mart_aria_mese:
-        required_columns: [anno, mese, stazione, agente_atm, media_valore]
+        required_columns: [anno, mese, stazione, agente_atm, media_valore, pct_sopra_soglia, misura_affidabile]
         primary_key: [anno, mese, stazione, agente_atm]
         min_rows: 500
 

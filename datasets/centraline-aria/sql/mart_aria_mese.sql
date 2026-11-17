@@ -18,11 +18,13 @@ SELECT
     COUNT(DISTINCT CAST(reftime AS DATE)) AS giorni_rilevati,
     ROUND(AVG(value), 1) AS media_valore,
     MAX(value) AS max_valore,
-    -- ore sopra soglia sul totale ore rilevate nel mese
+    -- Quota sopra soglia: ore per NO2/O3 (orari), giorni per PM10/PM2.5
+    -- (la fonte li pubblica come valore giornaliero).
     ROUND(100.0 * COUNT(*) FILTER (WHERE
         (agente_atm = 'PM10' AND value > 50)
         OR (agente_atm = 'NO2' AND value > 40)
         OR (agente_atm = 'O3' AND value > 120)
-    ) / COUNT(*), 1) AS pct_ore_sopra_soglia
+    ) / COUNT(*), 1) AS pct_sopra_soglia,
+    MIN(misura_affidabile) AS misura_affidabile
 FROM clean_input
 GROUP BY anno, mese, stazione, agente_atm

@@ -13,6 +13,22 @@
 - **Periodo**: 2017–2026
 - **Unità**: µg/m³ per tutti gli inquinanti **tranne CO, in mg/m³** (colonna `um`)
 
+### Cosa copre davvero
+
+Non è una griglia uniforme: gli inquinanti non hanno la stessa copertura né la stessa granularità.
+
+| Inquinante | Stazioni | Granularità | Colonna da controllare |
+|---|---|---|---|
+| NO2 | 3 | oraria | `misura_affidabile` |
+| PM10 | 3 | **giornaliera** (1 valore al giorno) | `misura_affidabile` |
+| O3 | 2 | oraria | — |
+| PM2.5 | 2 | **giornaliera** | — |
+| CO, NO, NOX | 1 (Porta San Felice) | oraria | `misura_affidabile` |
+| C6H6 | 1 (Porta San Felice) | oraria | — |
+
+`misura_affidabile = FALSE` segnala le misure non comparabili con gli altri anni:
+oggi solo il canale NOx di Porta San Felice nel 2024 (difetto strumentale, vedi `notes.md`).
+
 ## Struttura
 
 ```

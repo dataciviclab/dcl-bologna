@@ -82,6 +82,17 @@ SELECT
     CASE WHEN agente_atm = 'CO' THEN 'mg/m3'
          ELSE COALESCE(um_raw, 'ug/m3')
     END AS um,
+    -- Qualità della misura: il canale NOx di Porta San Felice nel 2024 non è
+    -- comparabile con gli altri anni. Evidenza (vedi notes.md):
+    --   NO2/NOX 0,27-0,42 a set-dic 2024 contro 0,66-0,79 negli stessi mesi
+    --   degli altri anni; NO +51% mentre NO2 -63%; rientro nel 2025.
+    -- Il difetto è del canale NOx: CO, C6H6 e PM10 della stessa stazione
+    -- non mostrano lo stesso salto e restano affidabili.
+    NOT (
+        stazione = 'PORTA SAN FELICE'
+        AND EXTRACT(YEAR FROM reftime) = 2024
+        AND agente_atm IN ('NO', 'NO2', 'NOX')
+    ) AS misura_affidabile,
     fonte
 FROM norm
 WHERE valore IS NOT NULL
