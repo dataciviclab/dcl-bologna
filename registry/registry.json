@@ -2,7 +2,7 @@
   "schema_version": 1,
   "repo": "dcl-bologna",
   "source_repo": "dataciviclab/dcl-bologna",
-  "updated_at": "2026-11-01",
+  "updated_at": "2026-11-17",
   "datasets": [
     {
       "slug": "bolognawifi_matrice",
@@ -110,7 +110,7 @@
       "source": "OpenData Comune di Bologna — Arpae",
       "source_id": "comune_bologna_opendata",
       "period": {
-        "start": 2025,
+        "start": 2017,
         "end": 2026
       },
       "tags": [
@@ -151,6 +151,24 @@
           "type": "DOUBLE",
           "role": "metric",
           "description": "Concentrazione rilevata"
+        },
+        {
+          "name": "um",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "misura_affidabile",
+          "type": "BOOLEAN",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "fonte",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
         }
       ],
       "location": {
@@ -161,7 +179,8 @@
       "stage": "incubating",
       "mart_refs": [
         "centraline_aria__mart_aria_stazione",
-        "centraline_aria__mart_aria_ora"
+        "centraline_aria__mart_aria_ora",
+        "centraline_aria__mart_aria_mese"
       ]
     },
     {
@@ -1197,7 +1216,7 @@
       "source_id": "comune_bologna_opendata",
       "period": {
         "start": 2022,
-        "end": 2025
+        "end": 2026
       },
       "tags": [
         "trasporti",
@@ -1226,6 +1245,12 @@
           "type": "BIGINT",
           "role": "metric",
           "description": "Identificativo spira"
+        },
+        {
+          "name": "id_spira",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
         },
         {
           "name": "chiave",
@@ -1556,6 +1581,16 @@
       }
     },
     {
+      "slug": "centraline_aria__mart_aria_mese",
+      "dataset": "centraline_aria",
+      "table": "mart_aria_mese",
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-mart/bologna/centraline_aria/2026/mart_aria_mese.parquet",
+        "multi_file": false
+      }
+    },
+    {
       "slug": "centraline_aria__mart_aria_ora",
       "dataset": "centraline_aria",
       "table": "mart_aria_ora",
@@ -1855,26 +1890,26 @@
       "detail": "anno 2026 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20261101T125801Z_877c700a",
+        "run_id": "20261117T222102Z_6f9e8da3",
         "year": 2026,
         "status": "SUCCESS",
         "quality_score": {
           "raw": 100,
-          "clean": 100,
+          "clean": 95,
           "mart": 100
         },
         "output_rows": {
-          "clean": 63908,
-          "mart": 254
+          "clean": 763032,
+          "mart": 3996
         },
         "output_bytes": {
-          "raw": 556847,
-          "clean": 257055,
-          "mart": 4971
+          "raw": 3527198,
+          "clean": 3223324,
+          "mart": 31623
         },
-        "started_at": "2026-11-01T12:58:01.461424+00:00",
-        "finished_at": "2026-11-01T12:58:09.071384+00:00",
-        "duration_seconds": 7.61
+        "started_at": "2026-11-17T22:21:02.244602+00:00",
+        "finished_at": "2026-11-17T22:22:34.754351+00:00",
+        "duration_seconds": 92.51
       }
     },
     {
@@ -1975,7 +2010,7 @@
       "detail": "anno 2026 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20261101T125937Z_de56e2ba",
+        "run_id": "20261117T222235Z_0102b180",
         "year": 2026,
         "status": "SUCCESS",
         "quality_score": {
@@ -1992,9 +2027,9 @@
           "clean": 314543,
           "mart": 1854
         },
-        "started_at": "2026-11-01T12:59:37.683166+00:00",
-        "finished_at": "2026-11-01T12:59:42.260933+00:00",
-        "duration_seconds": 4.578
+        "started_at": "2026-11-17T22:22:35.455094+00:00",
+        "finished_at": "2026-11-17T22:22:38.815345+00:00",
+        "duration_seconds": 3.36
       }
     },
     {
@@ -2182,11 +2217,11 @@
       "source_id": "comune_bologna_opendata",
       "status": "ok",
       "label": "spire_traffico",
-      "detail": "anni 2022-2025 — mart: si",
+      "detail": "anni 2022-2026 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20261101T130406Z_60f40d0b",
-        "year": 2025,
+        "run_id": "20261117T222619Z_cc95ebe0",
+        "year": 2026,
         "status": "SUCCESS",
         "quality_score": {
           "raw": 100,
@@ -2194,17 +2229,17 @@
           "mart": 100
         },
         "output_rows": {
-          "clean": 7315776,
-          "mart": 7825
+          "clean": 6310560,
+          "mart": 8000
         },
         "output_bytes": {
-          "raw": 17472473,
-          "clean": 12763818,
-          "mart": 60594
+          "raw": 14933673,
+          "clean": 11327136,
+          "mart": 61488
         },
-        "started_at": "2026-11-01T13:04:06.072037+00:00",
-        "finished_at": "2026-11-01T13:05:17.214047+00:00",
-        "duration_seconds": 71.142
+        "started_at": "2026-11-17T22:26:19.372681+00:00",
+        "finished_at": "2026-11-17T22:27:04.028782+00:00",
+        "duration_seconds": 44.656
       }
     },
     {
