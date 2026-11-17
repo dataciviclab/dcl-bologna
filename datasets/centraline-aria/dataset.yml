@@ -8,7 +8,7 @@ dataset:
   category: ambiente
   years: [2026]
   time_coverage:
-    start_year: 2025
+    start_year: 2017
     end_year: 2026
 
 raw:
@@ -16,29 +16,45 @@ raw:
   sources:
     - name: "ods_centraline_aria"
       type: "http_file"
+      # Rilevazioni orarie dell'anno corrente (2026 + coda di fine 2025).
       args:
         url: "https://opendata.comune.bologna.it/api/explore/v2.1/catalog/datasets/centraline-qualita-aria/exports/parquet"
         filename: "centraline_aria.parquet"
       primary: true
+    - name: "ods_centraline_storico"
+      type: "http_file"
+      # Storico 2017-2025 (696.683 righe, fermo al 2025-12-30).
+      # Schema diverso dal dataset corrente: cod_staz/agente/data_inizio/valore/um.
+      # Niente inject_column: con schemi diversi il toolkit costruisce un UNION
+      # posizionale che fallisce. La provenienza si deriva in clean.sql
+      # (reftime presente = dataset corrente, data_inizio = storico).
+      args:
+        url: "https://opendata.comune.bologna.it/api/explore/v2.1/catalog/datasets/dati-centraline-bologna-storico/exports/parquet"
+        filename: "centraline_storico.parquet"
 
 clean:
   sql: "sql/clean.sql"
   read:
     source: auto
-    mode: latest
+    # "all": unisce i due raw (schemi diversi, union_by_name) nella stessa view.
+    mode: "all"
   required_columns:
     - anno
     - reftime
     - stazione
     - agente_atm
     - value
+    - um
+    - fonte
+    - misura_affidabile
   validate:
-    min_rows: 10000
+    min_rows: 600000
     not_null:
       - reftime
       - stazione
       - agente_atm
       - value
+      - um
     primary_key:
       - reftime
       - stazione
@@ -50,19 +66,26 @@ mart:
       sql: "sql/mart_aria_stazione.sql"
     - name: "mart_aria_ora"
       sql: "sql/mart_aria_ora.sql"
+    - name: "mart_aria_mese"
+      sql: "sql/mart_aria_mese.sql"
   required_tables:
     - "mart_aria_stazione"
     - "mart_aria_ora"
+    - "mart_aria_mese"
   validate:
     table_rules:
       mart_aria_stazione:
-        required_columns: [anno, stazione, agente_atm, media_valore, max_valore, giorni_rilevati]
+        required_columns: [anno, stazione, agente_atm, giorni_rilevati, media_valore, max_valore, misura_affidabile]
         primary_key: [anno, stazione, agente_atm]
-        min_rows: 10
+        min_rows: 50
       mart_aria_ora:
-        required_columns: [ora_inizio, stazione, agente_atm, media_valore]
-        primary_key: [ora_inizio, stazione, agente_atm]
-        min_rows: 10
+        required_columns: [anno, ora_inizio, stazione, agente_atm, media_valore, misura_affidabile]
+        primary_key: [anno, ora_inizio, stazione, agente_atm]
+        min_rows: 500
+      mart_aria_mese:
+        required_columns: [anno, mese, stazione, agente_atm, media_valore, pct_sopra_soglia, misura_affidabile]
+        primary_key: [anno, mese, stazione, agente_atm]
+        min_rows: 500
 
 validation:
   fail_on_error: true

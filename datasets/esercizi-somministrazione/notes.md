@@ -5,7 +5,7 @@ Quirk della fonte, rischi noti, decisioni metodologiche.
 ## Quirk della fonte
 
 - **`stato`** è la dimensione chiave: `Attivo` (3.016), `Cessato` (14.936), `Sospeso` (27), `Diniegato` (2). Non coincide con `data_cessazione IS NULL`: 3.021 attivi con `data_cessazione` NULL vs 3.016 con stato Attivo — piccole discrepanze (5 record), usare `stato` come fonte di verità.
-- **Quartieri "storici"**: 171 record (0,95%) hanno quartiere pre-2016 (Borgo Panigale, Porto, Reno, San Donato, San Vitale) — probabile residuo di codifica della fonte. Da normalizzare o escludere nelle aggregazioni per quartiere.
+- **Quartieri "storici"**: 201 record (1,1%) hanno un quartiere pre-2016. Verificato che **non è un residuo di codifica**: sono i 9 quartieri soppressi nel 2016 (Borgo Panigale, Reno, Porto, Saragozza, San Donato, San Vitale) e compaiono solo su records con `data_inizio_attivita` ≤ 2015-11-29 (Porto max 2015-05-29, San Vitale max 2015-11-29, Saragozza max 2012-05-14). La nota precedente ne contava 171 perché non includeva Saragozza (30 record). Restano separati nel clean e il mart li espone con `quartiere_attuale = FALSE`: **normalizzarli sui 6 quartieri attuali è una decisione aperta** (utile per le serie temporali per quartiere, ma inventa geografia dove la fonte dice altro).
 - **`bottega_storica`**: 11 record valorizzati (1) — nessuna lista ufficiale delle botteghe storiche nel dataset, il campo è una flag parziale.
 - **`centro_storico`**: valorizzato come "(centro storico)" per le aree dentro la cerchia; NULL fuori. Non confondere con l'omonimo campo di popolazione-quartiere.
 

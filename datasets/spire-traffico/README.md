@@ -5,10 +5,14 @@
 ## Dataset / fonte
 
 - **Fonte**: [OpenData Comune di Bologna](https://opendata.comune.bologna.it) — tema Trasporti
-- **Dataset ODS**: `rilevazione-flusso-veicoli-tramite-spire-anno-{year}` (2022–2025 in questo candidate)
+- **Dataset ODS**: `rilevazione-flusso-veicoli-tramite-spire-anno-{year}` (2022–2026 in questo candidate)
 - **Formato raw**: export parquet diretto (single file per anno, ~17 MB/anno)
 - **Granularità**: spira × data × fascia oraria (24 fasce) — ~304k righe/anno wide, ~7,3M righe/anno long
-- **Periodo**: 2022–2025 (POC: anni campione della famiglia "flusso"; la famiglia completa ha anche `rilevazione-autoveicoli-*` 2019-2021 e `accuratezza-*`)
+- **Periodo**: 2022–2026 (POC: anni campione della famiglia "flusso"; la famiglia completa ha anche `rilevazione-autoveicoli-*` 2019-2021 e `accuratezza-*`)
+
+> **Nota fonte 2026**: 52 spire attive (5,6% dei passaggi) arrivano senza `id_uni`/`codice` nel registro della fonte. Il clean le tiene con `id_spira = 'chiave:<chiave>'` e lascia `id_uni` NULL — vedi `notes.md`.
+>
+> **Spire a zero**: alcune spire pubblicano righe orarie tutte a zero (4 nel 2022, 15 nel 2024, 21 nel 2025, 26 nel 2026) e compaiono in `mart_spire_sintesi` come "N giorni, 0 passaggi". Non sono filtri da applicare: sono sensori che non rilevano, e vanno letti come tali.
 
 ## Perché vale la pena
 
@@ -43,7 +47,7 @@ toolkit status --config datasets/spire-traffico/dataset.yml
 
 - `mart_spire_sintesi`: quali vie hanno più traffico, come rankano per anno
 - `mart_spire_ora`: profilo orario — picchi di traffico per via
-- `mart_spire_trend`: CAGR 2022→2025 per via — quali strade aumentano/diminuiscono
+- `mart_spire_trend`: CAGR 2022→2026 per via — quali strade aumentano/diminuiscono
 
 ## Criterio di promozione
 
