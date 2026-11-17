@@ -36,6 +36,6 @@ GROUP BY stagione ORDER BY stagione;
 SELECT corr(t.avg, a.value) as corr_temp_no2
 FROM read_parquet('out/data/clean/temperature_bologna/2026/temperature_bologna_2026_clean.parquet') t
 JOIN read_parquet('out/data/clean/centraline_aria/2026/centraline_aria_2026_clean.parquet') a ON t.date = a.reftime::date
-WHERE a.agente_atm = 'NO2 (Biossido di azoto)' 
+WHERE a.agente_atm = 'NO2' 
   AND a.stazione LIKE 'PORTA SAN FELICE%'
   AND extract(year FROM t.date) = 2026;

@@ -15,7 +15,7 @@ WHERE varco=44;
 -- 1. NO2 medio per stazione (2026)
 SELECT stazione, round(avg(value), 1) as media_no2
 FROM read_parquet('out/data/clean/centraline_aria/2026/centraline_aria_2026_clean.parquet')
-WHERE agente_atm='NO2 (Biossido di azoto)' AND extract(year FROM reftime)=2026
+WHERE agente_atm='NO2' AND extract(year FROM reftime)=2026
 GROUP BY stazione ORDER BY media_no2 DESC;
 
 -- 2. Profilo orario: NO2 (Porta San Felice) vs veicoli (varco Ercolani)
@@ -24,7 +24,7 @@ SELECT extract(hour FROM a.reftime) as ora,
        round(avg(v.auto_furgoni + v.moto_ciclomotori), 0) as media_veicoli
 FROM read_parquet('out/data/clean/centraline_aria/2026/centraline_aria_2026_clean.parquet') a
 JOIN read_parquet('out/data/clean/varchi_ztl/2026/varchi_ztl_2026_clean.parquet') v ON a.reftime = v.data AND v.varco = 44
-WHERE a.agente_atm='NO2 (Biossido di azoto)'
+WHERE a.agente_atm='NO2'
   AND a.stazione LIKE 'PORTA SAN FELICE%'
   AND extract(year FROM a.reftime)=2026
 GROUP BY ora ORDER BY ora;
@@ -35,7 +35,7 @@ SELECT CASE WHEN extract(dow FROM a.reftime) IN (0,6) THEN 'Weekend' ELSE 'Feria
        round(avg(v.auto_furgoni + v.moto_ciclomotori), 0) as media_veicoli
 FROM read_parquet('out/data/clean/centraline_aria/2026/centraline_aria_2026_clean.parquet') a
 JOIN read_parquet('out/data/clean/varchi_ztl/2026/varchi_ztl_2026_clean.parquet') v ON a.reftime = v.data AND v.varco = 44
-WHERE a.agente_atm='NO2 (Biossido di azoto)'
+WHERE a.agente_atm='NO2'
   AND a.stazione LIKE 'PORTA SAN FELICE%'
   AND extract(year FROM a.reftime)=2026
 GROUP BY tipo;
@@ -44,6 +44,6 @@ GROUP BY tipo;
 SELECT corr(a.value, v.auto_furgoni + v.moto_ciclomotori) as corr_no2_veicoli
 FROM read_parquet('out/data/clean/centraline_aria/2026/centraline_aria_2026_clean.parquet') a
 JOIN read_parquet('out/data/clean/varchi_ztl/2026/varchi_ztl_2026_clean.parquet') v ON a.reftime = v.data AND v.varco = 44
-WHERE a.agente_atm='NO2 (Biossido di azoto)'
+WHERE a.agente_atm='NO2'
   AND a.stazione LIKE 'PORTA SAN FELICE%'
   AND extract(year FROM a.reftime)=2026;

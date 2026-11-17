@@ -12,9 +12,9 @@ SELECT
     ROUND(AVG(value), 1) AS media_valore,
     MAX(value) AS max_valore,
     ROUND(AVG(CASE
-        WHEN agente_atm = 'PM10 (Particolato <10µm)'  AND value > 50  THEN 1
-        WHEN agente_atm = 'NO2 (Biossido di azoto)'    AND value > 40  THEN 1
-        WHEN agente_atm = 'O3 (Ozono)'                 AND value > 120 THEN 1
+        WHEN agente_atm = 'PM10' AND value > 50  THEN 1
+        WHEN agente_atm = 'NO2'  AND value > 40  THEN 1
+        WHEN agente_atm = 'O3'   AND value > 120 THEN 1
         ELSE 0
     END) * 100, 1) AS pct_sopra_soglia
 FROM clean_input
