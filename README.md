@@ -43,7 +43,7 @@ Bologna ha uno dei portali open data comunali più maturi d'Italia:
 | [Famiglie per tipologia](datasets/famiglie-tipologia/) | 1986–2024 | Demografia |
 | [Emigrati per destinazione](datasets/emigrati-destinazione/) | 1986–2024 | Demografia |
 | [Convivenze](datasets/convivenze/) | 1986–2024 | Demografia |
-| [Indici di fragilità](datasets/indici-fragilita/) | 2023–2026 | Demografia |
+| [Indici di fragilità](datasets/indici-fragilita/) | 2021–2023 | Demografia |
 | [Varchi ZTL](datasets/varchi-ztl/) | 2019–2026 | Mobilità |
 | [Colonnine bici](datasets/colonnine-bici/) | 2018–2026 | Mobilità |
 | [Spire traffico](datasets/spire-traffico/) | 2022–2026 | Mobilità |
