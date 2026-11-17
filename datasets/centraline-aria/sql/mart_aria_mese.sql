@@ -28,3 +28,6 @@ SELECT
     MIN(misura_affidabile) AS misura_affidabile
 FROM clean_input
 GROUP BY anno, mese, stazione, agente_atm
+-- Un mese con meno di 5 giorni rilevati non è un mese: caso reale C6H6
+-- (marzo-aprile 2025) e CO (aprile 2025), coperti 1-4 giorni.
+HAVING COUNT(DISTINCT CAST(reftime AS DATE)) >= 5

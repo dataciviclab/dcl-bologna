@@ -96,6 +96,9 @@ SELECT
     fonte
 FROM norm
 WHERE valore IS NOT NULL
+  -- Il periodo dichiarato parte dal 2017 (time_coverage): la fonte ha 17
+  -- righe del 30-31/12/2016, che nei mart diventano un "anno" da 2 giorni.
+  AND EXTRACT(YEAR FROM reftime) >= 2017
 QUALIFY ROW_NUMBER() OVER (
     PARTITION BY reftime, stazione, agente_atm
     ORDER BY CASE WHEN fonte = 'ods_2026' THEN 0 ELSE 1 END, value DESC

@@ -21,7 +21,13 @@ Quirk della fonte, rischi noti, decisioni metodologiche.
 - **Doppioni nel merge**: ~3817 righe duplicate (stessa data+varco, valori identici o quasi) per sovrapposizione tra i 80 dataset ODS. Rimossi con dedup per chiave (0.02% su 18,6M).
 - **Coordinate WKB**: il campo `coordinate` è GEOMETRY binaria (21 byte, POINT). DuckDB la casta a VARCHAR come `"POINT (lon lat)"` → regex per estrarre lon/lat. Il GEOMETRY→BLOB fallisce, il VARCHAR funziona.
 - **`chiave` non stabile**: non usata come chiave (vedi colonnine). Chiave del clean: `(data, varco)`.
-- **Timezone**: `data` è TIMESTAMP WITH TIME ZONE nell'export; il clean casta a TIMESTAMP.
+- **Timezone (verificato 2026-11-17)**: i timestamp sono **ora locale** di Bologna.
+  Le etichette dell'export non sono affidabili (CSV `+00:00`, parquet `+01:00` fisso):
+  la prova è il cambio ora. Il 31/03/2024 il giorno ha **23 ore** (manca l'ora 01:xx),
+  il 27/10/2024 ne ha 24, il 15/06/2024 ne ha 24. Un giorno UTC ne avrebbe sempre 24:
+  quindi è ora locale, con DST gestito in modo imperfetto a monte (l'API JSON duplica
+  le 01:xx a marzo; il file mergiato le normalizza, l'ora doppia di ottobre non c'è).
+  Controllo riproducibile: `analisi/14_check_fuso_orario.sql`.
 
 ## Rischi noti
 
