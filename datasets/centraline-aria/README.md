@@ -10,7 +10,7 @@
   - `dati-centraline-bologna-storico` — serie storica 2017 → 2025-12-30, 696.683 righe
 - **Formato raw**: parquet (~0,4 MB + ~3 MB)
 - **Granularità**: oraria × stazione (3) × agente inquinante (8)
-- **Periodo**: 2017–2026
+- **Periodo**: 2017–2026 (il clean contiene anche 17 righe del 30-31/12/2016, coda dell'export storico: restano, ma sono fuori dal periodo dichiarato)
 - **Unità**: µg/m³ per tutti gli inquinanti **tranne CO, in mg/m³** (colonna `um`)
 
 ### Cosa copre davvero

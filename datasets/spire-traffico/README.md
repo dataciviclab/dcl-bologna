@@ -11,6 +11,8 @@
 - **Periodo**: 2022–2026 (POC: anni campione della famiglia "flusso"; la famiglia completa ha anche `rilevazione-autoveicoli-*` 2019-2021 e `accuratezza-*`)
 
 > **Nota fonte 2026**: 52 spire attive (5,6% dei passaggi) arrivano senza `id_uni`/`codice` nel registro della fonte. Il clean le tiene con `id_spira = 'chiave:<chiave>'` e lascia `id_uni` NULL — vedi `notes.md`.
+>
+> **Spire a zero**: alcune spire pubblicano righe orarie tutte a zero (4 nel 2022, 15 nel 2024, 21 nel 2025, 26 nel 2026) e compaiono in `mart_spire_sintesi` come "N giorni, 0 passaggi". Non sono filtri da applicare: sono sensori che non rilevano, e vanno letti come tali.
 
 ## Perché vale la pena
 

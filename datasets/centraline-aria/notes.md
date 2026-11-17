@@ -19,8 +19,8 @@ Quirk della fonte, rischi noti, decisioni metodologiche.
 - **Etichetta `um` sbagliata sulla fonte (CO, 2025)**: 7.583 righe CO (7.582 del 2025 + 1 del 2024)
   dichiarano `um = 'ug/m3'`, ma i valori stanno sulla scala mg/m³ (0,0–2,0, identica alle altre righe
   CO). Il clean forza CO su `mg/m3`: lasciare l'etichetta errata renderebbe `um` inaffidabile.
-- **Coda 2016**: 17 righe del 2016-12-31 (le prime ore della serie). Restano, ma `time_coverage`
-  parte dal 2016 per non dichiarare il falso; per i confronti annuali il 2016 non è utilizzabile.
+- **Coda 2016**: 17 righe del 2016-12-30/31 (le prime ore della serie). Restano nel clean, ma
+  `time_coverage.start_year` è 2017: per i confronti annuali il 2016 non è utilizzabile.
 - **Intervallo orario nello storico**: `data_inizio` è `HH:01`, `data_fine` `HH+1:00`. L'ora di
   riferimento è `date_trunc('hour', data_inizio)`, identica a `reftime` del dataset corrente.
 - **Cambio ora legale**: 287 righe duplicate su `(ora, stazione, agente)` nello storico (stessa
@@ -41,8 +41,8 @@ Quirk della fonte, rischi noti, decisioni metodologiche.
 - **PM10 e PM2.5 non sono orari**: la fonte li pubblica come valore giornaliero (stampato alle
   23:00, con qualche ora sporadica in più). `mart_aria_ora` li esclude per questo.
 - **NO/NOX si fermano il 2026-09-16**: il 2026 non è comparabile su quegli agenti.
-- **Confini 2016 e 2026 sono parziali**: 17 righe nel 2016 e la serie 2026 ferma a novembre; il
-  confronto va fatto su finestre comparabili (o su `mart_aria_mese`), non sui totali annui.
+- **Il 2026 è parziale** (fermo a novembre, e NO/NOX a settembre): il confronto va fatto su
+  finestre comparabili (o su `mart_aria_mese`), non sui totali annui.
 - **Soglie**: `pct_sopra_soglia` (PM10>50, NO2>40, O3>120) sono riferimenti indicativi, non
   normativi. La quota è su ore per NO2/O3 e su giorni per PM10/PM2.5.
 - **2023 è l'anno più pulito della serie PM10** (3 giorni sopra 50 contro 11-28 degli altri anni):
