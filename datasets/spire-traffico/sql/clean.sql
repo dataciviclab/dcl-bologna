@@ -11,7 +11,18 @@
 --   4. typing: int/double con le macro standard
 --
 -- Chiave spira stabile: id_uni (1 nome_via + 1 coppia lat/lon ciascuna, verificato).
--- primary_key del clean: (data, id_uni, livello, fascia_oraria) — unico verificato.
+-- primary_key del clean: (data, id_spira, livello, fascia_oraria) — unico verificato.
+--
+-- ⚠️ Difetto della fonte dal 2026 (verificato sul parquet 2026):
+--   52 spire attive (5,6% dei passaggi) non hanno id_uni/codice/codice_arco nel
+--   registro della fonte, e gran parte non ha nemmeno livello/tipologia.
+--   Non esistono in nessun anno precedente (spire nuove). Per non perderle:
+--   - id_spira = id_uni ufficiale, altrimenti 'chiave:<chiave>' (chiave è stabile
+--     e presente per tutte le righe) → namespace esplicito, nessuna collisione
+--     (verificato: 728 valori si sovrappongono tra chiave e id_uni)
+--   - id_uni resta NULL e visibile (nessun backfill inventato)
+--   - livello NULL → -1 ("livello non registrato nella fonte")
+--   Unicità verificata sul 2026: 6.310.560 righe, 6.310.560 chiavi distinte.
 
 WITH wide AS (
     SELECT *
@@ -32,12 +43,16 @@ SELECT
     CAST(data AS DATE)     AS data,
 
     CAST(id_uni AS BIGINT) AS id_uni,
+    CASE
+        WHEN id_uni IS NOT NULL THEN CAST(CAST(id_uni AS BIGINT) AS VARCHAR)
+        ELSE 'chiave:' || CAST(CAST(chiave AS BIGINT) AS VARCHAR)
+    END AS id_spira,
     CAST(chiave AS BIGINT) AS chiave,
     normalize_string(nome_via)   AS nome_via,
     normalize_string(tipologia)  AS tipologia,
     normalize_string(direzione)  AS direzione,
     normalize_string(num_giorno_settimana) AS giorno_settimana,
-    CAST(livello AS INTEGER) AS livello,
+    CAST(COALESCE(livello, -1) AS INTEGER) AS livello,
     cast_int(codice_via) AS codice_via,
 
     -- fascia oraria: "00_00_01_00" → label "00:00-01:00" + ora di inizio

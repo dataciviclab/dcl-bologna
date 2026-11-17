@@ -6,10 +6,10 @@ dataset:
   source_id: "comune_bologna_opendata"
   tags: [trasporti, mobilita, traffico, spire, bologna]
   category: trasporti
-  years: [2022, 2023, 2024, 2025]
+  years: [2022, 2023, 2024, 2025, 2026]
   time_coverage:
     start_year: 2022
-    end_year: 2025
+    end_year: 2026
 
 raw:
   output_policy: overwrite
@@ -29,6 +29,7 @@ clean:
   required_columns:
     - anno
     - data
+    - id_spira
     - id_uni
     - chiave
     - nome_via
@@ -46,11 +47,11 @@ clean:
     min_rows: 10000
     not_null:
       - data
-      - id_uni
+      - id_spira
       - passaggi
     primary_key:
       - data
-      - id_uni
+      - id_spira
       - livello
       - fascia_oraria
 
@@ -62,7 +63,7 @@ mart:
       sql: "sql/mart_spire_ora.sql"
     - name: "mart_spire_trend"
       sql: "sql/mart_spire_trend.sql"
-      years: [2022, 2023, 2024, 2025]
+      years: [2022, 2023, 2024, 2025, 2026]
   required_tables:
     - "mart_spire_sintesi"
     - "mart_spire_ora"
