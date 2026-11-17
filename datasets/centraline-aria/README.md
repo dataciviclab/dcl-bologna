@@ -5,10 +5,13 @@
 ## Dataset / fonte
 
 - **Fonte**: [OpenData Comune di Bologna](https://opendata.comune.bologna.it) — tema Ambiente
-- **Dataset ODS**: `centraline-qualita-aria` — export parquet diretto, unico (2026)
-- **Formato raw**: parquet (~0,4 MB)
+- **Dataset ODS** (due export uniti, schemi diversi):
+  - `centraline-qualita-aria` — anno corrente, orario (2026 + coda di fine 2025)
+  - `dati-centraline-bologna-storico` — serie storica 2017 → 2025-12-30, 696.683 righe
+- **Formato raw**: parquet (~0,4 MB + ~3 MB)
 - **Granularità**: oraria × stazione (3) × agente inquinante (8)
-- **Periodo**: 2025–2026 (storico in `dati-centraline-bologna-storico`)
+- **Periodo**: 2017–2026
+- **Unità**: µg/m³ per tutti gli inquinanti **tranne CO, in mg/m³** (colonna `um`)
 
 ## Struttura
 
@@ -16,9 +19,10 @@
 datasets/centraline-aria/
 ├── dataset.yml
 ├── sql/
-│   ├── clean.sql                  # anno derivato + dedup cambio ora legale
-│   ├── mart_aria_stazione.sql     # per stazione × inquinante (media, max, % sopra soglia)
-│   └── mart_aria_ora.sql          # profilo orario per stazione × inquinante
+│   ├── clean.sql                  # unione due fonti + normalizzazione + dedup
+│   ├── mart_aria_stazione.sql     # anno × stazione × inquinante (media, max, % sopra soglia)
+│   ├── mart_aria_mese.sql         # serie mensile (la granularità per valutare una policy)
+│   └── mart_aria_ora.sql          # profilo orario per anno × stazione × inquinante
 ├── README.md
 └── notes.md
 ```
@@ -28,13 +32,14 @@ Output toolkit in `out/` (root: `../../out`), gitignorato.
 ## Run
 
 ```bash
-toolkit run --years 2026 --config datasets/centraline-aria/dataset.yml
+toolkit run --config datasets/centraline-aria/dataset.yml
 ```
 
 ## Output minimo atteso
 
-- `mart_aria_stazione`: medie, massimi, giorni sopra soglia per stazione e inquinante
-- `mart_aria_ora`: profilo orario — il NO2 di punta si confronta col traffico (spire/varchi)
+- `mart_aria_stazione`: medie, massimi, giorni sopra soglia per anno, stazione e inquinante
+- `mart_aria_mese`: serie mensile per stazione × inquinante — confronto prima/dopo Città 30 (gen 2024)
+- `mart_aria_ora`: profilo orario per anno — il NO2 di punta si confronta col traffico (spire/varchi)
 
 ## Stato / prossimo passo
 

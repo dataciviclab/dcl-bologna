@@ -48,7 +48,7 @@ Bologna ha uno dei portali open data comunali più maturi d'Italia:
 | [Colonnine bici](datasets/colonnine-bici/) | 2018–2026 | Mobilità |
 | [Spire traffico](datasets/spire-traffico/) | 2022–2026 | Mobilità |
 | [BolognaWiFi matrice](datasets/bolognawifi-matrice/) | 2021–2025 | Mobilità |
-| [Centraline qualità aria](datasets/centraline-aria/) | 2026 | Ambiente |
+| [Centraline qualità aria](datasets/centraline-aria/) | 2017–2026 | Ambiente |
 | [Temperature](datasets/temperatura/) | 2001–2026 | Ambiente |
 | [Precipitazioni](datasets/precipitazioni/) | 2001–2026 | Ambiente |
 | [Reddito mediano](datasets/reddito-mediano/) | 2016–2024 | Economia |

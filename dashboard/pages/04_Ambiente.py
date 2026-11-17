@@ -12,9 +12,9 @@ st.markdown("Qualità dell'aria (NO₂), temperature e precipitazioni a Bologna.
 # Qualità aria — media per stazione
 # ══════════════════════════════════════════════════════════════════════════════
 
-st.subheader("🌬️ NO₂ medio per stazione (2026)")
-
 df_aria = load_mart("centraline_aria", "mart_aria_stazione", 2026)
+anno_aria = int(df_aria["anno"].max()) if not df_aria.empty else 2026
+st.subheader(f"🌬️ NO₂ medio per stazione ({anno_aria})")
 if not df_aria.empty:
     # solo NO2, solo ultimo anno
     no2 = df_aria[
@@ -51,11 +51,16 @@ st.markdown("---")
 # Profilo orario NO₂
 # ══════════════════════════════════════════════════════════════════════════════
 
-st.subheader("⏰ Profilo orario NO₂ (2026)")
+st.subheader("⏰ Profilo orario NO₂")
 
 df_ora_aria = load_mart("centraline_aria", "mart_aria_ora", 2026)
 if not df_ora_aria.empty:
-    no2_ora = df_ora_aria[df_ora_aria["agente_atm"].str.contains("NO2", case=False, na=False)].copy()
+    anno_ora = int(df_ora_aria["anno"].max())
+    st.caption(f"Anno {anno_ora} (il mart copre 2017-2026: filtro sull'anno più recente)")
+    no2_ora = df_ora_aria[
+        df_ora_aria["agente_atm"].str.contains("NO2", case=False, na=False)
+        & (df_ora_aria["anno"] == anno_ora)
+    ].copy()
     if not no2_ora.empty:
         # media su tutte le stazioni
         agg = no2_ora.groupby("ora_inizio", as_index=False).agg(media=("media_valore", "mean"))
