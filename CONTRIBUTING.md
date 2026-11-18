@@ -65,6 +65,21 @@ con.execute('SELECT * FROM read_parquet(\"out/data/clean/ds/2026/ds_2026_clean.p
 # 3. Se emergono numeri interessanti, aggiorna README o Discussion
 ```
 
+### Unità dei conteggi (la trappola che ci è costata tre volte)
+
+In questo repo è già successo tre volte: un numero "per giorno" calcolato su dati orari.
+
+- `COUNT(DISTINCT <timestamp>)` **non è un numero di giorni**: su dati orari restituisce le
+  ore (8.759 in un anno). Per i giorni serve `COUNT(DISTINCT CAST(<timestamp> AS DATE))`.
+- Sanity check su un anno reale: ~365 è giorni, ~8.700 è ore, ~8.000 su 24 anni è ore.
+  Se una colonna si chiama `giorni` e vale migliaia su un anno, è sbagliata.
+- La granularità va dichiarata nel `notes.md` del dataset: oraria (varchi, colonnine, aria),
+  giornaliera (PM10/PM2.5), snapshot (esercizi, incarichi). Un aggregato "per giorno" su una
+  fonte oraria senza `CAST(... AS DATE)` è sbagliato di un fattore 24.
+
+Casi reali: `giorni_rilevati = COUNT(*)` in `mart_aria_stazione`, PM10 giornaliero dentro
+`mart_aria_ora`, e `analisi/15` con `COUNT(DISTINCT data)` sul timestamp orario.
+
 ## Commit e push
 
 ```bash

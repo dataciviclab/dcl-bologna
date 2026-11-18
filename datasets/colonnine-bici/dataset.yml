@@ -35,7 +35,11 @@ clean:
     - totale
     - quartiere
     - zona
+    - area_statistica
+    - zona_prossimita
     - via
+    - civico
+    - distanza_civico_m
   validate:
     min_rows: 100000
     not_null:
@@ -47,10 +51,13 @@ clean:
       - colonnina
 
 support:
-  - name: colonnina_quartieri
-    type: file
-    # path relativo al candidate root (datasets/colonnine-bici/), normalizzato dal parser
-    path: "../../mapping/colonnine-quartieri.csv"
+  # Geografia amministrativa (quartiere, zona, area statistica, zona di
+  # prossimità, bacino scolastico) per ogni civico. Il toolkit esegue il
+  # support prima del candidate (skip-if-exists) e risolve {support.civici.clean}.
+  - name: civici
+    type: dataset
+    config: "../rifter-civici/dataset.yml"
+    years: [2026]
 
 mart:
   tables:

@@ -13,7 +13,13 @@ Quirk della fonte, rischi noti, decisioni metodologiche.
 
 ## Rischi noti
 
-- **Join mapping**: risolto con ADR-005 (toolkit #451) — il mapping è un support `type: file` dichiarato nel `dataset.yml` e referenziato nel clean come `{support.colonnina_quartieri.path}`. Niente più path relativo alla cwd. **Nota**: il path del support è **relativo al candidate root** (non al root di output) — il parser lo normalizza rispetto a `datasets/colonnine-bici/`; `resolve_support_payloads` lo valida sul path già normalizzato.
+- **Geografia**: niente più CSV di mapping. Il clean prende il **civico più vicino** dal support
+  dataset `rifter-civici` (quarter/zona/area statistica/zona di prossimità) con haversine sulle
+  coordinate estratte dal WKT (`CAST(geo_point_2d AS VARCHAR)`), senza estensione spatial.
+  Verificato il 2026-11-18: 24/24 quartieri e 24/24 zone identici al vecchio mapping, distanza
+  mediana dal civico 21 m (max 58 m). Il toolkit esegue il support prima del candidate
+  (`skip-if-exists`) e risolve `{support.civici.clean}`: nessun ordine di batch da gestire.
+- **Coordinate della colonnina**: vengono dal raw (`geo_point_2d` → WKT), non più dal mapping.
 - **Copertura disomogenea**: la colonnina Ercolani è attiva dal 2018, le altre dal 2022/2024. `mart_colonnine_anno` con `rank_traffico_anno` confronta anni con numero di colonnine diverso — non è un bug ma va interpretato.
 
 ## Decisioni metodologiche
