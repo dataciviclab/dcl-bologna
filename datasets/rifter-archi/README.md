@@ -13,8 +13,9 @@
 ## Perché vale la pena
 
 È l'anello che mancava per collegare i dati puntuali al territorio **senza mapping manuali**.
-Nel repo c'erano tre CSV costruiti per distanza minima (`mapping/varchi-quartieri.csv`,
-`colonnine-quartieri.csv`, `stazioni-aria.csv`): andavano rifatti per ogni nuovo dataset.
+Il repo aveva tre CSV costruiti per distanza minima (`mapping/`): andavano rifatti per ogni
+nuovo dataset. Sono stati rimossi: la geografia ora arriva dai dataset `rifter-civici` e
+`rifter-archi` (support del candidate).
 
 Verificato: le spire espongono `codice_via` e **320 vie su 320** trovano il quartiere
 in questo dataset. Stessa cosa per la zona, con il join `codvia` → `quartiere`.
@@ -33,7 +34,7 @@ in questo dataset. Stessa cosa per la zona, con il join `codvia` → `quartiere`
   avrebbe richiesto `spatial` per `ST_X`/`ST_Y`. `geo_shape` (GeoJSON) resta fuori.
 - **I varchi**: non hanno `codvia`, quindi non entrano nel crosswalk per codice. Con lat/lon qui
   si può assegnare il quartiere per arco più vicino: verificato al **94,9%** di accordo con il
-  mapping manuale `mapping/varchi-quartieri.csv` (vedi `notes.md`).
+  mapping manuale storico (vedi `notes.md`).
 - Una via può stare su due quartieri: chi consuma sceglie (es. il quartiere con più archi).
 
 ## Run

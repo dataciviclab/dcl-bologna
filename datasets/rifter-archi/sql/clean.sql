@@ -5,10 +5,9 @@
 -- dataset che espongono il codice via (spire: `codice_via`, copertura 100%
 -- su 362 vie, verificata 2026-11-18).
 --
--- Coordinate: il raw è il **CSV**, dove `geo_point_2d` è testo ("44.53, 11.35").
--- Così si espongono lat/lon come DOUBLE senza l'estensione spatial (che servirebbe
--- per ST_X/ST_Y sul parquet). `geo_shape` (GeoJSON) è esclusa: non serve al
--- crosswalk e pesa.
+-- Coordinate senza estensione spatial: `CAST(geo_point_2d AS VARCHAR)` rende il
+-- WKT ("POINT (lon lat)"), quindi lon/lat si estraggono con una regex. ST_X/ST_Y
+-- richiederebbero l'estensione spatial; questa via no. `geo_shape` è esclusa.
 
 SELECT
     CAST({year} AS INTEGER) AS anno_run,
@@ -25,7 +24,7 @@ SELECT
     cast_int(cod_nodo1) AS nodo_da,
     cast_int(cod_nodo2) AS nodo_a,
     normalize_string(codice_ans) AS codice_ans,
-    cast_double(trim(split_part(geo_point_2d, ',', 1))) AS lat,
-    cast_double(trim(split_part(geo_point_2d, ',', 2))) AS lon
+    cast_double(regexp_extract(CAST(geo_point_2d AS VARCHAR), 'POINT \(([-0-9.]+) ([-0-9.]+)\)', 2)) AS lat,
+    cast_double(regexp_extract(CAST(geo_point_2d AS VARCHAR), 'POINT \(([-0-9.]+) ([-0-9.]+)\)', 1)) AS lon
 FROM raw_input
 WHERE codarco IS NOT NULL AND codvia IS NOT NULL

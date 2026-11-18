@@ -1,0 +1,60 @@
+root: "../../out"
+schema_version: 1
+
+dataset:
+  name: "rifter_civici"
+  source_id: "comune_bologna_opendata"
+  tags: [territorio, civici, toponomastica, quartiere, zona, area-statistica, bologna]
+  category: territorio
+  years: [2026]
+
+raw:
+  output_policy: overwrite
+  sources:
+    - name: "ods_rifter_civici"
+      type: "http_file"
+      args:
+        url: "https://opendata.comune.bologna.it/api/explore/v2.1/catalog/datasets/rifter_civici_pt/exports/parquet"
+        filename: "rifter_civici.parquet"
+      primary: true
+
+clean:
+  sql: "sql/clean.sql"
+  read:
+    source: auto
+    mode: latest
+  required_columns:
+    - anno_run
+    - civkey
+    - codvia
+    - civico
+    - subciv
+    - via
+    - quartiere
+    - zona_codice
+    - zona
+    - area_statistica
+    - zona_prossimita
+    - bacino_scuola
+    - lat
+    - lon
+  validate:
+    min_rows: 70000
+    not_null: [civkey, quartiere, zona]
+    primary_key: [civkey]
+
+mart:
+  tables:
+    - name: "mart_zona_civici"
+      sql: "sql/mart_zona_civici.sql"
+  required_tables:
+    - "mart_zona_civici"
+  validate:
+    table_rules:
+      mart_zona_civici:
+        required_columns: [quartiere, zona, civici, vie]
+        primary_key: [quartiere, zona]
+        min_rows: 6
+
+validation:
+  fail_on_error: true

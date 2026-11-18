@@ -9,7 +9,7 @@
 - **Formato raw**: parquet (~3 MB), 24 colonnine
 - **Granularità**: colonnina × data (oraria) × direzione (centro/periferia)
 - **Periodo**: 2018–2026
-- **Arricchimento**: join con `mapping/colonnine-quartieri.csv` (24 colonnine → quartiere/zona/via)
+- **Arricchimento**: join al civico più vicino del support `rifter-civici` → quartiere, zona, area statistica, zona di prossimità, via e civico
 
 ## Perché vale la pena
 

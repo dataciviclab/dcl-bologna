@@ -17,11 +17,8 @@ raw:
     - name: "ods_rifter_archi"
       type: "http_file"
       args:
-        # CSV, non parquet: nel CSV la geometria e' testo ("44.53, 11.35") e si
-        # legge senza l'estensione spatial. Nel parquet e' GEOMETRY e ST_X/ST_Y
-        # non sono disponibili nel toolkit.
-        url: "https://opendata.comune.bologna.it/api/explore/v2.1/catalog/datasets/rifter_arcstra_li/exports/csv?delimiter=%3B"
-        filename: "rifter_archi.csv"
+        url: "https://opendata.comune.bologna.it/api/explore/v2.1/catalog/datasets/rifter_arcstra_li/exports/parquet"
+        filename: "rifter_archi.parquet"
       primary: true
 
 clean:
@@ -29,9 +26,6 @@ clean:
   read:
     source: auto
     mode: latest
-    delim: ";"
-    encoding: utf-8
-    all_varchar: true
   required_columns:
     - anno_run
     - codarco

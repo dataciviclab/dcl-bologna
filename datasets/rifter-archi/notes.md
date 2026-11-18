@@ -30,8 +30,9 @@ Quirk della fonte, rischi noti, decisioni metodologiche.
 
 - **Solo `mart_via_quartiere` è pensato per il riuso**: `mart_quartiere_archi` è un benchmark
   territoriale (quanta strada per quartiere), non un lookup.
-- **Nessun mapping in `mapping/`**: questo dataset sostituisce il pattern dei CSV costruiti a mano.
-  I tre file esistenti restano per i dataset che non espongono `codvia`.
+- **Nessun mapping in `mapping/`**: la directory è stata rimossa. La geografia arriva da
+  `rifter-civici` (support) e da questo dataset; i dataset che non espongono `codvia` usano
+  il civico più vicino.
 - **`anno_run` nel clean**: il dataset è uno snapshot, `{year}` è l'anno di esecuzione.
 
 ## Esperimento: quartiere per arco più vicino (varchi)
@@ -42,7 +43,7 @@ per ogni varco si prende l'arco più vicino (haversine) e il suo `quartiere`.
 | | |
 |---|---|
 | varchi confrontabili | 79 |
-| accordo con `mapping/varchi-quartieri.csv` | **75/79 = 94,9%** |
+| accordo con il mapping manuale storico | **75/79 = 94,9%** |
 | distanza dall'arco più vicino | mediana 15 m, max 81 m |
 
 I 4 disaccordi sono **confini reali**, non errori: via D'Azeglio, via Indipendenza (2 varchi),
