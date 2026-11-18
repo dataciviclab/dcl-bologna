@@ -19,8 +19,13 @@ Quirk della fonte, rischi noti, decisioni metodologiche.
 - **Etichetta `um` sbagliata sulla fonte (CO, 2025)**: 7.583 righe CO (7.582 del 2025 + 1 del 2024)
   dichiarano `um = 'ug/m3'`, ma i valori stanno sulla scala mg/m³ (0,0–2,0, identica alle altre righe
   CO). Il clean forza CO su `mg/m3`: lasciare l'etichetta errata renderebbe `um` inaffidabile.
-- **Coda 2016**: 17 righe del 2016-12-30/31 (le prime ore della serie). Restano nel clean, ma
-  `time_coverage.start_year` è 2017: per i confronti annuali il 2016 non è utilizzabile.
+- **Timezone (verificato 2026-11-17)**: i timestamp sono **ora locale** di Bologna, non UTC
+  (etichette dell'export inaffidabili: CSV `+00:00`, parquet `+01:00` fisso). Prova: il
+  31/03/2024 ha 23 ore (manca la 02:xx) e il 15/06 ne ha 24; in UTC sarebbero 24 entrambi.
+  I duplicati del cambio ora che la fonte produce a monte (le 9 coppie sul 2026, 287 righe
+  sullo storico) sono assorbiti dal dedup.
+- **Coda 2016**: 17 righe del 2016-12-30/31 (prime ore della serie). `time_coverage` parte
+  dal 2017, e un "anno" da 2 giorni falsa i mart: **scartate nel clean**.
 - **Intervallo orario nello storico**: `data_inizio` è `HH:01`, `data_fine` `HH+1:00`. L'ora di
   riferimento è `date_trunc('hour', data_inizio)`, identica a `reftime` del dataset corrente.
 - **Cambio ora legale**: 287 righe duplicate su `(ora, stazione, agente)` nello storico (stessa

@@ -39,4 +39,8 @@ SELECT
     cast_double(max(latitudine))  AS latitudine
 
 FROM raw_input
+-- Coda 2018: la fonte ha 1 sola ora (2018-12-31 23:00-23:45, 240 righe).
+-- Il periodo del dataset parte dal 2019: un "anno 2018" di 1 ora entra
+-- nei mart come anno pieno (giorni_rilevati=1, passaggi/giorno falsati).
+WHERE CAST(data AS TIMESTAMP) >= TIMESTAMP '2019-01-01'
 GROUP BY data, varco

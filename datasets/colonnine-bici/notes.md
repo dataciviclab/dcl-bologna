@@ -6,7 +6,10 @@ Quirk della fonte, rischi noti, decisioni metodologiche.
 
 - **Export unico multi-anno**: a differenza di spire (un dataset ODS per anno), `colonnine-conta-bici` è un singolo parquet con 2018-2026. Quindi `dataset.years: [2026]` (run year) + `time_coverage` per la serie, e `anno` è **derivato** dalla data nel clean, non da `{year}`.
 - **Righe duplicate**: ~60 coppie `(data, colonnina)` con letture ridondanti e valori diversi (es. `totale` 0 vs 51). Risolte nel clean con `QUALIFY ROW_NUMBER() ... ORDER BY totale DESC = 1` (tengo la lettura maggiore). Verificato: dopo dedup, `(data, colonnina)` è unica.
-- **Timezone**: il parquet ODS ha `data` come `TIMESTAMP WITH TIME ZONE` (sembra Atlantic/Canary nell'export). Il clean casta a `TIMESTAMP` — da verificare l'ora italiana nel consumo reale.
+- **Timezone (verificato 2026-11-17)**: `data` è **ora locale** di Bologna, non UTC.
+  Le etichette dell'export mentono (CSV `+00:00`, parquet `+01:00` fisso). Prova: il
+  31/03/2024 il giorno ha 23 ore (manca la 01:xx) e il 15/06 ne ha 24 — in UTC sarebbero
+  24 entrambi. Il picco bici alle 8 (non alle 6) lo conferma. Il clean non converte nulla.
 
 ## Rischi noti
 
