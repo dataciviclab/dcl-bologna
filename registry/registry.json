@@ -478,7 +478,7 @@
       "source": "",
       "source_id": "comune_bologna_opendata",
       "period": {
-        "start": 1976,
+        "start": 2026,
         "end": 2026
       },
       "tags": [
@@ -1239,7 +1239,7 @@
       "source": "",
       "source_id": "comune_bologna_opendata",
       "period": {
-        "start": 1990,
+        "start": 2026,
         "end": 2026
       },
       "tags": [
@@ -2609,7 +2609,7 @@
       "detail": "anno 2026 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20261117T222235Z_0102b180",
+        "run_id": "20261118T154805Z_4b42ff0f",
         "year": 2026,
         "status": "SUCCESS",
         "quality_score": {
@@ -2622,13 +2622,13 @@
           "mart": 31
         },
         "output_bytes": {
-          "raw": 514721,
-          "clean": 314543,
+          "raw": 515147,
+          "clean": 315672,
           "mart": 1854
         },
-        "started_at": "2026-11-17T22:22:35.455094+00:00",
-        "finished_at": "2026-11-17T22:22:38.815345+00:00",
-        "duration_seconds": 3.36
+        "started_at": "2026-11-18T15:48:05.382803+00:00",
+        "finished_at": "2026-11-18T15:48:08.841854+00:00",
+        "duration_seconds": 3.459
       }
     },
     {
@@ -2819,7 +2819,7 @@
       "detail": "anno 2026 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20261118T150046Z_92aaca5e",
+        "run_id": "20261118T154809Z_38a7029b",
         "year": 2026,
         "status": "SUCCESS",
         "quality_score": {
@@ -2834,11 +2834,11 @@
         "output_bytes": {
           "raw": 1278189,
           "clean": 1128662,
-          "mart": 34822
+          "mart": 34756
         },
-        "started_at": "2026-11-18T15:00:46.188657+00:00",
-        "finished_at": "2026-11-18T15:00:49.225463+00:00",
-        "duration_seconds": 3.037
+        "started_at": "2026-11-18T15:48:09.331007+00:00",
+        "finished_at": "2026-11-18T15:48:12.213606+00:00",
+        "duration_seconds": 2.883
       }
     },
     {
