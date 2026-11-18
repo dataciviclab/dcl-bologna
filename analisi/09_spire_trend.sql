@@ -91,14 +91,53 @@ GROUP BY ora_inizio ORDER BY ora_inizio;
 --    (Spire: -11,7% 2022→2025 su passaggi/spira/giorno, spire stabili)
 --    Nota: periodi diversi per disponibilità dati — ZTL dal 2019, spire dal 2022.
 --
---    AGGIORNAMENTO 2026-11-18 (serie estesa al 2026): sul pannello di 775
---    spire presenti in tutti gli anni e su finestra gen-ott, la mediana per
---    spira è -11,7% ma il totale è -24,9%: il calo è CONCENTRATO (193 spire
---    con calo >40% spiegano l'82% del totale), non diffuso. E Via Stalingrado
---    è tornata ai livelli 2023 nel 2026 (140.119 passaggi/giorno a ottobre
---    contro 69.598 nel 2025): su una via di attraversamento è compatibile con
---    cantieri più che con una riduzione strutturale. Il benchmark sotto resta
---    il valore 2022-2025 su spire stabili.
+--    AGGIORNAMENTO 2026-11-18 — i numeri vengono dalla query 7 in fondo.
+--    Il calo è CONCENTRATO, non diffuso: sul pannello di 775 spire presenti in
+--    tutti gli anni (finestra gen-ott), 2022→2026 la mediana per spira è
+--    -12,4% e il totale -22,9%, ma il calo netto viene tutto da **204 spire
+--    con calo >40%** (-1.019.448 passaggi/spira/giorno su -1.019.818): le
+--    altre 571 spire, sommate, valgono -371. Inoltre Via Stalingrado è tornata
+--    ai livelli 2023 nel 2026 (140.119 passaggi/giorno a ottobre, contro
+--    69.598 nel 2025): su una via di attraversamento è compatibile con
+--    cantieri più che con una riduzione strutturale.
+--    ATTENZIONE alle etichette: il benchmark della query 6 (-11,7%) è un
+--    TOTALE su spire stabili 2022→2025, non una mediana.
+--
 SELECT 'ZTL (2019-2025)' as cerchia, round((61032.0 - 78017.0) * 100.0 / 78017.0, 1) as var_pct
 UNION ALL
 SELECT 'Spire (2022-2025)', -11.7;
+
+-- 7. Il calo è concentrato? (pannello di spire presenti in tutti gli anni)
+--
+--    Sulle spire presenti in TUTTI gli anni 2022-2026, finestra gen-ott:
+--    quante spiegano il calo totale? Serve a distinguere una riduzione diffusa
+--    (tutte le strade calano un po') da una concentrata (poche arterie).
+WITH y AS (
+    SELECT id_spira, anno, sum(passaggi) * 1.0 / count(DISTINCT data) AS passaggi_giorno
+    FROM read_parquet('out/data/clean/spire_traffico/*/spire_traffico_*_clean.parquet')
+    WHERE month(data) <= 10 AND anno BETWEEN 2022 AND 2026
+    GROUP BY 1, 2
+),
+panel AS (
+    SELECT id_spira FROM y GROUP BY 1 HAVING count(DISTINCT anno) = 5
+),
+p AS (
+    SELECT
+        id_spira,
+        max(passaggi_giorno) FILTER (WHERE anno = 2022) AS a22,
+        max(passaggi_giorno) FILTER (WHERE anno = 2026) AS a26
+    FROM y JOIN panel USING (id_spira)
+    GROUP BY 1
+),
+r AS (
+    SELECT id_spira, a22, a26, a26 - a22 AS delta, (a26 - a22) / a22 AS variazione
+    FROM p
+)
+SELECT
+    count(*) AS spire,
+    round(100.0 * median(variazione), 1) AS mediana_variazione_pct,
+    round(100.0 * (sum(a26) - sum(a22)) / sum(a22), 1) AS totale_variazione_pct,
+    count(*) FILTER (WHERE variazione < -0.4) AS spire_calo_oltre40,
+    round(sum(delta) FILTER (WHERE variazione < -0.4)) AS calo_delle_over40,
+    round(sum(delta) FILTER (WHERE variazione >= -0.4)) AS calo_delle_altre
+FROM r;

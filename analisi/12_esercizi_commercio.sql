@@ -10,9 +10,10 @@
 -- 1. 'stato' è la verità (Attivo/Cessato), non data_cessazione.
 -- 2. Sopravvivenza per decade: gli aperti nel 2020+ hanno avuto meno
 --    anni per cessare → confronto indicativo, non tasso rigoroso.
--- 3. 201 record (1,1%) hanno un quartiere pre-2016: sono i 9 quartieri
---    soppressi nel 2016, tutti con data_inizio_attivita <= 2015 (verificato
---    2026-11-18). Restano nel clean e nel mart con il flag `quartiere_attuale`;
+-- 3. 201 record (1,1%) hanno un quartiere pre-2016: stanno nei 6 nomi
+--    soppressi nel 2016 (San Donato, San Vitale, Borgo Panigale, Reno, Porto,
+--    Saragozza; gli altri 3 dei 9 pre-2016 hanno mantenuto il nome), tutti con
+--    data_inizio_attivita <= 2015-11-29 (verificato 2026-11-18). Restano nel clean e nel mart con il flag `quartiere_attuale`;
 --    le query per quartiere usano i 6 nomi attuali.
 -- ============================================================
 
