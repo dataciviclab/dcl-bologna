@@ -32,6 +32,15 @@ clean:
     - id_spira
     - id_uni
     - chiave
+    - codice_spira
+    - codice
+    - codice_arco
+    - nodo_da
+    - nodo_a
+    - codimpsem
+    - angolo
+    - ordinanza
+    - stato
     - nome_via
     - tipologia
     - direzione

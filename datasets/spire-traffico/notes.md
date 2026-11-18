@@ -27,3 +27,17 @@ Quirk della fonte, rischi noti, decisioni metodologiche.
 - **`num_spire` nel mart**: conta `id_spira`, non `id_uni`, così le 52 spire 2026 entrano nel conteggio per via.
 - **Benchmark nel mart**: `rank_passaggi_anno` in `mart_spire_sintesi` (PERCENT_RANK) segue il pattern comuni/sintesi/trend del candidate-standard.
 - **POC**: 5 anni (2022-2026), non la serie completa — sufficiente per valutare il flusso toolkit.
+
+## Colonne fuori dal clean (dichiarate)
+
+Clean **fedele** alla fonte. Le uniche colonne che non ci sono più:
+
+| Colonna fonte | Dove è finita |
+|---|---|
+| `00_00_01_00` … `23_00_24_00` (24) | **UNPIVOT** in `fascia_oraria` + `ora_inizio` + `passaggi`: nessuna perdita, cambia la forma |
+| `geopoint` | GEOMETRY: `longitudine`/`latitudine` sono già nel raw come DOUBLE, quindi la geometria è ridondante |
+
+Le colonne informative della fonte che **non** arrivavano al clean sono state recuperate il
+2026-11-18: `codice_spira`, `codice`, `codice_arco`, `nodo_da`, `nodo_a`, `codimpsem`, `angolo`,
+`ordinanza` (l'atto che disciplina la spira) e `stato`. Erano fuori perché il primo clean
+selezionava solo ciò che serviva ai mart.

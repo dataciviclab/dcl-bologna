@@ -23,6 +23,14 @@ raw:
         filename: "varchi_ztl.parquet"
       primary: true
 
+support:
+  # Geografia amministrativa per i varchi: non espongono `codvia`, quindi il
+  # quartiere arriva dal civico più vicino (support eseguito dal toolkit).
+  - name: civici
+    type: dataset
+    config: "../rifter-civici/dataset.yml"
+    years: [2026]
+
 clean:
   sql: "sql/clean.sql"
   read:
@@ -35,6 +43,14 @@ clean:
     - nome_varco
     - direzione
     - tipologia_varco
+    - descrizione
+    - quartiere
+    - zona
+    - area_statistica
+    - zona_prossimita
+    - via_civico
+    - civico
+    - distanza_civico_m
     - totale_passaggi
     - auto_furgoni
     - moto_ciclomotori
