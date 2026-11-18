@@ -58,10 +58,14 @@ SELECT
     cast_double(regexp_extract(CAST(geo_point_2d AS VARCHAR), 'POINT \(([-0-9.]+) ([-0-9.]+)\)', 2)) AS lat,
     cast_double(regexp_extract(CAST(geo_point_2d AS VARCHAR), 'POINT \(([-0-9.]+) ([-0-9.]+)\)', 1)) AS lon,
     cast_double(x_utm_etrs) AS x_utm,
-    cast_double(y_utm_etrs) AS y_utm
+    cast_double(y_utm_etrs) AS y_utm,
+
+    -- geometria come WKT: `CAST(... AS VARCHAR)` la rende senza estensione spatial
+    -- (come per geo_point_2d) e il WKT è leggibile da pyarrow/pandas
+    CAST(geo_shape AS VARCHAR) AS geo_shape
 FROM raw_input
 WHERE civkey IS NOT NULL
 
--- ESCLUSA: `geo_shape` (GEOMETRY, GeoJSON della particella). Non è utilizzabile
--- senza l'estensione spatial, pesa ~10x il resto e la geometria del civico non
--- serve a nessun consumer (per la posizione bastano lat/lon).
+-- Nessuna colonna della fonte è esclusa: `geo_shape` resta, convertita in WKT.
+-- Nota: nei civici `geo_shape` è un POINT, quindi duplica `geo_point_2d` (di cui
+-- si tengono le coordinate in `lat`/`lon`). Resta per fedeltà alla fonte.

@@ -50,6 +50,7 @@ clean:
     - codice_ans
     - lat
     - lon
+    - geo_shape
     - lat
     - lon
   validate:

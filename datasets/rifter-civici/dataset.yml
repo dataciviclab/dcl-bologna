@@ -60,6 +60,7 @@ clean:
     - data_variazione
     - lat
     - lon
+    - geo_shape
     - x_utm
     - y_utm
   validate:

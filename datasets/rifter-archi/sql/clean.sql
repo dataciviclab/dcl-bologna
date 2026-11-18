@@ -37,10 +37,12 @@ SELECT
 
     -- coordinate: WKT -> DOUBLE (niente spatial)
     cast_double(regexp_extract(CAST(geo_point_2d AS VARCHAR), 'POINT \(([-0-9.]+) ([-0-9.]+)\)', 2)) AS lat,
-    cast_double(regexp_extract(CAST(geo_point_2d AS VARCHAR), 'POINT \(([-0-9.]+) ([-0-9.]+)\)', 1)) AS lon
+    cast_double(regexp_extract(CAST(geo_point_2d AS VARCHAR), 'POINT \(([-0-9.]+) ([-0-9.]+)\)', 1)) AS lon,
+
+    -- geometria di linea come WKT: senza estensione spatial e leggibile da
+    -- pyarrow/pandas (il tipo GEOMETRY nativo lo leggono solo DuckDB recenti)
+    CAST(geo_shape AS VARCHAR) AS geo_shape
 FROM raw_input
 WHERE codarco IS NOT NULL AND codvia IS NOT NULL
 
--- ESCLUSA: `geo_shape` (GEOMETRY, LineString dell'arco). Non utilizzabile senza
--- l'estensione spatial e inutilizzata da ogni consumer attuale: gli archi
--- servono per il quartiere e per la lunghezza, non per la geometria di linea.
+-- Nessuna colonna della fonte è esclusa: `geo_shape` (LineString) resta in WKT.
