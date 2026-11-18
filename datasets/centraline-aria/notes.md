@@ -96,3 +96,26 @@ Va riesaminato se il Comune pubblica una revisione dei dati 2024.
   produrrebbero una barra isolata alle 23:00.
 - **`giorni_rilevati` = giorni distinti, non righe**: con agenti orari la vecchia definizione
   (COUNT(*)) restituiva le ore, non i giorni.
+
+## Geografia: perché non c'è (scelta dichiarata, non dimenticanza)
+
+Le centraline non hanno `quartiere`/`zona`, e non è una svista:
+
+- **La fonte non ha coordinate.** `centraline-qualita-aria` espone solo
+  `id, reftime, stazione, value, agente_atm`; `dati-centraline-bologna-storico` solo
+  `cod_staz, agente, data_inizio, data_fine, valore, um`. Nessun campo geo e nessuna geometria
+  nei metadati ODS (verificato 2026-11-18): non c'è niente da leggere.
+- **L'unica copia era in `mapping/stazioni-aria.csv`** (3 righe: lon/lat a 3 decimali, ~100 m di
+  precisione, provenienza non documentata). È stata rimossa con la pulizia del 2026-11-18 perché
+  nessun dataset la leggeva; è recuperabile da git con
+  `git show 4c5e4a7:mapping/stazioni-aria.csv`. Conteneva informazione **non riproducibile**:
+  giudicarla "morta" guardando chi la consumava è stato un errore.
+- **La via corretta è un'anagrafica autoritativa delle stazioni**: ARPAE (rete regionale, che
+  classifica anche il tipo di stazione — Giardini Margherita fondo urbano, Porta San Felice
+  traffico, Via Chiarini fondo suburbano) o EEA *Air Quality e-Reporting* (metadata con lat/lon
+  per stazione). Non è un URL pronto: è un **intake**, valutato e rimandato perché riguarda
+  3 stazioni.
+
+Conseguenza dichiarata: le analisi aria ↔ traffico restano a scala di città o di singola
+stazione, non di quartiere. Se serve la geografia, la strada è l'intake dell'anagrafica — non
+un match per nome via, che sarebbe un rattoppo.

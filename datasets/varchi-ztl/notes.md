@@ -42,3 +42,12 @@ Quirk della fonte, rischi noti, decisioni metodologiche.
 - **Benchmark nel mart**: `quota_pct` + `rank_varco` (PERCENT_RANK) seguono il pattern comuni/sintesi.
 - **`source_id`**: `comune_bologna_opendata` placeholder — da registrare in SO (stessa nota degli altri candidate).
 - **Portabilità**: il `dataset.yml` usa un path assoluto per il `local_file` (convenzione POC locale). Non riproducibile su altre macchine/CI senza prima generare il mergiato e aggiornare il path — da risolvere in Fase 5 (job CI dedicato + path relativo/configurabile).
+
+## Colonne fuori dal clean (dichiarate)
+
+Clean **fedele** al raw mergiato: nessuna colonna persa. `coordinate` (geo_point_2d) è stata
+decodificata in `longitudine`/`latitudine` dallo script di bootstrap, come documentato sopra.
+
+`descrizione` è stata aggiunta il 2026-11-18: era l'unica colonna del raw che non arrivava al
+clean (posizione leggibile del varco, es. "piazza Santo Stefano"). Recuperata perché il clean
+deve essere fedele, non perché servisse a un mart.

@@ -26,18 +26,42 @@ clean:
   required_columns:
     - anno_run
     - civkey
+    - id_civ
+    - partkey
     - codvia
     - civico
     - subciv
+    - ncivsub
+    - indirizzo_completo
     - via
+    - cap
     - quartiere
     - zona_codice
     - zona
     - area_statistica
+    - cod_area_statistica
     - zona_prossimita
+    - centro_storico
+    - localita_istat
+    - cod_localita_istat
+    - sezione_istat
+    - sez_2011
+    - sez_2001
+    - sez_1991
+    - sez_1981
     - bacino_scuola
+    - bacino_scuola_0
+    - bacino_scuola_1
+    - codfab
+    - codarco
+    - codice_ann
+    - codice_ans
+    - data_istituzione
+    - data_variazione
     - lat
     - lon
+    - x_utm
+    - y_utm
   validate:
     min_rows: 70000
     not_null: [civkey, quartiere, zona]

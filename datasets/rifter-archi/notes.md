@@ -51,3 +51,15 @@ viale Ercolani (anello). Entrambe le assegnazioni sono difendibili.
 
 Conclusione: il metodo è pronto per i dataset puntuali senza codice via (varchi, centraline).
 Per i varchi non conviene rigenerare il mapping: è già corretto dove conta, e il test lo conferma.
+
+## Colonne fuori dal clean (dichiarate)
+
+Convenzione del repo: clean **fedele alla fonte**, mart come viste. L'unica esclusa:
+
+| Colonna fonte | Perché è fuori |
+|---|---|
+| `geo_shape` | GEOMETRY (LineString dell'arco): non usabile senza `spatial` e non serve — gli archi servono per il quartiere e la lunghezza, non per la geometria di linea |
+
+Rinomine (nessuna perdita): `nomevia` → `nome_via`, `nomequart` → `quartiere`,
+`numquart` → `num_quartiere`, `lunghez` → `lunghezza_m`, `cod_nodo1/2` → `nodo_da`/`nodo_a`,
+`civico_mas` → `civico_max`, `data_istit` → `data_istituzione`, `geo_point_2d` → `lat`/`lon`.

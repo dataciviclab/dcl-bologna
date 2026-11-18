@@ -40,7 +40,16 @@ clean:
     - a_via
     - nodo_da
     - nodo_a
+    - esponente_min
+    - esponente_max
+    - esponente_1
+    - esponente_2
+    - civico_min_0
+    - civico_max_0
+    - data_istituzione
     - codice_ans
+    - lat
+    - lon
     - lat
     - lon
   validate:

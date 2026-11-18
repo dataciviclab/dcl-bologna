@@ -11,16 +11,46 @@
 --      (OOM anche con memory_limit 2GB). GROUP BY: 0.7s.
 --   (lon/lat già decodificate dal WKB nello script di merge)
 --
+--   4. geografia amministrativa (quartiere, zona, area statistica, zona di
+--      prossimità) dal civico più vicino: support dataset `rifter-civici`.
+--      I varchi non espongono `codvia`, quindi il criterio è la distanza.
+--
 -- Chiave: (data, varco) unica. primary_key del clean.
 
+WITH punti AS (
+    SELECT varco, max(longitudine) AS lon, max(latitudine) AS lat
+    FROM raw_input WHERE varco IS NOT NULL
+    GROUP BY varco
+),
+civici AS (
+    SELECT quartiere, zona, area_statistica, zona_prossimita, via, civico, lat, lon
+    FROM read_parquet('{support.civici.clean}')
+    WHERE lat IS NOT NULL AND lon IS NOT NULL
+),
+vicino AS (
+    -- civico più vicino per varco (haversine, raggio 6371 km)
+    SELECT
+        p.varco,
+        c.quartiere, c.zona, c.area_statistica, c.zona_prossimita,
+        c.via AS via_civico, c.civico,
+        2 * 6371000 * asin(sqrt(
+            pow(sin(radians(c.lat - p.lat) / 2), 2)
+            + cos(radians(p.lat)) * cos(radians(c.lat))
+              * pow(sin(radians(c.lon - p.lon) / 2), 2)
+        )) AS distanza_m
+    FROM punti p
+    CROSS JOIN civici c
+    QUALIFY ROW_NUMBER() OVER (PARTITION BY p.varco ORDER BY distanza_m) = 1
+)
 SELECT
-    CAST(EXTRACT(YEAR FROM data) AS INTEGER) AS anno,
-    CAST(data AS TIMESTAMP) AS data,
+    CAST(EXTRACT(YEAR FROM raw_input.data) AS INTEGER) AS anno,
+    CAST(raw_input.data AS TIMESTAMP) AS data,
 
-    cast_int(varco) AS varco,
+    cast_int(raw_input.varco) AS varco,
     max(normalize_string(nome_varco)) AS nome_varco,
     max(normalize_string(direzione)) AS direzione,
     max(normalize_string(tipologia_varco)) AS tipologia_varco,
+    max(normalize_string(descrizione))    AS descrizione,
 
     cast_bigint(max(totale_passaggi))      AS totale_passaggi,
     cast_bigint(max(auto_furgoni))         AS auto_furgoni,
@@ -36,11 +66,20 @@ SELECT
     cast_bigint(max(segnalazioni))         AS segnalazioni,
 
     cast_double(max(longitudine)) AS longitudine,
-    cast_double(max(latitudine))  AS latitudine
+    cast_double(max(latitudine))  AS latitudine,
+
+    max(v.quartiere)        AS quartiere,
+    max(v.zona)             AS zona,
+    max(v.area_statistica)  AS area_statistica,
+    max(v.zona_prossimita)  AS zona_prossimita,
+    max(v.via_civico)       AS via_civico,
+    max(v.civico)           AS civico,
+    max(ROUND(v.distanza_m)) AS distanza_civico_m
 
 FROM raw_input
 -- Coda 2018: la fonte ha 1 sola ora (2018-12-31 23:00-23:45, 240 righe).
 -- Il periodo del dataset parte dal 2019: un "anno 2018" di 1 ora entra
 -- nei mart come anno pieno (giorni_rilevati=1, passaggi/giorno falsati).
-WHERE CAST(data AS TIMESTAMP) >= TIMESTAMP '2019-01-01'
-GROUP BY data, varco
+LEFT JOIN vicino v ON cast_int(raw_input.varco) = v.varco
+WHERE CAST(raw_input.data AS TIMESTAMP) >= TIMESTAMP '2019-01-01'
+GROUP BY raw_input.data, raw_input.varco

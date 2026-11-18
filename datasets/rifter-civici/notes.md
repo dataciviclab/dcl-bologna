@@ -30,3 +30,18 @@ Quirk della fonte, rischi noti, decisioni metodologiche.
   sezioni ISTAT, UTM), per tenerlo leggero.
 - **Nessuna assegnazione nel dataset**: il "civico più vicino" si calcola nel consumer, perché la
   scelta (e la soglia di distanza) dipende dal dato.
+
+## Colonne fuori dal clean (dichiarate)
+
+Convenzione del repo: il clean è **fedele alla fonte** (rinomine, tipi, normalizzazioni),
+i mart sono le viste con quello che serve. Restano quindi tutte le colonne della fonte;
+l'unica esclusa è dichiarata qui.
+
+| Colonna fonte | Perché è fuori |
+|---|---|
+| `geo_shape` | GEOMETRY (GeoJSON della particella): non usabile senza l'estensione `spatial`, pesa ~10× il resto, e nessun consumer usa la geometria del civico — per la posizione bastano `lat`/`lon` (dal WKT di `geo_point_2d`) |
+
+Rinomine applicate (nessuna informazione persa): `denominazi` → `via`, `zona_nome` → `zona`,
+`zona` → `zona_codice`, `area_stati` → `area_statistica`, `zona_pross` → `zona_prossimita`,
+`bacino_scu` → `bacino_scuola`, `data_istit` → `data_istituzione`, `data_varia` → `data_variazione`,
+`geo_point_2d` → `lat`/`lon`, `x_utm_etrs`/`y_utm_etrs` → `x_utm`/`y_utm`.
