@@ -28,3 +28,10 @@ Quirk della fonte, rischi noti, decisioni metodologiche.
 - **Flag `quartiere_attuale` nel mart** (review PR #45): separa i 6 quartieri correnti dai valori soppressi nel 2016 (Borgo Panigale, Porto, Reno, San Donato, San Vitale, Saragozza). Chi consuma il mart filtra `quartiere_attuale = TRUE` — l'analisi 12 usa il flag, non un NOT IN hardcoded.
 - **`area_statistica` in MAIUSCOLO nella fonte** (verificato: 17.659/17.659 righe UPPER): reddito-mediano e indici-fragilita usano case normale (es. `Marconi-2` vs `MARCONI-2`). Il join cross del blocco economia richiede **`UPPER(area_statistica)`** su entrambi i lati — documentato per l'analisi cross (13). Match verificato: 88 aree su tutti e 3 i dataset con UPPER.
 - **Due definizioni di "centro storico"** (review PR #45): (a) campo `centro_storico` della fonte → 35,9% degli attivi; (b) quartieri Santo Stefano + Porto-Saragozza → 51,9%. La discussion #44 usa la (b); l'analisi Q1 usa la (a). Da definire quale è canonica nel Lab.
+
+## Snapshot, non serie
+
+Il dataset non dichiara `time_coverage`: è uno **snapshot 2026** i cui record portano date di
+apertura dal 1976 e di cessazione fino al 2026. Prima dichiarava `1976-2026`, che il catalogo
+legge come "serie di 50 anni" — non è così, e un consumatore che cercasse un trend ne
+troverebbe uno inesistente. L'intervallo interno resta nel README.

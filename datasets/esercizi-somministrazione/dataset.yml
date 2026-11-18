@@ -7,8 +7,11 @@ dataset:
   tags: [commercio, esercizi, tessuto_commerciale, bologna]
   category: economia
   years: [2026]
+  # SNAPSHOT: il periodo dichiarato è l'anno dello snapshot, non l'intervallo
+  # delle date interne (aperture dal 1976). Dichiarare 1976-2026 farebbe
+  # leggere al catalogo una serie di 50 anni che non esiste.
   time_coverage:
-    start_year: 1976
+    start_year: 2026
     end_year: 2026
 
 raw:

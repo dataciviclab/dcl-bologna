@@ -7,8 +7,10 @@ dataset:
   tags: [territorio, strade, toponomastica, quartiere, rifter, bologna]
   category: territorio
   years: [2026]
+  # SNAPSHOT della rete: il periodo è l'anno dello snapshot, non l'intervallo
+  # di `data_istituzione` (1990-2026).
   time_coverage:
-    start_year: 1990
+    start_year: 2026
     end_year: 2026
 
 raw:
