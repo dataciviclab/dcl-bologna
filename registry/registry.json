@@ -1295,18 +1295,6 @@
           "description": ""
         },
         {
-          "name": "civico_min",
-          "type": "INTEGER",
-          "role": "metric",
-          "description": ""
-        },
-        {
-          "name": "civico_max",
-          "type": "INTEGER",
-          "role": "metric",
-          "description": ""
-        },
-        {
           "name": "da_via",
           "type": "VARCHAR",
           "role": "dimension",
@@ -1331,9 +1319,63 @@
           "description": ""
         },
         {
-          "name": "codice_ans",
+          "name": "civico_min",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "civico_max",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "esponente_min",
           "type": "VARCHAR",
           "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "esponente_max",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "esponente_1",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "esponente_2",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "civico_min_0",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "civico_max_0",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "data_istituzione",
+          "type": "DATE",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "codice_ans",
+          "type": "BIGINT",
+          "role": "metric",
           "description": ""
         },
         {
@@ -1346,6 +1388,12 @@
           "name": "lon",
           "type": "DOUBLE",
           "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "geo_shape",
+          "type": "VARCHAR",
+          "role": "dimension",
           "description": ""
         }
       ],
@@ -1394,6 +1442,18 @@
           "description": ""
         },
         {
+          "name": "id_civ",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "partkey",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
           "name": "codvia",
           "type": "INTEGER",
           "role": "metric",
@@ -1412,7 +1472,25 @@
           "description": ""
         },
         {
+          "name": "ncivsub",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "indirizzo_completo",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
           "name": "via",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "cap",
           "type": "VARCHAR",
           "role": "dimension",
           "description": ""
@@ -1442,14 +1520,116 @@
           "description": ""
         },
         {
+          "name": "cod_area_statistica",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
           "name": "zona_prossimita",
           "type": "VARCHAR",
           "role": "dimension",
           "description": ""
         },
         {
+          "name": "centro_storico",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "localita_istat",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "cod_localita_istat",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "sezione_istat",
+          "type": "BIGINT",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "sez_2011",
+          "type": "BIGINT",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "sez_2001",
+          "type": "BIGINT",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "sez_1991",
+          "type": "BIGINT",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "sez_1981",
+          "type": "BIGINT",
+          "role": "metric",
+          "description": ""
+        },
+        {
           "name": "bacino_scuola",
           "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "bacino_scuola_0",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "bacino_scuola_1",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "codfab",
+          "type": "BIGINT",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "codarco",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "codice_ann",
+          "type": "BIGINT",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "codice_ans",
+          "type": "BIGINT",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "data_istituzione",
+          "type": "DATE",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "data_variazione",
+          "type": "DATE",
           "role": "dimension",
           "description": ""
         },
@@ -1463,6 +1643,24 @@
           "name": "lon",
           "type": "DOUBLE",
           "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "x_utm",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "y_utm",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "geo_shape",
+          "type": "VARCHAR",
+          "role": "dimension",
           "description": ""
         }
       ],
@@ -1525,6 +1723,61 @@
           "type": "BIGINT",
           "role": "metric",
           "description": ""
+        },
+        {
+          "name": "codice_spira",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "codice",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "codice_arco",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "nodo_da",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "nodo_a",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "codimpsem",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "angolo",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "ordinanza",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "stato",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": "",
+          "semantic_type": "country_code"
         },
         {
           "name": "nome_via",
@@ -1721,6 +1974,12 @@
           "description": ""
         },
         {
+          "name": "descrizione",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
           "name": "totale_passaggi",
           "type": "BIGINT",
           "role": "metric",
@@ -1800,6 +2059,48 @@
         },
         {
           "name": "latitudine",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "quartiere",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "zona",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "area_statistica",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "zona_prossimita",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "via_civico",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "civico",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "distanza_civico_m",
           "type": "DOUBLE",
           "role": "metric",
           "description": ""
@@ -2188,7 +2489,7 @@
       "detail": "anno 2026 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20261118T103537Z_d06ebfb1",
+        "run_id": "20261118T145912Z_309d5a02",
         "year": 2026,
         "status": "SUCCESS",
         "quality_score": {
@@ -2197,17 +2498,17 @@
           "mart": 100
         },
         "output_rows": {
-          "clean": 763015,
+          "clean": 763186,
           "mart": 3959
         },
         "output_bytes": {
-          "raw": 3526733,
-          "clean": 3183120,
-          "mart": 31201
+          "raw": 3527501,
+          "clean": 3177876,
+          "mart": 31141
         },
-        "started_at": "2026-11-18T10:35:37.723781+00:00",
-        "finished_at": "2026-11-18T10:37:13.637492+00:00",
-        "duration_seconds": 95.914
+        "started_at": "2026-11-18T14:59:12.810027+00:00",
+        "finished_at": "2026-11-18T15:00:45.653325+00:00",
+        "duration_seconds": 92.843
       }
     },
     {
@@ -2518,12 +2819,12 @@
       "detail": "anno 2026 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20261118T133129Z_7b1f53c8",
+        "run_id": "20261118T150046Z_92aaca5e",
         "year": 2026,
         "status": "SUCCESS",
         "quality_score": {
           "raw": 100,
-          "clean": 95,
+          "clean": 100,
           "mart": 100
         },
         "output_rows": {
@@ -2532,12 +2833,12 @@
         },
         "output_bytes": {
           "raw": 1278189,
-          "clean": 363279,
-          "mart": 34725
+          "clean": 1128662,
+          "mart": 34822
         },
-        "started_at": "2026-11-18T13:31:29.301197+00:00",
-        "finished_at": "2026-11-18T13:31:32.093056+00:00",
-        "duration_seconds": 2.792
+        "started_at": "2026-11-18T15:00:46.188657+00:00",
+        "finished_at": "2026-11-18T15:00:49.225463+00:00",
+        "duration_seconds": 3.037
       }
     },
     {
@@ -2548,12 +2849,12 @@
       "detail": "anno 2026 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20261118T133132Z_d77f5ccf",
+        "run_id": "20261118T150049Z_30f79faa",
         "year": 2026,
         "status": "SUCCESS",
         "quality_score": {
           "raw": 100,
-          "clean": 95,
+          "clean": 100,
           "mart": 100
         },
         "output_rows": {
@@ -2562,12 +2863,12 @@
         },
         "output_bytes": {
           "raw": 10012979,
-          "clean": 2016575,
-          "mart": 1809
+          "clean": 6806100,
+          "mart": 1835
         },
-        "started_at": "2026-11-18T13:31:32.606094+00:00",
-        "finished_at": "2026-11-18T13:31:55.709459+00:00",
-        "duration_seconds": 23.103
+        "started_at": "2026-11-18T15:00:49.759469+00:00",
+        "finished_at": "2026-11-18T15:01:12.513985+00:00",
+        "duration_seconds": 22.755
       }
     },
     {
@@ -2578,7 +2879,7 @@
       "detail": "anni 2022-2026 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20261117T222619Z_cc95ebe0",
+        "run_id": "20261118T150452Z_28eca969",
         "year": 2026,
         "status": "SUCCESS",
         "quality_score": {
@@ -2591,13 +2892,13 @@
           "mart": 8000
         },
         "output_bytes": {
-          "raw": 14933673,
-          "clean": 11327136,
-          "mart": 61488
+          "raw": 14934035,
+          "clean": 14800875,
+          "mart": 61760
         },
-        "started_at": "2026-11-17T22:26:19.372681+00:00",
-        "finished_at": "2026-11-17T22:27:04.028782+00:00",
-        "duration_seconds": 44.656
+        "started_at": "2026-11-18T15:04:52.507907+00:00",
+        "finished_at": "2026-11-18T15:05:37.290719+00:00",
+        "duration_seconds": 44.783
       }
     },
     {
@@ -2638,7 +2939,7 @@
       "detail": "anno 2026 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20261118T103816Z_4b3d56c1",
+        "run_id": "20261118T150537Z_adba03c2",
         "year": 2026,
         "status": "SUCCESS",
         "quality_score": {
@@ -2651,13 +2952,13 @@
           "mart": 788
         },
         "output_bytes": {
-          "raw": 207444038,
-          "clean": 137299135,
-          "mart": 16898
+          "raw": 207746564,
+          "clean": 170220766,
+          "mart": 16919
         },
-        "started_at": "2026-11-18T10:38:16.185458+00:00",
-        "finished_at": "2026-11-18T10:38:37.962850+00:00",
-        "duration_seconds": 21.777
+        "started_at": "2026-11-18T15:05:37.961220+00:00",
+        "finished_at": "2026-11-18T15:06:29.170451+00:00",
+        "duration_seconds": 51.209
       }
     }
   ],
@@ -2694,10 +2995,16 @@
             "name": "Esercizi Somministrazione",
             "column": "stato",
             "semantic_type": "country_code"
+          },
+          {
+            "slug": "spire_traffico",
+            "name": "Traffico fuori ZTL (spire)",
+            "column": "stato",
+            "semantic_type": "country_code"
           }
         ],
         "types": {
-          "country_code": 1
+          "country_code": 2
         }
       },
       "Tempo": {
