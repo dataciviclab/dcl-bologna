@@ -34,7 +34,7 @@ Bologna ha uno dei portali open data comunali più maturi d'Italia:
 
 ## Cosa contiene
 
-15 dataset configurati in `datasets/<slug>/` con lo standard candidate del Lab
+16 dataset configurati in `datasets/<slug>/` con lo standard candidate del Lab
 (`dataset.yml` + `sql/clean.sql` + `sql/mart_*.sql`).
 
 | Dataset | Periodo | Tema |
@@ -54,6 +54,7 @@ Bologna ha uno dei portali open data comunali più maturi d'Italia:
 | [Reddito mediano](datasets/reddito-mediano/) | 2016–2024 | Economia |
 | [Esercizi somministrazione](datasets/esercizi-somministrazione/) | 2026 | Economia |
 | [Incarichi collaborazione](datasets/incarichi/) | 2012–2026 | PA |
+| [RIFTER — archi stradali](datasets/rifter-archi/) | 2026 (snapshot) | Territorio |
 
 ## Come accedere ai dati
 
@@ -97,7 +98,7 @@ Le analisi SQL sono in `analisi/` e leggono dai parquet clean.
 ## Roadmap
 
 - [x] Scoring pilota del portale (702 dataset)
-- [x] 15 dataset attivi con pipeline toolkit
+- [x] 16 dataset attivi con pipeline toolkit
 - [x] Dashboard Streamlit (mappa quartieri, KPI per tema, SQL explorer)
 
 ## Architettura

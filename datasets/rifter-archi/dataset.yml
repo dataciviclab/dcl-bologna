@@ -1,0 +1,78 @@
+root: "../../out"
+schema_version: 1
+
+dataset:
+  name: "rifter_archi"
+  source_id: "comune_bologna_opendata"
+  tags: [territorio, strade, toponomastica, quartiere, rifter, bologna]
+  category: territorio
+  years: [2026]
+  time_coverage:
+    start_year: 1990
+    end_year: 2026
+
+raw:
+  output_policy: overwrite
+  sources:
+    - name: "ods_rifter_archi"
+      type: "http_file"
+      args:
+        # CSV, non parquet: nel CSV la geometria e' testo ("44.53, 11.35") e si
+        # legge senza l'estensione spatial. Nel parquet e' GEOMETRY e ST_X/ST_Y
+        # non sono disponibili nel toolkit.
+        url: "https://opendata.comune.bologna.it/api/explore/v2.1/catalog/datasets/rifter_arcstra_li/exports/csv?delimiter=%3B"
+        filename: "rifter_archi.csv"
+      primary: true
+
+clean:
+  sql: "sql/clean.sql"
+  read:
+    source: auto
+    mode: latest
+    delim: ";"
+    encoding: utf-8
+    all_varchar: true
+  required_columns:
+    - anno_run
+    - codarco
+    - codvia
+    - nome_via
+    - quartiere
+    - num_quartiere
+    - lunghezza_m
+    - civico_min
+    - civico_max
+    - da_via
+    - a_via
+    - nodo_da
+    - nodo_a
+    - codice_ans
+    - lat
+    - lon
+  validate:
+    min_rows: 7000
+    not_null: [codarco, codvia, quartiere]
+    primary_key: [codarco]
+
+mart:
+  tables:
+    - name: "mart_via_quartiere"
+      sql: "sql/mart_via_quartiere.sql"
+    - name: "mart_quartiere_archi"
+      sql: "sql/mart_quartiere_archi.sql"
+  required_tables:
+    - "mart_via_quartiere"
+    - "mart_quartiere_archi"
+  validate:
+    table_rules:
+      mart_via_quartiere:
+        required_columns: [codvia, nome_via, quartiere, archi, lunghezza_m]
+        primary_key: [codvia, quartiere]
+        min_rows: 500
+      mart_quartiere_archi:
+        required_columns: [quartiere, archi, lunghezza_km]
+        primary_key: [quartiere]
+        min_rows: 6
+
+validation:
+  fail_on_error: true
