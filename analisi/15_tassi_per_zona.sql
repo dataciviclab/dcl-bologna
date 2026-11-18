@@ -28,7 +28,9 @@ bici_zona AS (
     SELECT
         zona,
         COUNT(DISTINCT colonnina) AS colonnine,
-        COUNT(DISTINCT data) AS giorni,
+        -- `data` è un TIMESTAMP ORARIO: COUNT(DISTINCT data) darebbe le ore
+        -- (8.759 nel 2025), non i giorni. Il CAST a DATE è obbligatorio.
+        COUNT(DISTINCT CAST(data AS DATE)) AS giorni,
         SUM(totale) AS passaggi_bici
     FROM read_parquet('out/data/clean/colonnine_bici/*/colonnine_bici_*_clean.parquet')
     WHERE anno = 2025 AND zona IS NOT NULL
@@ -38,19 +40,21 @@ SELECT
     b.zona,
     b.colonnine,
     b.giorni,
-    ROUND(b.passaggi_bici * 1.0 / b.giorni) AS bici_giorno,
+    ROUND(b.passaggi_bici * 1.0 / b.giorni) AS bici_media_giornaliera,
     p.residenti,
-    ROUND(1000.0 * (b.passaggi_bici * 1.0 / b.giorni) / p.residenti, 2) AS bici_giorno_per_1000
+    ROUND(1000.0 * (b.passaggi_bici * 1.0 / b.giorni) / p.residenti, 2)
+        AS bici_media_giornaliera_per_1000
 FROM bici_zona b
 JOIN pop_zona p USING (zona)
-ORDER BY bici_giorno_per_1000 DESC;
+ORDER BY bici_media_giornaliera_per_1000 DESC;
 
 -- 2. Passaggi auto per 1.000 abitanti per quartiere (spire, gen-ott 2025)
 WITH via_quartiere AS (
-    SELECT codvia, MAX(quartiere) AS quartiere
+    -- Una via può stare su due quartieri (120 su 1.972). Il consumer sceglie:
+    -- qui il quartiere con più archi, come dichiara il commento del mart.
+    SELECT codvia, arg_max(quartiere, archi) AS quartiere
     FROM read_parquet('out/data/mart/rifter_archi/2026/mart_via_quartiere.parquet')
     GROUP BY codvia
-    HAVING COUNT(*) >= 1
 ),
 spire_via AS (
     SELECT
@@ -92,7 +96,7 @@ zone_popolazione AS (
 quartieri_spire AS (
     SELECT DISTINCT q.quartiere
     FROM read_parquet('out/data/clean/spire_traffico/*/spire_traffico_*_clean.parquet') s
-    JOIN (SELECT codvia, MAX(quartiere) AS quartiere
+    JOIN (SELECT codvia, arg_max(quartiere, archi) AS quartiere
           FROM read_parquet('out/data/mart/rifter_archi/2026/mart_via_quartiere.parquet')
           GROUP BY codvia) q ON s.codice_via = q.codvia
     WHERE s.anno = 2025
