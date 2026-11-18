@@ -2,7 +2,7 @@
   "schema_version": 1,
   "repo": "dcl-bologna",
   "source_repo": "dataciviclab/dcl-bologna",
-  "updated_at": "2026-11-17",
+  "updated_at": "2026-11-18",
   "datasets": [
     {
       "slug": "bolognawifi_matrice",
@@ -1890,7 +1890,7 @@
       "detail": "anno 2026 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20261117T222102Z_6f9e8da3",
+        "run_id": "20261118T103537Z_d06ebfb1",
         "year": 2026,
         "status": "SUCCESS",
         "quality_score": {
@@ -1899,17 +1899,17 @@
           "mart": 100
         },
         "output_rows": {
-          "clean": 763032,
-          "mart": 3996
+          "clean": 763015,
+          "mart": 3959
         },
         "output_bytes": {
-          "raw": 3527198,
-          "clean": 3223324,
-          "mart": 31623
+          "raw": 3526733,
+          "clean": 3183120,
+          "mart": 31201
         },
-        "started_at": "2026-11-17T22:21:02.244602+00:00",
-        "finished_at": "2026-11-17T22:22:34.754351+00:00",
-        "duration_seconds": 92.51
+        "started_at": "2026-11-18T10:35:37.723781+00:00",
+        "finished_at": "2026-11-18T10:37:13.637492+00:00",
+        "duration_seconds": 95.914
       }
     },
     {
@@ -1920,7 +1920,7 @@
       "detail": "anno 2026 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20261101T125809Z_cef3abf6",
+        "run_id": "20261118T103714Z_2f60cf5b",
         "year": 2026,
         "status": "SUCCESS",
         "quality_score": {
@@ -1929,17 +1929,17 @@
           "mart": 100
         },
         "output_rows": {
-          "clean": 570224,
+          "clean": 580472,
           "mart": 267
         },
         "output_bytes": {
-          "raw": 3202126,
-          "clean": 5082137,
-          "mart": 8425
+          "raw": 3259663,
+          "clean": 5203799,
+          "mart": 8449
         },
-        "started_at": "2026-11-01T12:58:09.678075+00:00",
-        "finished_at": "2026-11-01T12:59:19.224667+00:00",
-        "duration_seconds": 69.547
+        "started_at": "2026-11-18T10:37:14.266086+00:00",
+        "finished_at": "2026-11-18T10:38:16.104088+00:00",
+        "duration_seconds": 61.838
       }
     },
     {
@@ -2280,7 +2280,7 @@
       "detail": "anno 2026 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20261101T130520Z_a525dc8b",
+        "run_id": "20261118T103816Z_4b3d56c1",
         "year": 2026,
         "status": "SUCCESS",
         "quality_score": {
@@ -2289,17 +2289,17 @@
           "mart": 100
         },
         "output_rows": {
-          "clean": 19337091,
-          "mart": 849
+          "clean": 19574931,
+          "mart": 788
         },
         "output_bytes": {
-          "raw": 204998173,
-          "clean": 135631365,
-          "mart": 17607
+          "raw": 207444038,
+          "clean": 137299135,
+          "mart": 16898
         },
-        "started_at": "2026-11-01T13:05:20.674344+00:00",
-        "finished_at": "2026-11-01T13:05:36.881487+00:00",
-        "duration_seconds": 16.207
+        "started_at": "2026-11-18T10:38:16.185458+00:00",
+        "finished_at": "2026-11-18T10:38:37.962850+00:00",
+        "duration_seconds": 21.777
       }
     }
   ],
