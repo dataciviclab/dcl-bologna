@@ -11,7 +11,8 @@ Quirk della fonte, rischi noti, decisioni metodologiche.
 - **Geometria**: il parquet porta `geo_point_2d` come GEOMETRY e servirebbe l'estensione
   `spatial` per `ST_X`/`ST_Y`. Il **CSV** invece la espone come testo ("44.53, 11.35"):
   la sorgente è quindi il CSV e il clean espone `lat`/`lon` come DOUBLE, senza estensione.
-  `geo_shape` (GeoJSON) è esclusa.
+  anche `geo_shape` resta, come WKT (`CAST(geo_shape AS VARCHAR)`): è un LINESTRING, quindi
+  informazione non altrimenti disponibile in questo dataset.
 - **Unità di misura delle coordinate**: `geo_point_2d` è "lat, lon" — non "lon, lat". Invertirle
   non dà errore, dà distanze sbagliate di migliaia di km: è l'errore da non fare.
 - **`civico_min`/`civico_mas`** sono i civici estremi dell'arco: utili per capire il verso, non
@@ -54,11 +55,8 @@ Per i varchi non conviene rigenerare il mapping: è già corretto dove conta, e 
 
 ## Colonne fuori dal clean (dichiarate)
 
-Convenzione del repo: clean **fedele alla fonte**, mart come viste. L'unica esclusa:
-
-| Colonna fonte | Perché è fuori |
-|---|---|
-| `geo_shape` | GEOMETRY (LineString dell'arco): non usabile senza `spatial` e non serve — gli archi servono per il quartiere e la lunghezza, non per la geometria di linea |
+Convenzione del repo: clean **fedele alla fonte**, mart come viste. **Nessuna colonna della
+fonte è esclusa**: `geo_shape` resta come WKT di linea.
 
 Rinomine (nessuna perdita): `nomevia` → `nome_via`, `nomequart` → `quartiere`,
 `numquart` → `num_quartiere`, `lunghez` → `lunghezza_m`, `cod_nodo1/2` → `nodo_da`/`nodo_a`,

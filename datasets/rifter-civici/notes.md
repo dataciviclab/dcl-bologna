@@ -9,7 +9,8 @@ Quirk della fonte, rischi noti, decisioni metodologiche.
 - **`zona` è un codice** (lettera, es. "F"), il nome sta in `zona_nome` → nel clean: `zona_codice` e `zona`.
 - **`area_stati`** contiene il nome dell'area statistica ("IRNERIO-2"), non un codice.
 - **Geometria**: `geo_point_2d` è GEOMETRY; `CAST(... AS VARCHAR)` dà WKT "POINT (lon lat)" e si
-  estraggono lon/lat senza l'estensione `spatial`. `geo_shape` è esclusa.
+  estraggono lon/lat senza l'estensione `spatial`; `geo_shape` resta nel clean come WKT
+  (`CAST(geo_shape AS VARCHAR)`), forma leggibile anche da pyarrow/pandas.
 - **Coordinate nel WKT**: ordine **lon, lat**. Invertirle non dà errore, dà distanze sbagliate.
 
 ## Rischi noti
@@ -26,20 +27,22 @@ Quirk della fonte, rischi noti, decisioni metodologiche.
 
 - **Support, non mapping**: il dataset è pensato per essere consumato come `support: type: dataset`,
   con placeholder `{support.civici.clean}`. Il toolkit lo esegue prima del candidate.
-- **Clean = lookup**: il clean contiene solo le colonne utili al join (niente campi catastali,
-  sezioni ISTAT, UTM), per tenerlo leggero.
+- **Clean fedele, non lookup**: il clean tiene **tutte** le colonne della fonte — comprese quelle
+  che oggi nessun consumer usa (`cap`, `sezione_istat`, `codfab`, `codarco`, bacini scolastici,
+  UTM, date di istituzione/variazione, `indirizzo_completo`). Sono chiavi di join potenziali
+  (sezioni di censimento, edifici) e costano poco: la selezione sta nei mart.
 - **Nessuna assegnazione nel dataset**: il "civico più vicino" si calcola nel consumer, perché la
   scelta (e la soglia di distanza) dipende dal dato.
 
 ## Colonne fuori dal clean (dichiarate)
 
 Convenzione del repo: il clean è **fedele alla fonte** (rinomine, tipi, normalizzazioni),
-i mart sono le viste con quello che serve. Restano quindi tutte le colonne della fonte;
-l'unica esclusa è dichiarata qui.
+i mart sono le viste con quello che serve. **Nessuna colonna della fonte è esclusa**:
+`geo_shape` è presente come WKT.
 
-| Colonna fonte | Perché è fuori |
-|---|---|
-| `geo_shape` | GEOMETRY (GeoJSON della particella): non usabile senza l'estensione `spatial`, pesa ~10× il resto, e nessun consumer usa la geometria del civico — per la posizione bastano `lat`/`lon` (dal WKT di `geo_point_2d`) |
+Nota: nei civici `geo_shape` è un POINT e duplica `geo_point_2d` (di cui si tengono le
+coordinate in `lat`/`lon`). Resta comunque, perché la regola è la fedeltà alla fonte, non la
+selezione di ciò che serve oggi.
 
 Rinomine applicate (nessuna informazione persa): `denominazi` → `via`, `zona_nome` → `zona`,
 `zona` → `zona_codice`, `area_stati` → `area_statistica`, `zona_pross` → `zona_prossimita`,

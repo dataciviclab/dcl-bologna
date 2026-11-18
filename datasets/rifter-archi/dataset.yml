@@ -51,8 +51,6 @@ clean:
     - lat
     - lon
     - geo_shape
-    - lat
-    - lon
   validate:
     min_rows: 7000
     not_null: [codarco, codvia, quartiere]

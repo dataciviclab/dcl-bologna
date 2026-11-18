@@ -31,7 +31,8 @@ in questo dataset. Stessa cosa per la zona, con il join `codvia` → `quartiere`
 
 - **Niente `spatial`**: la sorgente è il **CSV**, dove `geo_point_2d` è testo; lat/lon sono
   esposte come DOUBLE e si può calcolare una distanza (haversine) senza estensione. Il parquet
-  avrebbe richiesto `spatial` per `ST_X`/`ST_Y`. `geo_shape` (GeoJSON) resta fuori.
+  avrebbe richiesto `spatial` per `ST_X`/`ST_Y`. Anche `geo_shape` resta, come **WKT di linea**
+  (`LINESTRING (…)`): è l'unica geometria che porta informazione non altrimenti presente qui.
 - **I varchi**: non hanno `codvia`, quindi non entrano nel crosswalk per codice. Con lat/lon qui
   si può assegnare il quartiere per arco più vicino: verificato al **94,9%** di accordo con il
   mapping manuale storico (vedi `notes.md`).
