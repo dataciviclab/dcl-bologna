@@ -233,10 +233,34 @@
           "description": "Zona"
         },
         {
+          "name": "area_statistica",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "zona_prossimita",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
           "name": "via",
           "type": "VARCHAR",
           "role": "dimension",
           "description": "Via della colonnina"
+        },
+        {
+          "name": "civico",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "distanza_civico_m",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
         },
         {
           "name": "direzione_centro",
@@ -1209,6 +1233,250 @@
       ]
     },
     {
+      "slug": "rifter_archi",
+      "name": "Rifter Archi",
+      "description": "",
+      "source": "",
+      "source_id": "comune_bologna_opendata",
+      "period": {
+        "start": 1990,
+        "end": 2026
+      },
+      "tags": [
+        "territorio",
+        "strade",
+        "toponomastica",
+        "quartiere",
+        "rifter",
+        "bologna"
+      ],
+      "category": "territorio",
+      "columns": [
+        {
+          "name": "anno_run",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "codarco",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "codvia",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "nome_via",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "quartiere",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "num_quartiere",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "lunghezza_m",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "civico_min",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "civico_max",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "da_via",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "a_via",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "nodo_da",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "nodo_a",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "codice_ans",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "lat",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "lon",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        }
+      ],
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-clean/bologna/rifter_archi/2026/rifter_archi_2026_clean.parquet",
+        "multi_file": false
+      },
+      "stage": "incubating",
+      "mart_refs": [
+        "rifter_archi__mart_via_quartiere",
+        "rifter_archi__mart_quartiere_archi"
+      ]
+    },
+    {
+      "slug": "rifter_civici",
+      "name": "Rifter Civici",
+      "description": "",
+      "source": "",
+      "source_id": "comune_bologna_opendata",
+      "period": {
+        "start": 2026,
+        "end": 2026
+      },
+      "tags": [
+        "territorio",
+        "civici",
+        "toponomastica",
+        "quartiere",
+        "zona",
+        "area-statistica",
+        "bologna"
+      ],
+      "category": "territorio",
+      "columns": [
+        {
+          "name": "anno_run",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "civkey",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "codvia",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "civico",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "subciv",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "via",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "quartiere",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "zona_codice",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "zona",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "area_statistica",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "zona_prossimita",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "bacino_scuola",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "lat",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "lon",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        }
+      ],
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-clean/bologna/rifter_civici/2026/rifter_civici_2026_clean.parquet",
+        "multi_file": false
+      },
+      "stage": "incubating",
+      "mart_refs": [
+        "rifter_civici__mart_zona_civici"
+      ]
+    },
+    {
       "slug": "spire_traffico",
       "name": "Traffico fuori ZTL (spire)",
       "description": "Passaggi veicolari sulle strade fuori ZTL rilevati dalle spire, per via e fascia oraria",
@@ -1791,6 +2059,36 @@
       }
     },
     {
+      "slug": "rifter_archi__mart_quartiere_archi",
+      "dataset": "rifter_archi",
+      "table": "mart_quartiere_archi",
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-mart/bologna/rifter_archi/2026/mart_quartiere_archi.parquet",
+        "multi_file": false
+      }
+    },
+    {
+      "slug": "rifter_archi__mart_via_quartiere",
+      "dataset": "rifter_archi",
+      "table": "mart_via_quartiere",
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-mart/bologna/rifter_archi/2026/mart_via_quartiere.parquet",
+        "multi_file": false
+      }
+    },
+    {
+      "slug": "rifter_civici__mart_zona_civici",
+      "dataset": "rifter_civici",
+      "table": "mart_zona_civici",
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-mart/bologna/rifter_civici/2026/mart_zona_civici.parquet",
+        "multi_file": false
+      }
+    },
+    {
       "slug": "spire_traffico__mart_spire_ora",
       "dataset": "spire_traffico",
       "table": "mart_spire_ora",
@@ -1920,7 +2218,7 @@
       "detail": "anno 2026 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20261118T103714Z_2f60cf5b",
+        "run_id": "20261118T133029Z_66387703",
         "year": 2026,
         "status": "SUCCESS",
         "quality_score": {
@@ -1929,17 +2227,17 @@
           "mart": 100
         },
         "output_rows": {
-          "clean": 580472,
+          "clean": 580928,
           "mart": 267
         },
         "output_bytes": {
-          "raw": 3259663,
-          "clean": 5203799,
-          "mart": 8449
+          "raw": 3259972,
+          "clean": 5944002,
+          "mart": 8412
         },
-        "started_at": "2026-11-18T10:37:14.266086+00:00",
-        "finished_at": "2026-11-18T10:38:16.104088+00:00",
-        "duration_seconds": 61.838
+        "started_at": "2026-11-18T13:30:29.396687+00:00",
+        "finished_at": "2026-11-18T13:31:28.697891+00:00",
+        "duration_seconds": 59.301
       }
     },
     {
@@ -2210,6 +2508,66 @@
         "started_at": "2026-11-01T13:00:28.128053+00:00",
         "finished_at": "2026-11-01T13:00:28.806338+00:00",
         "duration_seconds": 0.678
+      }
+    },
+    {
+      "id": "rifter_archi",
+      "source_id": "comune_bologna_opendata",
+      "status": "ok",
+      "label": "rifter_archi",
+      "detail": "anno 2026 — mart: si",
+      "action": "",
+      "run": {
+        "run_id": "20261118T133129Z_7b1f53c8",
+        "year": 2026,
+        "status": "SUCCESS",
+        "quality_score": {
+          "raw": 100,
+          "clean": 95,
+          "mart": 100
+        },
+        "output_rows": {
+          "clean": 8048,
+          "mart": 2042
+        },
+        "output_bytes": {
+          "raw": 1278189,
+          "clean": 363279,
+          "mart": 34725
+        },
+        "started_at": "2026-11-18T13:31:29.301197+00:00",
+        "finished_at": "2026-11-18T13:31:32.093056+00:00",
+        "duration_seconds": 2.792
+      }
+    },
+    {
+      "id": "rifter_civici",
+      "source_id": "comune_bologna_opendata",
+      "status": "ok",
+      "label": "rifter_civici",
+      "detail": "anno 2026 — mart: si",
+      "action": "",
+      "run": {
+        "run_id": "20261118T133132Z_d77f5ccf",
+        "year": 2026,
+        "status": "SUCCESS",
+        "quality_score": {
+          "raw": 100,
+          "clean": 95,
+          "mart": 100
+        },
+        "output_rows": {
+          "clean": 77618,
+          "mart": 18
+        },
+        "output_bytes": {
+          "raw": 10012979,
+          "clean": 2016575,
+          "mart": 1809
+        },
+        "started_at": "2026-11-18T13:31:32.606094+00:00",
+        "finished_at": "2026-11-18T13:31:55.709459+00:00",
+        "duration_seconds": 23.103
       }
     },
     {
