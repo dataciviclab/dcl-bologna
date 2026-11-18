@@ -5,8 +5,12 @@
 --
 -- Domanda: come è cambiato il traffico veicolare in ZTL dal 2019?
 -- Nota: 2026 è parziale (anno in corso) → i confronti usano 2019-2025.
--- Nota: gli anni hanno giorni rilevati diversi (365 nel 2019, 345 nel
--- 2025) → i confronti per varco usano passaggi/giorno, non i totali.
+-- Nota: gli anni hanno giorni rilevati diversi → i confronti usano
+-- passaggi/giorno, mai i totali. I buchi non sono casuali: 2024 ha 308 giorni
+-- (mancano ago 1-20, tutto ottobre, dic 1-19) e 2025 ne ha 345 (manca gen 1-20).
+-- Per questo il confronto robusto è su finestra comparabile (gen-ott): su
+-- quella finestra 2024 = 72.402 passaggi/giorno (non 70.959) e 2024→2025 è
+-- -16,0%, non -14,0%. Il -22% 2019→2025 regge.
 -- ============================================================
 
 -- 0. Verifica copertura: anni, varchi attivi, giorni rilevati

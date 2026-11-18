@@ -61,3 +61,9 @@ fonte è esclusa**: `geo_shape` resta come WKT di linea.
 Rinomine (nessuna perdita): `nomevia` → `nome_via`, `nomequart` → `quartiere`,
 `numquart` → `num_quartiere`, `lunghez` → `lunghezza_m`, `cod_nodo1/2` → `nodo_da`/`nodo_a`,
 `civico_mas` → `civico_max`, `data_istit` → `data_istituzione`, `geo_point_2d` → `lat`/`lon`.
+
+## Snapshot, non serie
+
+Nessun `time_coverage`: è lo **snapshot della rete stradale**. `data_istituzione` degli archi va
+dal 1990, ma non è un periodo coperto dal dataset. Dichiararlo come periodo farebbe leggere al
+catalogo una serie che non esiste.

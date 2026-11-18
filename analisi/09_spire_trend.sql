@@ -90,6 +90,15 @@ GROUP BY ora_inizio ORDER BY ora_inizio;
 --    (ZTL: analisi 07, -22% 2019→2025 su passaggi/giorno)
 --    (Spire: -11,7% 2022→2025 su passaggi/spira/giorno, spire stabili)
 --    Nota: periodi diversi per disponibilità dati — ZTL dal 2019, spire dal 2022.
+--
+--    AGGIORNAMENTO 2026-11-18 (serie estesa al 2026): sul pannello di 775
+--    spire presenti in tutti gli anni e su finestra gen-ott, la mediana per
+--    spira è -11,7% ma il totale è -24,9%: il calo è CONCENTRATO (193 spire
+--    con calo >40% spiegano l'82% del totale), non diffuso. E Via Stalingrado
+--    è tornata ai livelli 2023 nel 2026 (140.119 passaggi/giorno a ottobre
+--    contro 69.598 nel 2025): su una via di attraversamento è compatibile con
+--    cantieri più che con una riduzione strutturale. Il benchmark sotto resta
+--    il valore 2022-2025 su spire stabili.
 SELECT 'ZTL (2019-2025)' as cerchia, round((61032.0 - 78017.0) * 100.0 / 78017.0, 1) as var_pct
 UNION ALL
 SELECT 'Spire (2022-2025)', -11.7;
