@@ -49,8 +49,10 @@ SELECT
     COUNT(*) FILTER (WHERE c.impatto_categoria = 'restringimento')     AS cantieri_restringimento,
     MIN(c.data_inizio)                                                 AS prima_data_inizio,
     -- ultima data ATTIVA osservata (cappata a oggi): coerente con i mesi del
-    -- mart mensile. La fine dichiarata (può essere nel futuro) sta a parte.
-    LEAST(MAX(COALESCE(c.data_fine, c.data_inizio)), CAST(CURRENT_DATE AS DATE)) AS ultima_data,
+    -- mart mensile. GREATEST anche qui: 3 righe hanno data_fine < data_inizio,
+    -- quindi la fine non può precedere l'inizio dichiarato. La fine dichiarata
+    -- (può essere nel futuro) sta a parte.
+    LEAST(MAX(GREATEST(COALESCE(c.data_fine, c.data_inizio), c.data_inizio)), CAST(CURRENT_DATE AS DATE)) AS ultima_data,
     MAX(COALESCE(c.data_fine, c.data_inizio))                          AS ultima_data_pianificata,
     MAX(mv.mesi_con_cantiere)                                          AS mesi_con_cantiere,
     ROUND(AVG(c.longitudine), 6)                                       AS longitudine,
