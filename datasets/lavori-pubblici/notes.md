@@ -21,7 +21,7 @@ Quirk della fonte, rischi noti, decisioni metodologiche.
 - **`row_id` = md5 delle colonne identificative** (pattern di `akn-relations`). Il dataset non ha chiave naturale e — per non perdere righe — si tiene una riga per fase così com'è nella fonte. `row_id` è deterministico e unico (1.813/1.813).
 - **`impatto_categoria`** è una **normalizzazione dichiarata** del testo libero (normalizzazioni ammesse nel clean): priorità unica dal più severo, `chiusura → divieto_transito → senso_unico → restringimento → divieto_sosta → nessuna_modifica → altro → non_dichiarato`. Il testo originale resta in `impatto_traffico` per la lettura fine.
 - **Date in ora locale** in tutta la pipeline (`data_inizio`, `data_fine`).
-- **Lavori in corso** con `data_fine` NULL (24 righe): nei mart si considerano attivi fino all'ultimo mese noto del dataset (non oltre). Approssimazione dichiarata.
+- **Lavori in corso** con `data_fine` NULL (24 righe): nei mart si considerano attivi fino all'ultimo mese noto del dataset (non oltre). Approssimazione dichiarata. Le altre 10 hanno una `data_fine` **pianificata** (fino al 2028): di conseguenza il mart arriva al 2028 e va limitato agli anni osservati nei trend (lo fa `analisi/16`).
 - **`time_coverage` 2021–2026**: allineato al campo `year` della fonte. 3 lavori del programma 2021 hanno `data_inizio` a fine 2020 (preparazione) e restano nel dataset: hanno durate reali, non creano "anni da 1 giorno".
 
 ## Query di verifica
