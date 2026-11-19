@@ -2,7 +2,7 @@
   "schema_version": 1,
   "repo": "dcl-bologna",
   "source_repo": "dataciviclab/dcl-bologna",
-  "updated_at": "2026-11-18",
+  "updated_at": "2026-11-19",
   "datasets": [
     {
       "slug": "bolognawifi_matrice",
@@ -1039,6 +1039,188 @@
       "mart_refs": [
         "indici_fragilita__mart_fragilita_area",
         "indici_fragilita__mart_fragilita_quartiere"
+      ]
+    },
+    {
+      "slug": "lavori_pubblici",
+      "name": "Lavori Pubblici",
+      "description": "Cantieri e lavori pubblici stradali del Comune di Bologna — via, date di inizio/fine e impatto dichiarato sul traffico",
+      "source": "",
+      "source_id": "comune_bologna_opendata",
+      "period": {
+        "start": 2021,
+        "end": 2026
+      },
+      "tags": [
+        "cantieri",
+        "lavori-pubblici",
+        "strade",
+        "mobilita",
+        "traffico",
+        "bologna"
+      ],
+      "category": "trasporti",
+      "columns": [
+        {
+          "name": "row_id",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "id",
+          "type": "BIGINT",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "origine",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "status",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "via",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "descrizione",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "impatto_traffico",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "impatto_categoria",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "data_inizio",
+          "type": "DATE",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "data_fine",
+          "type": "DATE",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "anno_pianificato",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "anno_inizio",
+          "type": "INTEGER",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "tipo_sede_1",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "tipo_sede_2",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "tipo_sede_3",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "quartiere",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "quartiere_2",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "quartiere_3",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "civico_da",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "civico_a",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "longitudine",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "latitudine",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "pinpoint_wkt",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "civico_da_wkt",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "civico_a_wkt",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        }
+      ],
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-clean/bologna/lavori_pubblici/2026/lavori_pubblici_2026_clean.parquet",
+        "multi_file": false
+      },
+      "stage": "incubating",
+      "mart_refs": [
+        "lavori_pubblici__mart_cantiere_via_mese",
+        "lavori_pubblici__mart_cantiere_via"
       ]
     },
     {
@@ -2320,6 +2502,26 @@
       }
     },
     {
+      "slug": "lavori_pubblici__mart_cantiere_via",
+      "dataset": "lavori_pubblici",
+      "table": "mart_cantiere_via",
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-mart/bologna/lavori_pubblici/2026/mart_cantiere_via.parquet",
+        "multi_file": false
+      }
+    },
+    {
+      "slug": "lavori_pubblici__mart_cantiere_via_mese",
+      "dataset": "lavori_pubblici",
+      "table": "mart_cantiere_via_mese",
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-mart/bologna/lavori_pubblici/2026/mart_cantiere_via_mese.parquet",
+        "multi_file": false
+      }
+    },
+    {
       "slug": "popolazione_quartiere__mart_pop_quartiere",
       "dataset": "popolazione_quartiere",
       "table": "mart_pop_quartiere",
@@ -2719,6 +2921,36 @@
         "started_at": "2026-11-01T12:59:51.561451+00:00",
         "finished_at": "2026-11-01T12:59:52.694896+00:00",
         "duration_seconds": 1.133
+      }
+    },
+    {
+      "id": "lavori_pubblici",
+      "source_id": "comune_bologna_opendata",
+      "status": "ok",
+      "label": "lavori_pubblici",
+      "detail": "anno 2026 — mart: si",
+      "action": "",
+      "run": {
+        "run_id": "20261119T182028Z_c2e8f05a",
+        "year": 2026,
+        "status": "SUCCESS",
+        "quality_score": {
+          "raw": 100,
+          "clean": 100,
+          "mart": 100
+        },
+        "output_rows": {
+          "clean": 1813,
+          "mart": 4021
+        },
+        "output_bytes": {
+          "raw": 206903,
+          "clean": 162178,
+          "mart": 50300
+        },
+        "started_at": "2026-11-19T18:20:28.427775+00:00",
+        "finished_at": "2026-11-19T18:20:30.843291+00:00",
+        "duration_seconds": 2.416
       }
     },
     {
