@@ -13,7 +13,12 @@
 WITH confini AS (
     SELECT
         date_trunc('month', MIN(data_inizio)) AS mese_min,
-        date_trunc('month', MAX(COALESCE(data_fine, data_inizio))) AS mese_max
+        -- Stesso tetto del mart mensile: mese corrente, non la pianificazione
+        -- più lontana (2028) dei lavori con data_fine NULL.
+        LEAST(
+            date_trunc('month', MAX(COALESCE(data_fine, data_inizio))),
+            date_trunc('month', CURRENT_DATE)
+        ) AS mese_max
     FROM clean_input
 ),
 mesi AS (
@@ -26,7 +31,10 @@ mesi_via AS (
     FROM clean_input c
     JOIN mesi m
       ON m.data_mese >= date_trunc('month', c.data_inizio)
-     AND m.data_mese <= COALESCE(date_trunc('month', c.data_fine), m.mese_max)
+     AND m.data_mese <= COALESCE(
+            GREATEST(date_trunc('month', c.data_fine), date_trunc('month', c.data_inizio)),
+            m.mese_max
+         )
     GROUP BY c.via
 )
 SELECT
@@ -40,7 +48,10 @@ SELECT
     COUNT(*) FILTER (WHERE c.impatto_categoria = 'chiusura')           AS cantieri_chiusura,
     COUNT(*) FILTER (WHERE c.impatto_categoria = 'restringimento')     AS cantieri_restringimento,
     MIN(c.data_inizio)                                                 AS prima_data_inizio,
-    MAX(COALESCE(c.data_fine, c.data_inizio))                          AS ultima_data,
+    -- ultima data ATTIVA osservata (cappata a oggi): coerente con i mesi del
+    -- mart mensile. La fine dichiarata (può essere nel futuro) sta a parte.
+    LEAST(MAX(COALESCE(c.data_fine, c.data_inizio)), CAST(CURRENT_DATE AS DATE)) AS ultima_data,
+    MAX(COALESCE(c.data_fine, c.data_inizio))                          AS ultima_data_pianificata,
     MAX(mv.mesi_con_cantiere)                                          AS mesi_con_cantiere,
     ROUND(AVG(c.longitudine), 6)                                       AS longitudine,
     ROUND(AVG(c.latitudine), 6)                                        AS latitudine

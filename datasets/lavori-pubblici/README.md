@@ -48,17 +48,18 @@ Il calo parte con i lavori e il recupero arriva (pur con un lavoro ancora dichia
 | Mart | Granularità | Contenuto |
 |---|---|---|
 | `mart_cantiere_via_mese` | via × anno × mese | cantieri attivi, di cui con impatto sulla carreggiata / chiusura / restringimento / senza impatto, cantieri iniziati |
-| `mart_cantiere_via` | via | cantieri, fasi distinte, impatto sulla carreggiata, prima/ultima data, mesi con cantiere, coordinate |
+| `mart_cantiere_via` | via | cantieri, fasi distinte, impatto sulla carreggiata, prima data, ultima data attiva (cappata a oggi) e ultima **pianificata**, mesi con cantiere, coordinate |
 
 `mart_cantiere_via_mese` è la vista per l'incrocio temporale con le serie del traffico: "attivo nel mese m" = intervallo `[data_inizio, data_fine]` che interseca `m`.
 
 ## Limiti
 
 - **Nessuna chiave naturale**: `id` è un id di **lavoro/lotto** che si ripete su più fasi e su righe quasi-duplicate (differiscono solo per la geometria). Serve `row_id` (md5). Sull'incrocio, conta le righe o `COUNT(DISTINCT id)` a seconda della domanda.
+- **Quirk della fonte**: 3 righe hanno `data_fine < data_inizio` (nei mart l'intervallo è normalizzato almeno al mese di inizio); 10 `id` compaiono in entrambe le fonti (storico "Completato" + in corso) e `cantieri_attivi` li conta due volte nei mesi sovrapposti — `lavori_distinti` li conta una volta.
 - **`impatto_categoria` è una normalizzazione** del testo libero (almeno 4 varianti di "Restringimenti di carreggiata"). I testi possono essere **combinati**: 60 citano sia chiusura sia restringimento e la categoria prende il match più severo. Il testo originale resta in `impatto_traffico`.
-- **Il join con le spire copre 230/745 vie** (29%): le spire misurano solo un sottoinsieme di vie. `via` è il nome normalizzato della fonte (maiuscolo, senza civico).
+- **Il join con le spire copre 230 vie**: 230/745 vie cantierate (**31%**) = 230/329 vie misurate dalle spire (**70%**). `via` è il nome normalizzato della fonte (maiuscolo, senza civico).
 - **Geometria parziale**: 1.301/1.813 righe hanno coordinate (`longitudine`/`latitudine`); le altre hanno il civico testuale.
-- **Lavori in corso** (34 righe): `data_fine` NULL per 24. Nei mart si considerano attivi fino all'ultimo mese noto (approssimazione dichiarata).
+- **Lavori in corso** (34 righe): `data_fine` NULL per 24. Nei mart si considerano attivi **fino al mese corrente** (data di run), non fino alle date pianificate più lontane.
 
 ## Run
 

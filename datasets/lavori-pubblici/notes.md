@@ -21,8 +21,13 @@ Quirk della fonte, rischi noti, decisioni metodologiche.
 - **`row_id` = md5 delle colonne identificative** (pattern di `akn-relations`). Il dataset non ha chiave naturale e — per non perdere righe — si tiene una riga per fase così com'è nella fonte. `row_id` è deterministico e unico (1.813/1.813).
 - **`impatto_categoria`** è una **normalizzazione dichiarata** del testo libero (normalizzazioni ammesse nel clean): priorità unica dal più severo, `chiusura → divieto_transito → senso_unico → restringimento → divieto_sosta → nessuna_modifica → altro → non_dichiarato`. Il testo originale resta in `impatto_traffico` per la lettura fine.
 - **Date in ora locale** in tutta la pipeline (`data_inizio`, `data_fine`).
-- **Lavori in corso** con `data_fine` NULL (24 righe): nei mart si considerano attivi fino all'ultimo mese noto del dataset (non oltre). Approssimazione dichiarata. Le altre 10 hanno una `data_fine` **pianificata** (fino al 2028): di conseguenza il mart arriva al 2028 e va limitato agli anni osservati nei trend (lo fa `analisi/16`).
+- **Lavori in corso** con `data_fine` NULL (24 righe): nei mart si considerano attivi **fino al mese corrente** (`CURRENT_DATE` del run), non fino alle date pianificate più lontane del dataset. Il raw espone `timestamp_utc` in `metadata.json` ma non è una colonna del clean; `CURRENT_DATE` coincide con la data di download perché la pipeline scarica a ogni run. Le altre 10 righe hanno una `data_fine` pianificata (fino al 2028): il mart cappa comunque il mese massimo a oggi. `ultima_data` è la fine attiva osservata (cappata a oggi), `ultima_data_pianificata` è la fine dichiarata.
 - **`time_coverage` 2021–2026**: allineato al campo `year` della fonte. 3 lavori del programma 2021 hanno `data_inizio` a fine 2020 (preparazione) e restano nel dataset: hanno durate reali, non creano "anni da 1 giorno".
+
+## Quirk minori (documentati)
+
+- **3 righe con `data_fine < data_inizio`** (fino a −305 giorni): il clean tiene il valore grezzo della fonte. Nei mart l'intervallo è normalizzato con `GREATEST(fine, inizio)`, quindi il cantiere compare almeno nel mese di inizio — prima spariva dal mart mensile pur essendo in `mart_cantiere_via`.
+- **10 `id` presenti in entrambe le fonti** (15 righe storico + 10 in corso; es. 4953, 4958, 4959): la stessa fase compare come "Completato" nello storico e "In corso" nel live. `cantieri_attivi` del mart mensile la conta **due volte** nei 53 via-mese sovrapposti; `lavori_distinti` (`COUNT(DISTINCT id)`) la conta una volta. Per analisi per fase, deduplicare su `(id, via, data_inizio)` preferendo `origine = 'in_corso'`.
 
 ## Query di verifica
 
@@ -65,7 +70,8 @@ WITH cv AS (SELECT DISTINCT via FROM read_parquet('out/data/clean/lavori_pubblic
             FROM read_parquet('out/data/clean/spire_traffico/*/spire_traffico_*_clean.parquet'))
 SELECT (SELECT count(*) FROM cv) AS vie_cantieri, (SELECT count(*) FROM sv) AS vie_spire,
        (SELECT count(*) FROM cv JOIN sv USING(via)) AS comuni;
--- 745 vie cantieri · 329 vie spire · 230 comuni (29%)
+-- 745 vie cantieri · 329 vie spire · 230 comuni in comune
+-- (= 31% delle vie cantierate, 70% delle vie misurate dalle spire)
 ```
 
 ## Colonne fuori dal clean (dichiarate)

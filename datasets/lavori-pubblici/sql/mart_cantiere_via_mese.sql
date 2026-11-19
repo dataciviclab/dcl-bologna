@@ -5,8 +5,9 @@
 -- sono attivi e quanti impattano la carreggiata.
 --
 -- "Attivo nel mese m" = intervallo [data_inizio, data_fine] che interseca m.
--- I lavori IN CORSO (data_fine NULL) si considerano attivi fino all'ultimo
--- mese noto del dataset (limite), non oltre: è un'approssimazione dichiarata.
+-- I lavori IN CORSO (data_fine NULL) si considerano attivi fino al **mese
+-- corrente** (CURRENT_DATE del run), non fino alle date pianificate più
+-- lontane del dataset: è un'approssimazione dichiarata.
 --
 -- Chiave: (via, anno, mese). Tabella sparsa: esistono solo le coppie
 -- via × mese con almeno un cantiere attivo (per un LEFT JOIN parti dalla
@@ -15,7 +16,14 @@
 WITH confini AS (
     SELECT
         date_trunc('month', MIN(data_inizio)) AS mese_min,
-        date_trunc('month', MAX(COALESCE(data_fine, data_inizio))) AS mese_max
+        -- Tetto al MESE CORRENTE: i lavori con data_fine NULL non devono
+        -- estendersi fino alle date pianificate di altri lavori (che arrivano
+        -- al 2028). Sono "in corso" fino a oggi, non fino alla pianificazione
+        -- più lontana del dataset. Il mart dipende quindi dalla data di run.
+        LEAST(
+            date_trunc('month', MAX(COALESCE(data_fine, data_inizio))),
+            date_trunc('month', CURRENT_DATE)
+        ) AS mese_max
     FROM clean_input
 ),
 mesi AS (
@@ -42,7 +50,15 @@ attivi AS (
     FROM clean_input c
     JOIN mesi m
       ON m.data_mese >= date_trunc('month', c.data_inizio)
-     AND m.data_mese <= COALESCE(date_trunc('month', c.data_fine), m.mese_max)
+     -- GREATEST: 3 righe della fonte hanno data_fine < data_inizio (fino a
+     -- −305 giorni). Senza GREATEST il join è insoddisfacibile e quelle righe
+     -- sparirebbero dal mart mensile pur essendo in mart_cantiere_via.
+     -- Normalizzazione dichiarata: il cantiere è attivo almeno nel mese di
+     -- inizio. Il clean tiene il valore grezzo.
+     AND m.data_mese <= COALESCE(
+            GREATEST(date_trunc('month', c.data_fine), date_trunc('month', c.data_inizio)),
+            m.mese_max
+         )
     GROUP BY c.via, m.data_mese
 )
 SELECT

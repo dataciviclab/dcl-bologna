@@ -98,7 +98,7 @@ mart:
         primary_key: [via, anno, mese]
         min_rows: 1000
       mart_cantiere_via:
-        required_columns: [via, cantieri, fasi_distinte, mesi_con_cantiere, prima_data_inizio, ultima_data]
+        required_columns: [via, cantieri, fasi_distinte, mesi_con_cantiere, prima_data_inizio, ultima_data, ultima_data_pianificata]
         primary_key: [via]
         min_rows: 500
 
