@@ -34,7 +34,7 @@ Bologna ha uno dei portali open data comunali più maturi d'Italia:
 
 ## Cosa contiene
 
-17 dataset configurati in `datasets/<slug>/` con lo standard candidate del Lab
+18 dataset configurati in `datasets/<slug>/` con lo standard candidate del Lab
 (`dataset.yml` + `sql/clean.sql` + `sql/mart_*.sql`).
 
 | Dataset | Periodo | Tema |
@@ -48,6 +48,7 @@ Bologna ha uno dei portali open data comunali più maturi d'Italia:
 | [Colonnine bici](datasets/colonnine-bici/) | 2018–2026 | Mobilità |
 | [Spire traffico](datasets/spire-traffico/) | 2022–2026 | Mobilità |
 | [BolognaWiFi matrice](datasets/bolognawifi-matrice/) | 2021–2025 | Mobilità |
+| [Lavori pubblici / cantieri](datasets/lavori-pubblici/) | 2021–2026 | Mobilità |
 | [Centraline qualità aria](datasets/centraline-aria/) | 2017–2026 | Ambiente |
 | [Temperature](datasets/temperatura/) | 2001–2026 | Ambiente |
 | [Precipitazioni](datasets/precipitazioni/) | 2001–2026 | Ambiente |
@@ -99,7 +100,7 @@ Le analisi SQL sono in `analisi/` e leggono dai parquet clean.
 ## Roadmap
 
 - [x] Scoring pilota del portale (702 dataset)
-- [x] 17 dataset attivi con pipeline toolkit
+- [x] 18 dataset attivi con pipeline toolkit
 - [x] Dashboard Streamlit (mappa quartieri, KPI per tema, SQL explorer)
 
 ## Architettura

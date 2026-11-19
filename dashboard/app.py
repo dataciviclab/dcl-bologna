@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 dcl-bologna · Dashboard Streamlit
-Bologna in dati — 17 dataset, 6 temi, dal 1976 ad oggi.
+Bologna in dati — 18 dataset, 6 temi, dal 1976 ad oggi.
 """
 
 import streamlit as st

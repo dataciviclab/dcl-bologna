@@ -1,0 +1,106 @@
+root: "../../out"
+schema_version: 1
+
+dataset:
+  name: "lavori_pubblici"
+  description: "Cantieri e lavori pubblici stradali del Comune di Bologna — via, date di inizio/fine e impatto dichiarato sul traffico"
+  source_id: "comune_bologna_opendata"
+  tags: [cantieri, lavori-pubblici, strade, mobilita, traffico, bologna]
+  category: trasporti
+  years: [2026]
+  time_coverage:
+    start_year: 2021
+    end_year: 2026
+
+raw:
+  output_policy: overwrite
+  sources:
+    - name: "ods_lavori_pubblici_storico"
+      type: "http_file"
+      # Lavori conclusi (1.779 righe, 2021-2026). Fonte separata dal dataset
+      # dei lavori in corso: schema IDENTICO, quindi si uniscono in clean con
+      # read.mode: all e la provenienza arriva da inject_column.
+      inject_column:
+        origine: "storico"
+      args:
+        url: "https://opendata.comune.bologna.it/api/explore/v2.1/catalog/datasets/lavori-pubblici-storico/exports/parquet"
+        filename: "lavori_pubblici_storico.parquet"
+      primary: true
+
+    - name: "ods_lavori_pubblici_in_corso"
+      type: "http_file"
+      # Lavori in corso (34 righe, snapshot). Stesso schema dello storico:
+      # stessa view dopo l'unione, distinta dalla colonna `origine`.
+      inject_column:
+        origine: "in_corso"
+      args:
+        url: "https://opendata.comune.bologna.it/api/explore/v2.1/catalog/datasets/lavori-pubblici/exports/parquet"
+        filename: "lavori_pubblici_in_corso.parquet"
+
+clean:
+  sql: "sql/clean.sql"
+  read:
+    source: auto
+    # "all": unisce storico + in corso (schema identico) nella stessa view.
+    # La provenienza per riga è la colonna `origine` iniettata per fonte
+    # (inject_column), non derivata dal contenuto.
+    mode: "all"
+  required_columns:
+    - row_id
+    - id
+    - origine
+    - status
+    - via
+    - descrizione
+    - impatto_traffico
+    - impatto_categoria
+    - data_inizio
+    - data_fine
+    - anno_pianificato
+    - anno_inizio
+    - tipo_sede_1
+    - tipo_sede_2
+    - tipo_sede_3
+    - quartiere
+    - quartiere_2
+    - quartiere_3
+    - civico_da
+    - civico_a
+    - longitudine
+    - latitudine
+    - pinpoint_wkt
+    - civico_da_wkt
+    - civico_a_wkt
+  validate:
+    min_rows: 1800
+    not_null:
+      - row_id
+      - id
+      - origine
+      - status
+      - data_inizio
+    primary_key:
+      - row_id
+
+mart:
+  tables:
+    - name: "mart_cantiere_via_mese"
+      sql: "sql/mart_cantiere_via_mese.sql"
+    - name: "mart_cantiere_via"
+      sql: "sql/mart_cantiere_via.sql"
+  required_tables:
+    - "mart_cantiere_via_mese"
+    - "mart_cantiere_via"
+  validate:
+    table_rules:
+      mart_cantiere_via_mese:
+        required_columns: [via, anno, mese, data_mese, cantieri_attivi, cantieri_impatto_carreggiata]
+        primary_key: [via, anno, mese]
+        min_rows: 1000
+      mart_cantiere_via:
+        required_columns: [via, cantieri, fasi_distinte, mesi_con_cantiere, prima_data_inizio, ultima_data, ultima_data_pianificata]
+        primary_key: [via]
+        min_rows: 500
+
+validation:
+  fail_on_error: true
