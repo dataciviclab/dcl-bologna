@@ -55,6 +55,9 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           INPUT_DATASETS: ${{ inputs.datasets }}
+          # Esclusione temporanea (issue #77): fonti rimosse da OpenData Bologna.
+          # Rimuovere questa lista quando i 4 dataset tornano raggiungibili.
+          EXCLUDE_DATASETS: "convivenze emigrati-destinazione famiglie-tipologia popolazione-quartiere"
         run: |
           : > batch.txt
 
@@ -71,6 +74,17 @@ jobs:
           else
             # Schedule o dispatch senza slug: tutti
             find datasets -maxdepth 1 -mindepth 1 -type d -printf '%f\n' | sort > dirs.txt
+          fi
+
+          # Esclusione temporanea (issue #77): fonti rimosse da OpenData Bologna.
+          # Vale per schedule, dispatch vuoto e slug espliciti; non tocca i dati
+          # già pubblicati (rsync senza --delete, registry per-dataset).
+          if [ -n "$EXCLUDE_DATASETS" ]; then
+            printf '%s\n' $EXCLUDE_DATASETS > .exclude.txt
+            grep -vxFf .exclude.txt dirs.txt > dirs.filtered.txt || true
+            mv dirs.filtered.txt dirs.txt
+            rm -f .exclude.txt
+            echo "::notice::dataset esclusi temporaneamente: $EXCLUDE_DATASETS (issue #77)"
           fi
 
           # Filtra solo dir con dataset.yml
